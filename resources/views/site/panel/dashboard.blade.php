@@ -108,12 +108,67 @@
         .empty { color: #94a3b8; font-size: 14px; padding: 10px 0; }
         .scb-ticket { border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px; margin-bottom: 14px; background: #f9fafb; }
         .scb-ticket-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 14px; }
-        .scb-thread { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-        .scb-msg { border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.8; }
-        .scb-msg:before { content: attr(data-label); display: block; font-size: 11px; font-weight: bold; opacity: .7; margin-bottom: 2px; }
-        .scb-msg-customer { background: #eff6ff; color: #1e3a8a; }
-        .scb-msg-admin { background: #f0fdf4; color: #15803d; }
-        .scb-reply-form textarea { min-height: 56px; }
+        .scb-chat {
+            max-height: 360px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 14px;
+            background: #eef2f7;
+            border-radius: 14px;
+            margin-bottom: 12px;
+        }
+        .scb-row { display: flex; }
+        .scb-row-customer { justify-content: flex-end; }
+        .scb-row-admin { justify-content: flex-start; }
+        .scb-bubble {
+            max-width: 78%;
+            padding: 9px 13px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.7;
+        }
+        .scb-bubble-customer {
+            background: linear-gradient(135deg,#2563eb,#1d4ed8);
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+        .scb-bubble-admin {
+            background: #fff;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            border-bottom-right-radius: 4px;
+        }
+        .scb-bubble-time { font-size: 10.5px; opacity: .65; margin-top: 4px; text-align: left; direction: ltr; }
+        .scb-reply-form { display: flex; gap: 8px; align-items: flex-end; margin: 0; }
+        .scb-reply-form textarea {
+            flex: 1;
+            min-height: 44px;
+            max-height: 120px;
+            resize: none;
+            border-radius: 20px;
+            margin-bottom: 0;
+            padding: 11px 16px;
+        }
+        .scb-send {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            flex-shrink: 0;
+            border: 0;
+            background: linear-gradient(135deg,#1e3a8a,#2563eb);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(30,58,138,.25);
+        }
+        .scb-send svg { width: 19px; height: 19px; transform: scaleX(-1); }
         label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 6px; }
         input, select, textarea {
             width: 100%;
@@ -432,33 +487,46 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                     $tStatusClass = ['new' => 'badge-new', 'answered' => 'badge-done', 'closed' => 'badge-ignored'];
                 @endphp
                 @foreach ($supportTickets as $ticket)
-                @php $thread = $supportMessages->get($ticket->id, collect()); @endphp
+                @php
+                    $thread = $supportMessages->get($ticket->id, collect());
+                    $timeline = collect();
+                    if ($ticket->customer_note) {
+                        $timeline->push(['sender' => 'customer', 'message' => $ticket->customer_note, 'at' => $ticket->created_at]);
+                    }
+                    $hasAdminMsg = false;
+                    foreach ($thread as $m) {
+                        if ($m->sender === 'admin') { $hasAdminMsg = true; }
+                        $timeline->push(['sender' => $m->sender, 'message' => $m->message, 'at' => $m->created_at]);
+                    }
+                    if (!$hasAdminMsg && $ticket->admin_reply) {
+                        $timeline->push(['sender' => 'admin', 'message' => $ticket->admin_reply, 'at' => $ticket->replied_at ?? $ticket->created_at]);
+                    }
+                    $timeline = $timeline->sortBy('at')->values();
+                @endphp
                 <div class="scb-ticket">
                     <div class="scb-ticket-head">
                         <div>{{ $ticket->original_filename }} <span style="color:#94a3b8; font-size:12px;">— {{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</span></div>
                         <span class="badge {{ $tStatusClass[$ticket->status] ?? 'badge-new' }}">{{ $tStatusLabels[$ticket->status] ?? $ticket->status }}</span>
                     </div>
 
-                    <div class="scb-thread">
-                        @if ($ticket->customer_note)
-                            <div class="scb-msg scb-msg-customer" data-label="شما">{{ $ticket->customer_note }}</div>
-                        @endif
-                        @if ($ticket->admin_reply)
-                            <div class="scb-msg scb-msg-admin" data-label="پشتیبانی">{{ $ticket->admin_reply }}</div>
-                        @endif
-                        @foreach ($thread as $m)
-                            <div class="scb-msg scb-msg-{{ $m->sender }}" data-label="{{ $m->sender === 'admin' ? 'پشتیبانی' : 'شما' }}">{{ $m->message }}</div>
-                        @endforeach
-                        @if (!$ticket->customer_note && !$ticket->admin_reply && $thread->isEmpty())
+                    <div class="scb-chat">
+                        @forelse ($timeline as $item)
+                            <div class="scb-row scb-row-{{ $item['sender'] }}">
+                                <div class="scb-bubble scb-bubble-{{ $item['sender'] }}">
+                                    <div>{{ $item['message'] }}</div>
+                                    <div class="scb-bubble-time">{{ \Carbon\Carbon::parse($item['at'])->format('m-d H:i') }}</div>
+                                </div>
+                            </div>
+                        @empty
                             <div class="empty">هنوز پیامی ثبت نشده.</div>
-                        @endif
+                        @endforelse
                     </div>
 
                     @if ($ticket->status !== 'closed')
                     <form method="POST" action="/panel/support/{{ $ticket->id }}/reply" class="scb-reply-form">
                         @csrf
                         <textarea name="message" placeholder="پیام خود را برای پشتیبانی بنویسید..." required maxlength="2000"></textarea>
-                        <button type="submit" class="btn" style="margin-top:8px;">ارسال پیام</button>
+                        <button type="submit" class="scb-send" title="ارسال پیام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="10" y2="14"/><polygon points="21 3 14 21 10 14 3 10 21 3"/></svg></button>
                     </form>
                     @endif
                 </div>
@@ -471,6 +539,14 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 @include('partials.site-footer')
 
 <div id="copy-note" class="copy-note">کد لایسنس کپی شد</div><script>function copyLicense(t){var n=document.getElementById("copy-note");if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){showN(n);}).catch(function(){fallback(t,n);});}else{fallback(t,n);}}function fallback(t,n){var ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.left="-9999px";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");}catch(e){}document.body.removeChild(ta);showN(n);}function showN(n){n.style.display="block";setTimeout(function(){n.style.display="none";},1800);}</script>
+<script>
+document.querySelectorAll('.scb-chat').forEach(function(box){box.scrollTop=box.scrollHeight;});
+document.querySelectorAll('.scb-reply-form textarea').forEach(function(ta){
+ta.addEventListener('keydown',function(e){
+if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ta.closest('form').submit();}
+});
+});
+</script>
 <script>
 (function(){
  var els=document.querySelectorAll(".scb-reveal");
