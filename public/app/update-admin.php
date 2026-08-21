@@ -440,8 +440,8 @@ function scb_status_badge(string $status): string
     color: #6b7280;
     margin-top: 20px;
   }
-  .field { position: relative; }
-  .field input { padding-left: 44px; }
+  .field { position: relative; display: flex; align-items: center; line-height: normal; }
+  .field input { padding-left: 44px; width: 100%; }
   .eye {
     position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
     width: 36px; height: 36px; border: 0; border-radius: 10px;
