@@ -5,6 +5,7 @@ const ADMIN_PASSWORD_HASH = '$2y$10$k9xHo7RevfjmzA9fS2rLzeNliZyguX15kgtTtkQpx0.Z
 const JSON_PATH  = __DIR__ . '/update-desktop.json';
 const STATE_DIR  = __DIR__ . '/../../storage/app/update-admin';
 const LOCK_FILE  = STATE_DIR . '/attempts.json';
+const PASSWORD_FILE = STATE_DIR . '/password.hash';
 const MAX_ATTEMPTS = 5;
 const LOCKOUT_SECONDS = 600;
 const LARAVEL_ROOT = __DIR__ . '/../..';
@@ -76,6 +77,17 @@ function csrf_check(): bool
     return isset($_POST['csrf'], $_SESSION['csrf']) && hash_equals($_SESSION['csrf'], $_POST['csrf']);
 }
 
+function scb_current_password_hash(): string
+{
+    if (is_file(PASSWORD_FILE)) {
+        $stored = trim((string) @file_get_contents(PASSWORD_FILE));
+        if ($stored !== '') {
+            return $stored;
+        }
+    }
+    return ADMIN_PASSWORD_HASH;
+}
+
 function scb_env(string $key, string $default = ''): string
 {
     static $envVars = null;
@@ -137,7 +149,7 @@ if (!$authed && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'
         $error = 'تعداد تلاش‌های ناموفق زیاد بوده. لطفاً ' . ceil($lockedFor / 60) . ' دقیقه دیگر تلاش کنید.';
     } elseif (!csrf_check()) {
         $error = 'درخواست نامعتبر است، صفحه را رفرش کنید.';
-    } elseif (password_verify((string) $_POST['password'], ADMIN_PASSWORD_HASH)) {
+    } elseif (password_verify((string) $_POST['password'], scb_current_password_hash())) {
         session_regenerate_id(true);
         $_SESSION['authed'] = true;
         clear_attempts();
@@ -246,6 +258,30 @@ if ($authed && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) 
     }
 }
 
+if ($authed && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'change_password') {
+    if (!csrf_check()) {
+        $error = 'درخواست نامعتبر است، صفحه را رفرش کنید.';
+    } else {
+        $currentPassword = (string) ($_POST['current_password'] ?? '');
+        $newPassword = (string) ($_POST['new_password'] ?? '');
+        $newPasswordConfirm = (string) ($_POST['new_password_confirmation'] ?? '');
+        if (!password_verify($currentPassword, scb_current_password_hash())) {
+            $error = 'رمز فعلی اشتباه است.';
+        } elseif (strlen($newPassword) < 8) {
+            $error = 'رمز جدید باید حداقل ۸ کاراکتر باشد.';
+        } elseif ($newPassword !== $newPasswordConfirm) {
+            $error = 'تکرار رمز جدید با رمز جدید یکسان نیست.';
+        } else {
+            $newHash = password_hash($newPassword, PASSWORD_BCRYPT);
+            if (file_put_contents(PASSWORD_FILE, $newHash, LOCK_EX) !== false) {
+                $success = 'رمز عبور با موفقیت تغییر کرد.';
+            } else {
+                $error = 'خطا در نوشتن فایل رمز. دسترسی نوشتن پوشه‌ی ' . htmlspecialchars(STATE_DIR) . ' را بررسی کنید.';
+            }
+        }
+    }
+}
+
 $current = ['version' => '', 'message' => '', 'url' => ''];
 if (is_file(JSON_PATH)) {
     $decoded = json_decode((string) @file_get_contents(JSON_PATH), true);
@@ -256,12 +292,15 @@ if (is_file(JSON_PATH)) {
     }
 }
 
-$tab = (isset($_GET['tab']) && $_GET['tab'] === 'support') ? 'support' : 'update';
+$tab = 'update';
+if (isset($_GET['tab']) && in_array($_GET['tab'], ['support', 'password'], true)) {
+    $tab = $_GET['tab'];
+}
 $updateHistory = [];
 $supportTickets = [];
 $openTicketCount = 0;
 $dbError = '';
-if ($authed) {
+if ($authed && $tab !== 'password') {
     try {
         if ($tab === 'update') {
             $updateHistory = scb_db()->query('SELECT * FROM scanbridge_update_history ORDER BY published_at DESC LIMIT 20')->fetchAll();
@@ -279,6 +318,12 @@ if ($authed) {
         $openTicketCount = (int) scb_db()->query('SELECT COUNT(*) AS c FROM scanbridge_support_tickets WHERE status = "new"')->fetch()['c'];
     } catch (Throwable $e) {
         $dbError = 'اتصال به دیتابیس یا خواندن اطلاعات با خطا مواجه شد - احتمالاً باید ابتدا «php artisan migrate» را روی سرور اجرا کنید. (' . $e->getMessage() . ')';
+    }
+} elseif ($authed) {
+    try {
+        $openTicketCount = (int) scb_db()->query('SELECT COUNT(*) AS c FROM scanbridge_support_tickets WHERE status = "new"')->fetch()['c'];
+    } catch (Throwable $e) {
+        // ignore - badge count only
     }
 }
 
@@ -359,6 +404,8 @@ function scb_status_badge(string $status): string
     font-family: inherit;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(30,58,138,.25);
+    text-decoration: none;
+    display: inline-block;
   }
   button:hover, .btn:hover { filter: brightness(1.08); }
   button.secondary, .btn.secondary {
@@ -382,17 +429,52 @@ function scb_status_badge(string $status): string
     font-size: 14px;
     margin-bottom: 14px;
   }
-  .top-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 18px;
-  }
-  .logout {
+  .hint {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 10px 14px;
     font-size: 13px;
-    color: #6b7280;
-    text-decoration: none;
+    margin-bottom: 14px;
   }
+  .top-header {
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    border-radius: 20px;
+    padding: 22px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(30,58,138,.2);
+  }
+  .top-header h1 { margin: 0; font-size: 22px; color: #fff; }
+  .top-header small { display: block; opacity: .85; margin-top: 5px; font-size: 13px; }
+  .top-header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .pill-btn {
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.35);
+    color: #fff;
+    border-radius: 12px;
+    height: 44px;
+    min-width: 110px;
+    padding: 0 18px;
+    margin: 0;
+    box-shadow: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .pill-btn:hover { background: rgba(255,255,255,.3); filter: none; }
   .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
   .tab-link {
     display: inline-block;
@@ -470,21 +552,58 @@ function scb_status_badge(string $status): string
   </form>
   </div>
 <?php else: ?>
-  <div class="top-row">
-    <h1>آپدیت و پشتیبانی</h1>
-    <a class="logout" href="?logout=1">خروج</a>
+  <div class="top-header">
+    <div>
+      <h1>آپدیت و پشتیبانی</h1>
+      <small>مدیریت نسخه‌ی دسکتاپ و رسیدگی به تیکت‌های پشتیبانی مشتریان</small>
+    </div>
+    <div class="top-header-actions">
+      <a href="?tab=password" class="pill-btn">تغییر رمز</a>
+      <a href="?logout=1" class="pill-btn">خروج</a>
+    </div>
   </div>
 
+  <?php if ($tab !== 'password'): ?>
   <div class="tabs">
     <a class="tab-link <?= $tab === 'update' ? 'active' : '' ?>" href="?tab=update">بروزرسانی</a>
     <a class="tab-link <?= $tab === 'support' ? 'active' : '' ?>" href="?tab=support">پشتیبانی<?= $openTicketCount > 0 ? ' (' . $openTicketCount . ')' : '' ?></a>
   </div>
+  <?php endif; ?>
 
   <?php if ($error): ?><div class="msg-error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
   <?php if ($success): ?><div class="msg-success"><?= htmlspecialchars($success) ?></div><?php endif; ?>
   <?php if ($dbError): ?><div class="msg-error"><?= htmlspecialchars($dbError) ?></div><?php endif; ?>
 
-  <?php if ($tab === 'update'): ?>
+  <?php if ($tab === 'password'): ?>
+    <div class="card login-card">
+      <h1>تغییر رمز عبور</h1>
+      <div class="hint">رمز جدید حداقل باید ۸ کاراکتر باشد.</div>
+      <form method="post">
+        <input type="hidden" name="csrf" value="<?= htmlspecialchars($token) ?>">
+        <input type="hidden" name="action" value="change_password">
+        <label for="current_password">رمز فعلی</label>
+        <div class="field">
+          <input type="password" id="current_password" name="current_password" autofocus required>
+          <button class="eye" type="button" onclick="togglePassword('current_password', this)" title="نمایش رمز"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <label for="new_password">رمز جدید</label>
+        <div class="field">
+          <input type="password" id="new_password" name="new_password" required minlength="8">
+          <button class="eye" type="button" onclick="togglePassword('new_password', this)" title="نمایش رمز"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <label for="new_password_confirmation">تکرار رمز جدید</label>
+        <div class="field">
+          <input type="password" id="new_password_confirmation" name="new_password_confirmation" required minlength="8">
+          <button class="eye" type="button" onclick="togglePassword('new_password_confirmation', this)" title="نمایش رمز"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <button type="submit">ذخیره رمز جدید</button>
+      </form>
+      <div style="margin-top:14px;">
+        <a class="btn secondary" href="?tab=update">بازگشت به پنل</a>
+      </div>
+    </div>
+
+  <?php elseif ($tab === 'update'): ?>
     <div class="card">
       <form method="post">
         <input type="hidden" name="csrf" value="<?= htmlspecialchars($token) ?>">
