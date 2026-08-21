@@ -364,6 +364,32 @@ function scb_status_badge(string $status): string
         default => '<span class="badge badge-new">جدید</span>',
     };
 }
+
+function scb_ticket_timeline(array $t, array $messages): array
+{
+    $timeline = [];
+    if (!empty($t['customer_note'])) {
+        $timeline[] = ['sender' => 'customer', 'message' => (string) $t['customer_note'], 'at' => (string) $t['created_at']];
+    }
+    $hasAdminMsg = false;
+    foreach ($messages as $m) {
+        if ($m['sender'] === 'admin') {
+            $hasAdminMsg = true;
+        }
+        $timeline[] = ['sender' => $m['sender'], 'message' => (string) $m['message'], 'at' => (string) $m['created_at']];
+    }
+    if (!$hasAdminMsg && !empty($t['admin_reply'])) {
+        $timeline[] = ['sender' => 'admin', 'message' => (string) $t['admin_reply'], 'at' => (string) ($t['replied_at'] ?? $t['created_at'])];
+    }
+    usort($timeline, fn(array $a, array $b) => $a['at'] <=> $b['at']);
+    return $timeline;
+}
+
+function scb_short_time(string $datetime): string
+{
+    $ts = strtotime($datetime);
+    return $ts ? date('m-d H:i', $ts) : $datetime;
+}
 ?>
 <!doctype html>
 <html lang="fa" dir="rtl">
@@ -531,16 +557,61 @@ function scb_status_badge(string $status): string
     background: linear-gradient(135deg,#1e3a8a,#2563eb);
     color: #fff;
   }
-  .thread-msg {
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 13.5px;
-    line-height: 1.8;
-    margin-top: 8px;
+  .chat-scroll {
+    max-height: 360px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+    background: #eef2f7;
+    border-radius: 14px;
+    margin-top: 12px;
   }
-  .thread-msg:before { content: attr(data-label); display: block; font-size: 11px; font-weight: bold; opacity: .7; margin-bottom: 2px; }
-  .thread-msg-customer { background: #f9fafb; color: #334155; }
-  .thread-msg-admin { background: #eff6ff; color: #1e3a8a; }
+  .chat-row { display: flex; }
+  .chat-row-admin { justify-content: flex-end; }
+  .chat-row-customer { justify-content: flex-start; }
+  .chat-bubble {
+    max-width: 75%;
+    padding: 9px 13px;
+    border-radius: 16px;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .chat-bubble-admin {
+    background: linear-gradient(135deg,#2563eb,#1d4ed8);
+    color: #fff;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-bubble-customer {
+    background: #fff;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+    border-bottom-right-radius: 4px;
+  }
+  .chat-time { font-size: 10.5px; opacity: .65; margin-top: 4px; text-align: left; direction: ltr; }
+  .chat-input-row { display: flex; gap: 8px; align-items: flex-end; margin-top: 10px; }
+  .chat-input {
+    flex: 1;
+    border-radius: 20px;
+    padding: 11px 16px;
+    min-height: 44px;
+    max-height: 120px;
+    resize: none;
+  }
+  .chat-send {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+  }
+  .chat-send svg { width: 19px; height: 19px; transform: scaleX(-1); }
   .badge {
     display: inline-block;
     padding: 4px 12px;
@@ -704,7 +775,8 @@ function scb_status_badge(string $status): string
         <div class="empty">هنوز هیچ گزارش تشخیصی‌ای از پنل مشتری‌ها آپلود نشده است.</div>
       <?php else: ?>
         <?php foreach ($supportTickets as $t): ?>
-          <div class="ticket">
+          <?php $timeline = scb_ticket_timeline($t, $supportMessages[(int) $t['id']] ?? []); ?>
+          <div class="ticket chat-ticket">
             <div class="ticket-head">
               <div class="ticket-customer"><?= htmlspecialchars((string) ($t['customer_name'] ?? '—')) ?> — <?= htmlspecialchars((string) ($t['customer_mobile'] ?? '—')) ?></div>
               <?= scb_status_badge((string) $t['status']) ?>
@@ -717,35 +789,37 @@ function scb_status_badge(string $status): string
                 لایسنسی برای این تیکت ثبت نشده.
               <?php endif; ?>
               &middot; ارسال‌شده: <?= htmlspecialchars((string) $t['created_at']) ?>
+              &middot; <a href="?tab=support&download=<?= (int) $t['id'] ?>">دانلود فایل: <?= htmlspecialchars((string) $t['original_filename']) ?></a>
             </div>
-            <div>
-              <a class="btn secondary" style="margin-top:0; padding:8px 16px; font-size:13px;" href="?tab=support&download=<?= (int) $t['id'] ?>">دانلود فایل: <?= htmlspecialchars((string) $t['original_filename']) ?></a>
+
+            <div class="chat-scroll">
+              <?php if (!$timeline): ?>
+                <div class="empty">هنوز پیامی ثبت نشده.</div>
+              <?php endif; ?>
+              <?php foreach ($timeline as $item): ?>
+                <div class="chat-row chat-row-<?= $item['sender'] ?>">
+                  <div class="chat-bubble chat-bubble-<?= $item['sender'] ?>">
+                    <div class="chat-text"><?= nl2br(htmlspecialchars($item['message'])) ?></div>
+                    <div class="chat-time"><?= htmlspecialchars(scb_short_time($item['at'])) ?></div>
+                  </div>
+                </div>
+              <?php endforeach; ?>
             </div>
-            <?php if ($t['customer_note']): ?>
-              <div class="ticket-reply-box" style="background:#f9fafb; color:#334155;">یادداشت مشتری: <?= nl2br(htmlspecialchars((string) $t['customer_note'])) ?></div>
-            <?php endif; ?>
-            <?php if ($t['admin_reply']): ?>
-              <div class="ticket-reply-box">پاسخ ثبت‌شده: <?= nl2br(htmlspecialchars((string) $t['admin_reply'])) ?></div>
-            <?php endif; ?>
-            <?php foreach ($supportMessages[(int) $t['id']] ?? [] as $m): ?>
-              <div class="thread-msg thread-msg-<?= $m['sender'] === 'admin' ? 'admin' : 'customer' ?>" data-label="<?= $m['sender'] === 'admin' ? 'پاسخ شما' : 'پیام مشتری' ?> · <?= htmlspecialchars((string) $m['created_at']) ?>"><?= nl2br(htmlspecialchars((string) $m['message'])) ?></div>
-            <?php endforeach; ?>
+
             <?php if ($t['status'] !== 'closed'): ?>
-            <div class="ticket-actions">
-              <form method="post">
+              <form method="post" class="chat-input-row">
                 <input type="hidden" name="csrf" value="<?= htmlspecialchars($token) ?>">
                 <input type="hidden" name="action" value="reply">
                 <input type="hidden" name="ticket_id" value="<?= (int) $t['id'] ?>">
-                <textarea name="reply_text" placeholder="پاسخی که توی «پیام‌ها»ی برنامه‌ی همین کاربر نشان داده می‌شود..."></textarea>
-                <button type="submit" style="margin-top:0;">ارسال پاسخ</button>
+                <textarea name="reply_text" class="chat-input" placeholder="پیام..." required></textarea>
+                <button type="submit" class="chat-send" title="ارسال پیام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="10" y2="14"/><polygon points="21 3 14 21 10 14 3 10 21 3"/></svg></button>
               </form>
-              <form method="post" onsubmit="return confirm('این تیکت بدون پاسخ بسته شود؟');">
+              <form method="post" onsubmit="return confirm('این تیکت بدون پاسخ بسته شود؟');" style="margin-top:6px;">
                 <input type="hidden" name="csrf" value="<?= htmlspecialchars($token) ?>">
                 <input type="hidden" name="action" value="close_ticket">
                 <input type="hidden" name="ticket_id" value="<?= (int) $t['id'] ?>">
-                <button type="submit" class="secondary" style="margin-top:0;">بستن بدون پاسخ</button>
+                <button type="submit" class="secondary" style="margin-top:0; padding:7px 14px; font-size:12.5px;">بستن بدون پاسخ</button>
               </form>
-            </div>
             <?php endif; ?>
           </div>
         <?php endforeach; ?>
@@ -764,6 +838,12 @@ var closed='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 if(el.type==='password'){el.type='text';btn.innerHTML=closed;}
 else{el.type='password';btn.innerHTML=open;}
 }
+document.querySelectorAll('.chat-scroll').forEach(function(box){box.scrollTop=box.scrollHeight;});
+document.querySelectorAll('.chat-input').forEach(function(ta){
+ta.addEventListener('keydown',function(e){
+if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ta.closest('form').submit();}
+});
+});
 </script>
 </body>
 </html>
