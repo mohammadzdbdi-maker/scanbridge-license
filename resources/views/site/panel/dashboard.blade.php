@@ -118,8 +118,13 @@
             background: #f1f5f9;
         }
         .scb-status-pill.active { background: linear-gradient(135deg,#1e3a8a,#2563eb); color: #fff; }
-        .scb-ticket { border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px; margin-bottom: 14px; background: #f9fafb; }
-        .scb-ticket-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 14px; }
+        .scb-ticket { border: 1px solid #e5e7eb; border-radius: 14px; margin-bottom: 14px; background: #f9fafb; overflow: hidden; }
+        .scb-ticket-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; padding: 14px 16px; font-size: 14px; cursor: pointer; user-select: none; transition: background .2s; }
+        .scb-ticket-head:hover { background: #f1f5f9; }
+        .scb-ticket-head-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .scb-chevron { width: 18px; height: 18px; color: #94a3b8; transition: transform .3s ease; flex-shrink: 0; }
+        .scb-ticket-body { max-height: 0; overflow: hidden; padding: 0 16px; transition: max-height .4s ease, padding .4s ease; }
+        .scb-ticket-body.open { max-height: 650px; padding: 0 16px 16px; }
         .scb-chat {
             max-height: 360px;
             overflow-y: auto;
@@ -533,31 +538,36 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                     $timeline = $timeline->sortBy('at')->values();
                 @endphp
                 <div class="scb-ticket">
-                    <div class="scb-ticket-head">
-                        <div>{{ $ticket->original_filename ?: 'تیکت #' . $ticket->id }} <span style="color:#94a3b8; font-size:12px;">— {{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</span></div>
-                        <span class="badge {{ $tStatusClass[$ticket->status] ?? 'badge-new' }}">{{ $tStatusLabels[$ticket->status] ?? $ticket->status }}</span>
+                    <div class="scb-ticket-head" onclick="scbToggleTicket(this)">
+                        <div class="scb-ticket-head-info">
+                            <span>{{ $ticket->original_filename ?: 'تیکت #' . $ticket->id }}</span>
+                            <span style="color:#94a3b8; font-size:12px;">{{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</span>
+                            <span class="badge {{ $tStatusClass[$ticket->status] ?? 'badge-new' }}">{{ $tStatusLabels[$ticket->status] ?? $ticket->status }}</span>
+                        </div>
+                        <svg class="scb-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </div>
-
-                    <div class="scb-chat">
-                        @forelse ($timeline as $item)
-                            <div class="scb-row scb-row-{{ $item['sender'] }}">
-                                <div class="scb-bubble scb-bubble-{{ $item['sender'] }}">
-                                    <div>{{ $item['message'] }}</div>
-                                    <div class="scb-bubble-time">{{ \Carbon\Carbon::parse($item['at'])->format('m-d H:i') }}</div>
+                    <div class="scb-ticket-body">
+                        <div class="scb-chat">
+                            @forelse ($timeline as $item)
+                                <div class="scb-row scb-row-{{ $item['sender'] }}">
+                                    <div class="scb-bubble scb-bubble-{{ $item['sender'] }}">
+                                        <div>{{ $item['message'] }}</div>
+                                        <div class="scb-bubble-time">{{ \Carbon\Carbon::parse($item['at'])->format('m-d H:i') }}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        @empty
-                            <div class="empty">هنوز پیامی ثبت نشده.</div>
-                        @endforelse
-                    </div>
+                            @empty
+                                <div class="empty">هنوز پیامی ثبت نشده.</div>
+                            @endforelse
+                        </div>
 
-                    @if ($ticket->status !== 'closed')
-                    <form method="POST" action="/panel/support/{{ $ticket->id }}/reply" class="scb-reply-form">
-                        @csrf
-                        <textarea name="message" placeholder="پیام خود را برای پشتیبانی بنویسید..." required maxlength="2000"></textarea>
-                        <button type="submit" class="scb-send" title="ارسال پیام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="10" y2="14"/><polygon points="21 3 14 21 10 14 3 10 21 3"/></svg></button>
-                    </form>
-                    @endif
+                        @if ($ticket->status !== 'closed')
+                        <form method="POST" action="/panel/support/{{ $ticket->id }}/reply" class="scb-reply-form">
+                            @csrf
+                            <textarea name="message" placeholder="پیام خود را برای پشتیبانی بنویسید..." required maxlength="2000"></textarea>
+                            <button type="submit" class="scb-send" title="ارسال پیام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="3" x2="10" y2="14"/><polygon points="21 3 14 21 10 14 3 10 21 3"/></svg></button>
+                        </form>
+                        @endif
+                    </div>
                 </div>
                 @endforeach
             @endif
@@ -575,6 +585,18 @@ ta.addEventListener('keydown',function(e){
 if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();ta.closest('form').submit();}
 });
 });
+function scbToggleTicket(head){
+var body=head.nextElementSibling;
+if(!body)return;
+var chevron=head.querySelector('.scb-chevron');
+var willOpen=!body.classList.contains('open');
+body.classList.toggle('open');
+if(chevron){chevron.style.transform=willOpen?'rotate(180deg)':'';}
+if(willOpen){
+var chat=body.querySelector('.scb-chat');
+if(chat){setTimeout(function(){chat.scrollTop=chat.scrollHeight;},320);}
+}
+}
 </script>
 <script>
 (function(){
