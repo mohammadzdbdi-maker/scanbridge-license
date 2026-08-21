@@ -106,6 +106,18 @@
         .badge-done { background: #f0fdf4; color: #15803d; }
         .badge-ignored { background: #f1f5f9; color: #64748b; }
         .empty { color: #94a3b8; font-size: 14px; padding: 10px 0; }
+        .scb-status-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+        .scb-status-pill {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #334155;
+            background: #f1f5f9;
+        }
+        .scb-status-pill.active { background: linear-gradient(135deg,#1e3a8a,#2563eb); color: #fff; }
         .scb-ticket { border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px; margin-bottom: 14px; background: #f9fafb; }
         .scb-ticket-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 14px; }
         .scb-chat {
@@ -306,6 +318,9 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         @if (session('ok'))
             <div class="flash-ok">{{ session('ok') }}</div>
         @endif
+        @if (session('error'))
+            <div class="flash-error">{{ session('error') }}</div>
+        @endif
         @if ($errors->any())
             <div class="flash-error">{{ $errors->first() }}</div>
         @endif
@@ -461,12 +476,22 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             </script>
         </div>
 
-        <div class="section-title">پشتیبانی</div>
+        <div class="section-title" id="support">پشتیبانی</div>
         <div class="card scb-reveal">
-            <form method="POST" action="/panel/support" enctype="multipart/form-data" style="margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:{{ $errors->any() || old('note') ? '16px' : '0' }};">
+                <div class="scb-status-filters">
+                    <a class="scb-status-pill {{ $supportStatus === 'all' ? 'active' : '' }}" href="/panel?sstatus=all#support">همه</a>
+                    <a class="scb-status-pill {{ $supportStatus === 'new' ? 'active' : '' }}" href="/panel?sstatus=new#support">در حال بررسی</a>
+                    <a class="scb-status-pill {{ $supportStatus === 'answered' ? 'active' : '' }}" href="/panel?sstatus=answered#support">پاسخ داده‌شده</a>
+                    <a class="scb-status-pill {{ $supportStatus === 'closed' ? 'active' : '' }}" href="/panel?sstatus=closed#support">بسته‌شده</a>
+                </div>
+                <button type="button" id="scbNewTicketBtn" class="btn" style="margin-top:0; {{ $errors->any() || old('note') ? 'display:none;' : '' }}" onclick="document.getElementById('scbNewTicketForm').style.display='block';this.style.display='none';">+ تیکت جدید</button>
+            </div>
+
+            <form method="POST" action="/panel/support" enctype="multipart/form-data" id="scbNewTicketForm" style="margin:16px 0 20px; {{ $errors->any() || old('note') ? '' : 'display:none;' }}">
                 @csrf
-                <label>فایل گزارش تشخیصی (از نرم‌افزار: دکمه‌ی «ساخت گزارش تشخیصی برای پشتیبانی»)</label>
-                <input type="file" name="log_file" accept=".txt,.log" required>
+                <label>فایل گزارش تشخیصی (اختیاری — از نرم‌افزار: دکمه‌ی «ساخت گزارش تشخیصی برای پشتیبانی»)</label>
+                <input type="file" name="log_file" accept=".txt,.log">
                 @if ($licenses->count() > 1)
                 <label>مربوط به کدام لایسنس؟</label>
                 <select name="license_id">
@@ -475,12 +500,16 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                     @endforeach
                 </select>
                 @endif
-                <label>توضیح (اختیاری)</label>
-                <textarea name="note" placeholder="مشکل رو کوتاه توضیح بدید..."></textarea>
-                <button type="submit" class="btn">ارسال به پشتیبانی</button>
+                <label>پیام / توضیح</label>
+                <textarea name="note" placeholder="مشکل رو بنویسید... (اگر فایلی آپلود نمی‌کنید، این فیلد را پر کنید)">{{ old('note') }}</textarea>
+                <div style="display:flex; gap:8px;">
+                    <button type="submit" class="btn">ارسال به پشتیبانی</button>
+                    <button type="button" class="btn" style="background:#f1f5f9; color:#334155; box-shadow:none;" onclick="document.getElementById('scbNewTicketForm').style.display='none';document.getElementById('scbNewTicketBtn').style.display='inline-block';">انصراف</button>
+                </div>
             </form>
+
             @if ($supportTickets->count() === 0)
-                <div class="empty">هنوز گزارشی ارسال نکرده‌اید.</div>
+                <div class="empty">هنوز تیکتی در این دسته ثبت نشده.</div>
             @else
                 @php
                     $tStatusLabels = ['new' => 'در حال بررسی', 'answered' => 'پاسخ داده شد', 'closed' => 'بسته شد'];
@@ -505,7 +534,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                 @endphp
                 <div class="scb-ticket">
                     <div class="scb-ticket-head">
-                        <div>{{ $ticket->original_filename }} <span style="color:#94a3b8; font-size:12px;">— {{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</span></div>
+                        <div>{{ $ticket->original_filename ?: 'تیکت #' . $ticket->id }} <span style="color:#94a3b8; font-size:12px;">— {{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</span></div>
                         <span class="badge {{ $tStatusClass[$ticket->status] ?? 'badge-new' }}">{{ $tStatusLabels[$ticket->status] ?? $ticket->status }}</span>
                     </div>
 

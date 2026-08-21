@@ -789,7 +789,9 @@ function scb_short_time(string $datetime): string
                 لایسنسی برای این تیکت ثبت نشده.
               <?php endif; ?>
               &middot; ارسال‌شده: <?= htmlspecialchars((string) $t['created_at']) ?>
-              &middot; <a href="?tab=support&download=<?= (int) $t['id'] ?>">دانلود فایل: <?= htmlspecialchars((string) $t['original_filename']) ?></a>
+              <?php if (!empty($t['stored_path'])): ?>
+                &middot; <a href="?tab=support&download=<?= (int) $t['id'] ?>">دانلود فایل: <?= htmlspecialchars((string) $t['original_filename']) ?></a>
+              <?php endif; ?>
             </div>
 
             <div class="chat-scroll">

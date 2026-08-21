@@ -1088,10 +1088,17 @@ Route::get('/panel', function (Request $request) use ($requireCustomer) {
         ];
     }
 
-    $supportTickets = DB::table('scanbridge_support_tickets')
-        ->where('customer_id', $customer->id)
-        ->orderByDesc('id')
-        ->get();
+    $supportStatus = 'all';
+    if (in_array($request->query('sstatus'), ['new', 'answered', 'closed'], true)) {
+        $supportStatus = $request->query('sstatus');
+    }
+
+    $supportTicketsQuery = DB::table('scanbridge_support_tickets')
+        ->where('customer_id', $customer->id);
+    if ($supportStatus !== 'all') {
+        $supportTicketsQuery->where('status', $supportStatus);
+    }
+    $supportTickets = $supportTicketsQuery->orderByDesc('id')->get();
 
     $supportMessages = DB::table('scanbridge_support_messages')
         ->whereIn('ticket_id', $supportTickets->pluck('id'))
@@ -1099,7 +1106,7 @@ Route::get('/panel', function (Request $request) use ($requireCustomer) {
         ->get()
         ->groupBy('ticket_id');
 
-    return view('site.panel.dashboard', compact('customer', 'licenses', 'requests', 'pricingData', 'deviceData', 'supportTickets', 'supportMessages'));
+    return view('site.panel.dashboard', compact('customer', 'licenses', 'requests', 'pricingData', 'deviceData', 'supportTickets', 'supportMessages', 'supportStatus'));
 });
 
 Route::post('/panel/request', function (Request $request) use ($requireCustomer) {
@@ -1142,10 +1149,14 @@ Route::post('/panel/support', function (Request $request) use ($requireCustomer)
     $customer = DB::table('scanbridge_customers')->where('id', $request->session()->get('scanbridge_customer_id'))->first();
 
     $data = $request->validate([
-        'log_file' => 'required|file|max:5120|mimes:txt,log',
+        'log_file' => 'nullable|file|max:5120|mimes:txt,log',
         'license_id' => 'nullable|integer',
         'note' => 'nullable|string|max:2000',
     ]);
+
+    if (!$request->hasFile('log_file') && empty($data['note'])) {
+        return back()->withErrors(['note' => 'لطفاً یا فایل گزارش تشخیصی را آپلود کنید یا پیام خود را بنویسید.'])->withInput();
+    }
 
     $ownedLicenses = DB::table('scanbridge_licenses')
         ->where('customer_id', $customer->id)
@@ -1159,15 +1170,21 @@ Route::post('/panel/support', function (Request $request) use ($requireCustomer)
         $licenseId = $ownedLicenses->first();
     }
 
-    $file = $request->file('log_file');
-    $storedName = 'ticket-' . time() . '-' . bin2hex(random_bytes(8)) . '.' . strtolower($file->getClientOriginalExtension());
-    $file->storeAs('support-logs', $storedName);
+    $originalFilename = null;
+    $storedPath = null;
+    if ($request->hasFile('log_file')) {
+        $file = $request->file('log_file');
+        $storedName = 'ticket-' . time() . '-' . bin2hex(random_bytes(8)) . '.' . strtolower($file->getClientOriginalExtension());
+        $file->storeAs('support-logs', $storedName);
+        $originalFilename = $file->getClientOriginalName();
+        $storedPath = 'support-logs/' . $storedName;
+    }
 
     $ticketId = DB::table('scanbridge_support_tickets')->insertGetId([
         'customer_id' => $customer->id,
         'license_id' => $licenseId,
-        'original_filename' => $file->getClientOriginalName(),
-        'stored_path' => 'support-logs/' . $storedName,
+        'original_filename' => $originalFilename,
+        'stored_path' => $storedPath,
         'customer_note' => $data['note'] ?? null,
         'status' => 'new',
         'created_at' => now(),
@@ -1183,7 +1200,7 @@ Route::post('/panel/support', function (Request $request) use ($requireCustomer)
         ]);
     }
 
-    return redirect('/panel')->with('ok', 'فایل گزارش با موفقیت ارسال شد. پاسخ پشتیبانی به‌زودی همین‌جا (بخش پشتیبانی) و توی «پیام‌ها»ی نرم‌افزار نمایش داده می‌شود.');
+    return redirect('/panel')->with('ok', 'تیکت شما با موفقیت ثبت شد. پاسخ پشتیبانی به‌زودی همین‌جا (بخش پشتیبانی) و توی «پیام‌ها»ی نرم‌افزار نمایش داده می‌شود.');
 });
 
 Route::post('/panel/support/{ticket}/reply', function (Request $request, $ticket) use ($requireCustomer) {
