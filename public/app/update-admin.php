@@ -310,15 +310,17 @@ function scb_status_badge(string $status): string
     font-display: swap;
   }
   * { box-sizing: border-box; }
+  html, body { height: 100%; }
   body {
     font-family: 'Pinar', Tahoma, Arial, sans-serif;
     background: #f8fafc;
     margin: 0;
-    padding: 40px 16px;
     color: #0f172a;
     line-height: 1.9;
+    display: flex;
+    flex-direction: column;
   }
-  .wrap { max-width: 900px; margin: 0 auto; }
+  .wrap { flex: 1 0 auto; max-width: 900px; margin: 0 auto; padding: 40px 16px; width: 100%; }
   .card {
     background: #fff;
     border-radius: 18px;
