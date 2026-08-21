@@ -1093,7 +1093,13 @@ Route::get('/panel', function (Request $request) use ($requireCustomer) {
         ->orderByDesc('id')
         ->get();
 
-    return view('site.panel.dashboard', compact('customer', 'licenses', 'requests', 'pricingData', 'deviceData', 'supportTickets'));
+    $supportMessages = DB::table('scanbridge_support_messages')
+        ->whereIn('ticket_id', $supportTickets->pluck('id'))
+        ->orderBy('created_at')
+        ->get()
+        ->groupBy('ticket_id');
+
+    return view('site.panel.dashboard', compact('customer', 'licenses', 'requests', 'pricingData', 'deviceData', 'supportTickets', 'supportMessages'));
 });
 
 Route::post('/panel/request', function (Request $request) use ($requireCustomer) {
@@ -1157,7 +1163,7 @@ Route::post('/panel/support', function (Request $request) use ($requireCustomer)
     $storedName = 'ticket-' . time() . '-' . bin2hex(random_bytes(8)) . '.' . strtolower($file->getClientOriginalExtension());
     $file->storeAs('support-logs', $storedName);
 
-    DB::table('scanbridge_support_tickets')->insert([
+    $ticketId = DB::table('scanbridge_support_tickets')->insertGetId([
         'customer_id' => $customer->id,
         'license_id' => $licenseId,
         'original_filename' => $file->getClientOriginalName(),
@@ -1168,7 +1174,53 @@ Route::post('/panel/support', function (Request $request) use ($requireCustomer)
         'updated_at' => now(),
     ]);
 
+    if (!empty($data['note'])) {
+        DB::table('scanbridge_support_messages')->insert([
+            'ticket_id' => $ticketId,
+            'sender' => 'customer',
+            'message' => $data['note'],
+            'created_at' => now(),
+        ]);
+    }
+
     return redirect('/panel')->with('ok', 'فایل گزارش با موفقیت ارسال شد. پاسخ پشتیبانی به‌زودی همین‌جا (بخش پشتیبانی) و توی «پیام‌ها»ی نرم‌افزار نمایش داده می‌شود.');
+});
+
+Route::post('/panel/support/{ticket}/reply', function (Request $request, $ticket) use ($requireCustomer) {
+    if ($redirect = $requireCustomer($request)) {
+        return $redirect;
+    }
+    $customer = DB::table('scanbridge_customers')->where('id', $request->session()->get('scanbridge_customer_id'))->first();
+
+    $ticketRow = DB::table('scanbridge_support_tickets')
+        ->where('id', (int) $ticket)
+        ->where('customer_id', $customer->id)
+        ->first();
+
+    if (!$ticketRow) {
+        return redirect('/panel')->with('error', 'تیکت پیدا نشد.');
+    }
+    if ($ticketRow->status === 'closed') {
+        return redirect('/panel')->with('error', 'این تیکت بسته شده و امکان ارسال پیام جدید در آن نیست.');
+    }
+
+    $data = $request->validate([
+        'message' => 'required|string|max:2000',
+    ]);
+
+    DB::table('scanbridge_support_messages')->insert([
+        'ticket_id' => $ticketRow->id,
+        'sender' => 'customer',
+        'message' => $data['message'],
+        'created_at' => now(),
+    ]);
+
+    DB::table('scanbridge_support_tickets')->where('id', $ticketRow->id)->update([
+        'status' => 'new',
+        'updated_at' => now(),
+    ]);
+
+    return redirect('/panel')->with('ok', 'پیام شما ارسال شد.');
 });
 // SCANBRIDGE_CUSTOMER_PANEL_END
 

@@ -106,6 +106,14 @@
         .badge-done { background: #f0fdf4; color: #15803d; }
         .badge-ignored { background: #f1f5f9; color: #64748b; }
         .empty { color: #94a3b8; font-size: 14px; padding: 10px 0; }
+        .scb-ticket { border: 1px solid #e5e7eb; border-radius: 14px; padding: 16px; margin-bottom: 14px; background: #f9fafb; }
+        .scb-ticket-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; font-size: 14px; }
+        .scb-thread { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+        .scb-msg { border-radius: 10px; padding: 10px 12px; font-size: 13.5px; line-height: 1.8; }
+        .scb-msg:before { content: attr(data-label); display: block; font-size: 11px; font-weight: bold; opacity: .7; margin-bottom: 2px; }
+        .scb-msg-customer { background: #eff6ff; color: #1e3a8a; }
+        .scb-msg-admin { background: #f0fdf4; color: #15803d; }
+        .scb-reply-form textarea { min-height: 56px; }
         label { display: block; font-weight: bold; font-size: 14px; margin-bottom: 6px; }
         input, select, textarea {
             width: 100%;
@@ -419,23 +427,42 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             @if ($supportTickets->count() === 0)
                 <div class="empty">هنوز گزارشی ارسال نکرده‌اید.</div>
             @else
-                <table>
-                    <tr><th>فایل</th><th>وضعیت</th><th>پاسخ پشتیبانی</th><th>تاریخ</th></tr>
-                    @foreach ($supportTickets as $ticket)
-                    <tr>
-                        <td>{{ $ticket->original_filename }}</td>
-                        <td>
-                            @php
-                                $tStatusLabels = ['new' => 'در حال بررسی', 'answered' => 'پاسخ داده شد', 'closed' => 'بسته شد'];
-                                $tStatusClass = ['new' => 'badge-new', 'answered' => 'badge-done', 'closed' => 'badge-ignored'];
-                            @endphp
-                            <span class="badge {{ $tStatusClass[$ticket->status] ?? 'badge-new' }}">{{ $tStatusLabels[$ticket->status] ?? $ticket->status }}</span>
-                        </td>
-                        <td>{{ $ticket->admin_reply ?: '—' }}</td>
-                        <td>{{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</td>
-                    </tr>
-                    @endforeach
-                </table>
+                @php
+                    $tStatusLabels = ['new' => 'در حال بررسی', 'answered' => 'پاسخ داده شد', 'closed' => 'بسته شد'];
+                    $tStatusClass = ['new' => 'badge-new', 'answered' => 'badge-done', 'closed' => 'badge-ignored'];
+                @endphp
+                @foreach ($supportTickets as $ticket)
+                @php $thread = $supportMessages->get($ticket->id, collect()); @endphp
+                <div class="scb-ticket">
+                    <div class="scb-ticket-head">
+                        <div>{{ $ticket->original_filename }} <span style="color:#94a3b8; font-size:12px;">— {{ \Carbon\Carbon::parse($ticket->created_at)->format('Y-m-d') }}</span></div>
+                        <span class="badge {{ $tStatusClass[$ticket->status] ?? 'badge-new' }}">{{ $tStatusLabels[$ticket->status] ?? $ticket->status }}</span>
+                    </div>
+
+                    <div class="scb-thread">
+                        @if ($ticket->customer_note)
+                            <div class="scb-msg scb-msg-customer" data-label="شما">{{ $ticket->customer_note }}</div>
+                        @endif
+                        @if ($ticket->admin_reply)
+                            <div class="scb-msg scb-msg-admin" data-label="پشتیبانی">{{ $ticket->admin_reply }}</div>
+                        @endif
+                        @foreach ($thread as $m)
+                            <div class="scb-msg scb-msg-{{ $m->sender }}" data-label="{{ $m->sender === 'admin' ? 'پشتیبانی' : 'شما' }}">{{ $m->message }}</div>
+                        @endforeach
+                        @if (!$ticket->customer_note && !$ticket->admin_reply && $thread->isEmpty())
+                            <div class="empty">هنوز پیامی ثبت نشده.</div>
+                        @endif
+                    </div>
+
+                    @if ($ticket->status !== 'closed')
+                    <form method="POST" action="/panel/support/{{ $ticket->id }}/reply" class="scb-reply-form">
+                        @csrf
+                        <textarea name="message" placeholder="پیام خود را برای پشتیبانی بنویسید..." required maxlength="2000"></textarea>
+                        <button type="submit" class="btn" style="margin-top:8px;">ارسال پیام</button>
+                    </form>
+                    @endif
+                </div>
+                @endforeach
             @endif
         </div>
 

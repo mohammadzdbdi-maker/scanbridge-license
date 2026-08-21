@@ -236,6 +236,10 @@ if ($authed && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) 
                      WHERE id = :id'
                 );
                 $stmt->execute(['reply' => $replyText, 'id' => $ticketId]);
+                $msgStmt = scb_db()->prepare(
+                    'INSERT INTO scanbridge_support_messages (ticket_id, sender, message, created_at) VALUES (:ticket_id, "admin", :message, NOW())'
+                );
+                $msgStmt->execute(['ticket_id' => $ticketId, 'message' => $replyText]);
                 $success = 'پاسخ ذخیره شد - با اولین بررسی وضعیت لایسنس توسط برنامه‌ی کاربر (حداکثر تا ۶ ساعت دیگر، یا با باز کردن مجدد برنامه)، توی «پیام‌ها»ش نمایش داده می‌شود.';
             } catch (Throwable $e) {
                 $error = 'خطا در ذخیره‌ی پاسخ: ' . $e->getMessage();
@@ -298,22 +302,44 @@ if (isset($_GET['tab']) && in_array($_GET['tab'], ['support', 'password'], true)
 }
 $updateHistory = [];
 $supportTickets = [];
+$supportMessages = [];
 $openTicketCount = 0;
 $dbError = '';
+$statusFilter = 'all';
+if (isset($_GET['status']) && in_array($_GET['status'], ['new', 'answered', 'closed'], true)) {
+    $statusFilter = $_GET['status'];
+}
 if ($authed && $tab !== 'password') {
     try {
         if ($tab === 'update') {
             $updateHistory = scb_db()->query('SELECT * FROM scanbridge_update_history ORDER BY published_at DESC LIMIT 20')->fetchAll();
         } else {
-            $supportTickets = scb_db()->query(
-                'SELECT t.*, c.name AS customer_name, c.mobile AS customer_mobile,
+            $sql = 'SELECT t.*, c.name AS customer_name, c.mobile AS customer_mobile,
                         l.license_key AS license_key, l.plan AS license_plan, l.expires_at AS license_expires_at
                  FROM scanbridge_support_tickets t
                  LEFT JOIN scanbridge_customers c ON c.id = t.customer_id
-                 LEFT JOIN scanbridge_licenses l ON l.id = t.license_id
-                 ORDER BY (t.status = "new") DESC, t.created_at DESC
-                 LIMIT 100'
-            )->fetchAll();
+                 LEFT JOIN scanbridge_licenses l ON l.id = t.license_id';
+            $params = [];
+            if ($statusFilter !== 'all') {
+                $sql .= ' WHERE t.status = :status';
+                $params['status'] = $statusFilter;
+            }
+            $sql .= ' ORDER BY (t.status = "new") DESC, t.created_at DESC LIMIT 100';
+            $stmt = scb_db()->prepare($sql);
+            $stmt->execute($params);
+            $supportTickets = $stmt->fetchAll();
+
+            if ($supportTickets) {
+                $ticketIds = array_column($supportTickets, 'id');
+                $placeholders = implode(',', array_fill(0, count($ticketIds), '?'));
+                $msgStmt = scb_db()->prepare(
+                    "SELECT * FROM scanbridge_support_messages WHERE ticket_id IN ($placeholders) ORDER BY created_at ASC"
+                );
+                $msgStmt->execute($ticketIds);
+                foreach ($msgStmt->fetchAll() as $m) {
+                    $supportMessages[(int) $m['ticket_id']][] = $m;
+                }
+            }
         }
         $openTicketCount = (int) scb_db()->query('SELECT COUNT(*) AS c FROM scanbridge_support_tickets WHERE status = "new"')->fetch()['c'];
     } catch (Throwable $e) {
@@ -490,6 +516,31 @@ function scb_status_badge(string $status): string
     background: linear-gradient(135deg,#1e3a8a,#2563eb);
     color: #fff;
   }
+  .status-filters { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .status-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #334155;
+    background: #f1f5f9;
+  }
+  .status-pill.active {
+    background: linear-gradient(135deg,#1e3a8a,#2563eb);
+    color: #fff;
+  }
+  .thread-msg {
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin-top: 8px;
+  }
+  .thread-msg:before { content: attr(data-label); display: block; font-size: 11px; font-weight: bold; opacity: .7; margin-bottom: 2px; }
+  .thread-msg-customer { background: #f9fafb; color: #334155; }
+  .thread-msg-admin { background: #eff6ff; color: #1e3a8a; }
   .badge {
     display: inline-block;
     padding: 4px 12px;
@@ -641,6 +692,12 @@ function scb_status_badge(string $status): string
     </div>
 
   <?php else: ?>
+    <div class="status-filters">
+      <a class="status-pill <?= $statusFilter === 'all' ? 'active' : '' ?>" href="?tab=support&status=all">همه</a>
+      <a class="status-pill <?= $statusFilter === 'new' ? 'active' : '' ?>" href="?tab=support&status=new">جدید</a>
+      <a class="status-pill <?= $statusFilter === 'answered' ? 'active' : '' ?>" href="?tab=support&status=answered">پاسخ داده‌شده</a>
+      <a class="status-pill <?= $statusFilter === 'closed' ? 'active' : '' ?>" href="?tab=support&status=closed">بسته‌شده</a>
+    </div>
     <div class="card">
       <div class="section-title" style="font-weight:bold; margin-bottom:6px;">تیکت‌های پشتیبانی</div>
       <?php if (!$supportTickets): ?>
@@ -670,6 +727,9 @@ function scb_status_badge(string $status): string
             <?php if ($t['admin_reply']): ?>
               <div class="ticket-reply-box">پاسخ ثبت‌شده: <?= nl2br(htmlspecialchars((string) $t['admin_reply'])) ?></div>
             <?php endif; ?>
+            <?php foreach ($supportMessages[(int) $t['id']] ?? [] as $m): ?>
+              <div class="thread-msg thread-msg-<?= $m['sender'] === 'admin' ? 'admin' : 'customer' ?>" data-label="<?= $m['sender'] === 'admin' ? 'پاسخ شما' : 'پیام مشتری' ?> · <?= htmlspecialchars((string) $m['created_at']) ?>"><?= nl2br(htmlspecialchars((string) $m['message'])) ?></div>
+            <?php endforeach; ?>
             <?php if ($t['status'] !== 'closed'): ?>
             <div class="ticket-actions">
               <form method="post">
