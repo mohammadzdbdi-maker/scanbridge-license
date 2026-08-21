@@ -801,13 +801,13 @@ a{color:#1d4ed8!important;}
 <style>/*SCB_ADMIN_TABS*/
 .scb-admin-tabs { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:22px; }
 .scb-admin-tab-btn {
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
-    padding:22px 16px; border-radius:20px; font-size:15px; font-weight:bold;
+    display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:14px;
+    padding:16px 20px; border-radius:20px; font-size:15px; font-weight:bold;
     background:#fff; color:#334155; border:1px solid #e5e7eb; cursor:pointer;
     font-family:'Pinar',Tahoma,Arial,sans-serif;
     box-shadow:0 6px 20px rgba(15,23,42,.06);
     transition:all .15s;
-    text-align:center;
+    text-align:right;
 }
 .scb-admin-tab-btn:hover { border-color:#bfdbfe; transform:translateY(-1px); }
 .scb-admin-tab-btn.active {
@@ -815,8 +815,13 @@ a{color:#1d4ed8!important;}
     color:#fff; border-color:transparent;
     box-shadow:0 10px 26px rgba(30,58,138,.3);
 }
+.scb-admin-tab-icon-wrap {
+    background:#fff; border-radius:12px; padding:6px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    box-shadow:0 2px 6px rgba(15,23,42,.08);
+}
 .scb-admin-tab-icon {
-    width:56px; height:56px; object-fit:contain;
+    width:32px; height:32px; object-fit:contain; display:block;
     background:transparent; mix-blend-mode:multiply;
 }
 .scb-admin-tab-btn .cnt {
@@ -829,8 +834,8 @@ a{color:#1d4ed8!important;}
 .scb-tab-panel.active { display:block; }
 @media (max-width: 700px) {
     .scb-admin-tabs { grid-template-columns:1fr; gap:10px; }
-    .scb-admin-tab-btn { flex-direction:row; padding:14px 16px; font-size:14px; }
-    .scb-admin-tab-icon { width:38px; height:38px; }
+    .scb-admin-tab-btn { padding:14px 16px; font-size:14px; }
+    .scb-admin-tab-icon { width:26px; height:26px; }
 }
 
 /* SCB_ADMIN_ACCORDION_ROWS */
@@ -888,6 +893,24 @@ a{color:#1d4ed8!important;}
     display:flex; align-items:center; justify-content:center; padding:0; margin:0;
 }
 .scb-modal-title { font-size:17px; font-weight:bold; color:#1e3a8a; margin:0 0 16px; padding-left:44px; }
+
+/* SCB_ADMIN_ICON_BUTTONS */
+.upload-installer-form { grid-template-columns:1fr auto; }
+.scb-icon-btn-row { display:flex; gap:10px; align-items:center; }
+.scb-icon-btn {
+    width:48px; height:48px; min-width:48px; border-radius:14px;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:#fff; border:1.5px solid #e2e8f0; cursor:pointer;
+    box-shadow:0 4px 12px rgba(15,23,42,.06);
+    transition:all .15s; padding:0; margin:0; text-decoration:none;
+}
+.scb-icon-btn:hover { border-color:#93c5fd; transform:translateY(-2px); box-shadow:0 8px 18px rgba(37,99,235,.18); }
+.scb-icon-btn img { width:26px; height:26px; object-fit:contain; }
+.export-buttons.scb-icon-btn-row { margin-top:4px; }
+@media (max-width:900px) {
+    .upload-installer-form { grid-template-columns:1fr; }
+    .scb-icon-btn-row { justify-content:flex-start; }
+}
 </style>
 </head>
 <body>
@@ -935,15 +958,15 @@ a{color:#1d4ed8!important;}
 
     <div class="scb-admin-tabs" id="scbAdminTabs">
         <button type="button" class="scb-admin-tab-btn" data-tab="licenses" onclick="scbAdminShowTab('licenses')">
-            <img class="scb-admin-tab-icon" src="/icons/tab-licenses.png" alt="" onerror="this.style.display='none'">
+            <span class="scb-admin-tab-icon-wrap"><img class="scb-admin-tab-icon" src="/icons/tab-licenses.png" alt="" onerror="this.parentElement.style.display='none'"></span>
             <span>لایسنس‌ها</span>
         </button>
         <button type="button" class="scb-admin-tab-btn" data-tab="requests" onclick="scbAdminShowTab('requests')">
-            <img class="scb-admin-tab-icon" src="/icons/tab-requests.png" alt="" onerror="this.style.display='none'">
+            <span class="scb-admin-tab-icon-wrap"><img class="scb-admin-tab-icon" src="/icons/tab-requests.png" alt="" onerror="this.parentElement.style.display='none'"></span>
             <span>درخواست‌های خرید و تمدید @if(($newPurchaseRequests ?? 0) > 0)<span class="cnt">{{ $newPurchaseRequests }}</span>@endif</span>
         </button>
         <button type="button" class="scb-admin-tab-btn" data-tab="settings" onclick="scbAdminShowTab('settings')">
-            <img class="scb-admin-tab-icon" src="/icons/tab-settings.png" alt="" onerror="this.style.display='none'">
+            <span class="scb-admin-tab-icon-wrap"><img class="scb-admin-tab-icon" src="/icons/tab-settings.png" alt="" onerror="this.parentElement.style.display='none'"></span>
             <span>بروزرسانی و تنظیمات</span>
         </button>
     </div>
@@ -965,9 +988,14 @@ a{color:#1d4ed8!important;}
 
         <input type="file" name="installer" accept=".exe" required>
 
-        <button class="btn btn-blue" type="submit">آپلود فایل نصب جدید</button>
-
-        <a class="btn" style="background:#16a34a;" href="/latest">تست دانلود آخرین نسخه</a>
+        <div class="scb-icon-btn-row">
+            <button class="scb-icon-btn" type="submit" title="آپلود فایل نصب جدید">
+                <img src="/icons/icon-upload.png" alt="">
+            </button>
+            <a class="scb-icon-btn" href="/latest" target="_blank" rel="noopener" title="تست دانلود آخرین نسخه">
+                <img src="/icons/download.png" alt="">
+            </a>
+        </div>
     </form>
     <div class="upload-progress" id="progress-installer">
         <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="progress-installer-fill"></div></div>
@@ -989,9 +1017,14 @@ a{color:#1d4ed8!important;}
 
         <input type="file" name="installer_android" accept=".apk" required>
 
-        <button class="btn btn-blue" type="submit">آپلود فایل APK جدید</button>
-
-        <a class="btn" style="background:#16a34a;" href="/latest-android">تست دانلود آخرین نسخه</a>
+        <div class="scb-icon-btn-row">
+            <button class="scb-icon-btn" type="submit" title="آپلود فایل APK جدید">
+                <img src="/icons/icon-upload.png" alt="">
+            </button>
+            <a class="scb-icon-btn" href="/latest-android" target="_blank" rel="noopener" title="تست دانلود آخرین نسخه">
+                <img src="/icons/download.png" alt="">
+            </a>
+        </div>
     </form>
     <div class="upload-progress" id="progress-installer-android">
         <div class="upload-progress-bar-bg"><div class="upload-progress-bar-fill" id="progress-installer-android-fill"></div></div>
@@ -1002,10 +1035,16 @@ a{color:#1d4ed8!important;}
 
 <section class="card">
     <h2>خروجی گزارش‌ها</h2>
-    <div class="export-buttons">
-        <a class="btn btn-blue" href="/admin/export/licenses.xlsx">خروجی لایسنس‌ها Excel</a>
-        <a class="btn" style="background:#16a34a;" href="/admin/export/requests.xlsx">خروجی درخواست‌ها Excel</a>
-        <a class="btn btn-gray" href="/admin/export/logs.xlsx">خروجی لاگ‌ها Excel</a>
+    <div class="scb-icon-btn-row">
+        <a class="scb-icon-btn" href="/admin/export/licenses.xlsx" title="خروجی لایسنس‌ها Excel">
+            <img src="/icons/icon-excel.png" alt="">
+        </a>
+        <a class="scb-icon-btn" href="/admin/export/requests.xlsx" title="خروجی درخواست‌ها Excel">
+            <img src="/icons/icon-excel.png" alt="">
+        </a>
+        <a class="scb-icon-btn" href="/admin/export/logs.xlsx" title="خروجی لاگ‌ها Excel">
+            <img src="/icons/icon-excel.png" alt="">
+        </a>
     </div>
 </section>
 
