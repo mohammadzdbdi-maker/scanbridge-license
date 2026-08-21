@@ -1,0 +1,1 @@
+@include('site.panel._otp', ['mode' => 'verify', 'mobile' => $mobile, 'action' => '/panel/register/verify', 'resendAction' => '/panel/register/resend', 'pageTitle' => 'تایید شماره موبایل | Scanbridge'])

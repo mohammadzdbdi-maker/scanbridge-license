@@ -1,0 +1,1 @@
+@include('site.panel._otp', ['mode' => 'reset', 'mobile' => $mobile, 'action' => '/panel/reset-password', 'resendAction' => '/panel/reset-password/resend', 'pageTitle' => 'تغییر رمز عبور | Scanbridge'])
