@@ -447,6 +447,7 @@ function scb_status_badge(string $status): string
     width: 36px; height: 36px; border: 0; border-radius: 10px;
     background: #eef2ff; color: #1e3a8a; cursor: pointer;
     display: flex; align-items: center; justify-content: center; padding: 0;
+    margin: 0; box-shadow: none;
   }
   .eye:hover { background: #e0e7ff; }
   .eye svg { width: 20px; height: 20px; pointer-events: none; }
