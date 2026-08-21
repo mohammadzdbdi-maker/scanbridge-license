@@ -440,6 +440,16 @@ function scb_status_badge(string $status): string
     color: #6b7280;
     margin-top: 20px;
   }
+  .field { position: relative; }
+  .field input { padding-left: 44px; }
+  .eye {
+    position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+    width: 36px; height: 36px; border: 0; border-radius: 10px;
+    background: #eef2ff; color: #1e3a8a; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+  }
+  .eye:hover { background: #e0e7ff; }
+  .eye svg { width: 20px; height: 20px; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -451,7 +461,10 @@ function scb_status_badge(string $status): string
   <form method="post">
     <input type="hidden" name="csrf" value="<?= htmlspecialchars($token) ?>">
     <label for="password">رمز عبور</label>
-    <input type="password" id="password" name="password" autofocus required <?= $lockedFor > 0 ? 'disabled' : '' ?>>
+    <div class="field">
+      <input type="password" id="password" name="password" autofocus required <?= $lockedFor > 0 ? 'disabled' : '' ?>>
+      <button class="eye" type="button" onclick="togglePassword('password', this)" title="نمایش رمز"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    </div>
     <button type="submit" <?= $lockedFor > 0 ? 'disabled' : '' ?>>ورود</button>
   </form>
   </div>
@@ -563,5 +576,14 @@ function scb_status_badge(string $status): string
 <?php endif; ?>
 </div>
 <style>footer.site-footer{position:relative!important;z-index:999!important;clear:both!important;background:#0f172a!important;color:#cbd5e1!important;padding:26px 20px!important;text-align:center!important;border-top:2px solid #3b82f6!important;line-height:2!important;}footer.site-footer a{color:#93c5fd!important;font-weight:bold!important;margin:0 8px!important;text-decoration:none!important;}footer.site-footer a:hover{color:#fff!important;text-decoration:underline!important;}</style><footer class="site-footer"><div><a href="/privacy">حریم خصوصی</a> | <a href="/terms">شرایط استفاده</a> | <a href="https://wa.me/989136346309">پشتیبانی واتساپ</a><div style="margin-top:8px;font-size:13px;color:#94a3b8;">© 1405 Scanbridge — تمامی حقوق محفوظ است.</div></div></footer>
+<script>
+function togglePassword(id,btn){
+var el=document.getElementById(id);if(!el)return;
+var open='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+var closed='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-10-8-10-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+if(el.type==='password'){el.type='text';btn.innerHTML=closed;}
+else{el.type='password';btn.innerHTML=open;}
+}
+</script>
 </body>
 </html>
