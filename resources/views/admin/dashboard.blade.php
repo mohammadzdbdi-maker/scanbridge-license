@@ -797,6 +797,35 @@ header{background:linear-gradient(135deg,#1e3a8a,#2563eb,#3b82f6)!important;box-
 /* لینک‌ها */
 a{color:#1d4ed8!important;}
 </style>
+
+<style>/*SCB_ADMIN_TABS*/
+.scb-admin-tabs { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.scb-admin-tab-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 22px; border-radius:14px; font-size:14.5px; font-weight:bold;
+    background:#fff; color:#334155; border:1px solid #e5e7eb; cursor:pointer;
+    font-family:'Pinar',Tahoma,Arial,sans-serif;
+    box-shadow:0 4px 14px rgba(15,23,42,.05);
+    transition:all .15s;
+}
+.scb-admin-tab-btn:hover { border-color:#bfdbfe; }
+.scb-admin-tab-btn.active {
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
+    color:#fff; border-color:transparent;
+    box-shadow:0 8px 22px rgba(30,58,138,.28);
+}
+.scb-admin-tab-btn .cnt {
+    background:#fee2e2; color:#dc2626; border-radius:999px;
+    padding:2px 9px; font-size:12px; font-weight:bold;
+}
+.scb-admin-tab-btn.active .cnt { background:rgba(255,255,255,.25); color:#fff; }
+.scb-tab-panel { display:none; }
+.scb-tab-panel.active { display:block; }
+@media (max-width: 700px) {
+    .scb-admin-tabs { gap:8px; }
+    .scb-admin-tab-btn { flex:1 1 auto; justify-content:center; padding:11px 12px; font-size:13px; }
+}
+</style>
 </head>
 <body>
 <header>
@@ -841,8 +870,16 @@ a{color:#1d4ed8!important;}
         </div>
     </section>
 
-    
+    <div class="scb-admin-tabs" id="scbAdminTabs">
+        <button type="button" class="scb-admin-tab-btn" data-tab="licenses" onclick="scbAdminShowTab('licenses')">لایسنس‌ها</button>
+        <button type="button" class="scb-admin-tab-btn" data-tab="requests" onclick="scbAdminShowTab('requests')">
+            درخواست‌های خرید و تمدید
+            @if(($newPurchaseRequests ?? 0) > 0)<span class="cnt">{{ $newPurchaseRequests }}</span>@endif
+        </button>
+        <button type="button" class="scb-admin-tab-btn" data-tab="settings" onclick="scbAdminShowTab('settings')">بروزرسانی و تنظیمات</button>
+    </div>
 
+    <div class="scb-tab-panel" data-tab="settings">
 <!-- SCANBRIDGE_PURCHASE_REQUESTS_PANEL_START -->
 
 
@@ -1015,7 +1052,9 @@ a{color:#1d4ed8!important;}
     })();
     </script>
 </section>
+    </div>
 
+    <div class="scb-tab-panel" data-tab="requests">
 <section class="card" id="purchase-requests">
     <h2>درخواست‌های خرید و تمدید</h2>
 
@@ -1138,8 +1177,9 @@ a{color:#1d4ed8!important;}
     </table>
 </section>
 <!-- SCANBRIDGE_PURCHASE_REQUESTS_PANEL_END -->
+    </div>
 
-
+    <div class="scb-tab-panel" data-tab="settings">
 <!-- SCANBRIDGE_ADMIN_LOGS_START -->
 <section class="card" id="admin-logs">
     <h2>آخرین فعالیت‌های پنل</h2>
@@ -1172,7 +1212,9 @@ a{color:#1d4ed8!important;}
     </table>
 </section>
 <!-- SCANBRIDGE_ADMIN_LOGS_END -->
+    </div>
 
+    <div class="scb-tab-panel" data-tab="licenses">
 <section class="card">
         <h2>ساخت لایسنس جدید</h2>
         <form method="post" action="/admin/licenses">
@@ -1370,6 +1412,7 @@ a{color:#1d4ed8!important;}
             </tbody>
         </table>
     </section>
+    </div>
 </main>
 
 <div id="copy-note" class="copy-note">کد لایسنس کپی شد</div>
@@ -1405,7 +1448,7 @@ a{color:#1d4ed8!important;}
             n.style.display = 'none';
         }, 1800);
     }
-
+</script>
 
 <script>
 function scbAttachUploadProgress(formId, fillId, textId) {
@@ -1444,6 +1487,33 @@ function scbAttachUploadProgress(formId, fillId, textId) {
 }
 scbAttachUploadProgress('installer-form', 'progress-installer-fill', 'progress-installer-text');
 scbAttachUploadProgress('installer-android-form', 'progress-installer-android-fill', 'progress-installer-android-text');
+</script>
+
+<script>
+function scbAdminShowTab(name) {
+    document.querySelectorAll('.scb-tab-panel').forEach(function (p) {
+        p.classList.toggle('active', p.getAttribute('data-tab') === name);
+    });
+    document.querySelectorAll('.scb-admin-tab-btn').forEach(function (b) {
+        b.classList.toggle('active', b.getAttribute('data-tab') === name);
+    });
+}
+(function () {
+    var initial = 'licenses';
+    var params = new URLSearchParams(window.location.search);
+    if (params.has('request_status') || window.location.hash === '#purchase-requests') {
+        initial = 'requests';
+    } else if (params.has('license_filter') || params.has('q')) {
+        initial = 'licenses';
+    }
+    scbAdminShowTab(initial);
+    if (window.location.hash) {
+        setTimeout(function () {
+            var el = document.querySelector(window.location.hash);
+            if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        }, 80);
+    }
+})();
 </script>
 
 @include('partials.site-footer')
