@@ -799,29 +799,34 @@ a{color:#1d4ed8!important;}
 </style>
 
 <style>/*SCB_ADMIN_TABS*/
-.scb-admin-tabs { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:22px; }
+.scb-admin-tabs { display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; margin-bottom:22px; }
 .scb-admin-tab-btn {
-    display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:14px;
-    padding:16px 20px; border-radius:20px; font-size:15px; font-weight:bold;
+    display:flex; flex-direction:row; align-items:center; justify-content:flex-start; gap:12px;
+    padding:14px 18px; border-radius:16px; font-size:14.5px; font-weight:bold;
     background:#fff; color:#334155; border:1px solid #e5e7eb; cursor:pointer;
     font-family:'Pinar',Tahoma,Arial,sans-serif;
-    box-shadow:0 6px 20px rgba(15,23,42,.06);
+    box-shadow:0 6px 18px rgba(15,23,42,.05);
     transition:all .15s;
     text-align:right;
+    position:relative;
 }
 .scb-admin-tab-btn:hover { border-color:#bfdbfe; transform:translateY(-1px); }
 .scb-admin-tab-btn.active {
+    background:#eff6ff;
+    color:#1e3a8a; border-color:#dbeafe;
+}
+.scb-admin-tab-btn.active::after {
+    content:""; position:absolute; bottom:-1px; left:50%; transform:translateX(-50%);
+    width:44px; height:4px; border-radius:999px 999px 0 0;
     background:linear-gradient(135deg,#1e3a8a,#2563eb);
-    color:#fff; border-color:transparent;
-    box-shadow:0 10px 26px rgba(30,58,138,.3);
 }
 .scb-admin-tab-icon-wrap {
-    background:#fff; border-radius:12px; padding:6px;
+    width:40px; height:40px; background:#fff; border-radius:12px; padding:5px;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
     box-shadow:0 2px 6px rgba(15,23,42,.08);
 }
 .scb-admin-tab-icon {
-    width:32px; height:32px; object-fit:contain; display:block;
+    width:100%; height:100%; object-fit:contain; display:block;
     background:transparent; mix-blend-mode:multiply;
 }
 .scb-admin-tab-btn .cnt {
@@ -829,13 +834,13 @@ a{color:#1d4ed8!important;}
     padding:2px 10px; font-size:12px; font-weight:bold;
     margin-right:6px;
 }
-.scb-admin-tab-btn.active .cnt { background:rgba(255,255,255,.25); color:#fff; }
+.scb-admin-tab-btn.active .cnt { background:#dbeafe; color:#1e3a8a; }
 .scb-tab-panel { display:none; }
 .scb-tab-panel.active { display:block; }
 @media (max-width: 700px) {
     .scb-admin-tabs { grid-template-columns:1fr; gap:10px; }
     .scb-admin-tab-btn { padding:14px 16px; font-size:14px; }
-    .scb-admin-tab-icon { width:26px; height:26px; }
+    .scb-admin-tab-icon-wrap { width:34px; height:34px; }
 }
 
 /* SCB_ADMIN_ACCORDION_ROWS */
@@ -893,6 +898,22 @@ a{color:#1d4ed8!important;}
     display:flex; align-items:center; justify-content:center; padding:0; margin:0;
 }
 .scb-modal-title { font-size:17px; font-weight:bold; color:#1e3a8a; margin:0 0 16px; padding-left:44px; }
+
+.scb-device-count-btn {
+    display:inline-flex; align-items:center; gap:8px; margin-top:12px;
+    padding:9px 16px; border-radius:12px; border:1.5px solid #e2e8f0; background:#f8fafc;
+    color:#1e3a8a; font-weight:bold; font-size:13px; cursor:pointer; font-family:inherit;
+    transition:all .15s;
+}
+.scb-device-count-btn:hover { border-color:#93c5fd; background:#eff6ff; }
+.scb-device-count-btn .num {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:24px; height:24px; padding:0 6px; border-radius:999px;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; font-size:12.5px;
+}
+#scbModalOverlay3 { z-index:1100; }
+.scb-log-delete-form { margin-top:16px; }
+.scb-log-delete-form .btn { width:100%; }
 
 /* SCB_ADMIN_ICON_BUTTONS */
 .upload-installer-form { grid-template-columns:1fr auto; }
@@ -1281,6 +1302,10 @@ a{color:#1d4ed8!important;}
                 <strong>IP:</strong> <span style="direction:ltr; display:inline-block;">{{ $log->ip_address ?: '-' }}</span>
             </div>
             <div style="margin-top:10px; padding:10px 12px; background:#f9fafb; border-radius:10px; font-size:13px; color:#374151; white-space:normal;">{{ $log->message ?: '-' }}</div>
+            <form class="scb-log-delete-form" method="post" action="/admin/logs/{{ $log->id }}/delete" onsubmit="return confirm('این رویداد برای همیشه حذف شود؟');">
+                @csrf
+                <button class="btn btn-red" type="submit">حذف</button>
+            </form>
         </div>
     @empty
         <div style="text-align:center; padding:24px; color:#6b7280;">هنوز فعالیتی ثبت نشده است.</div>
@@ -1390,21 +1415,9 @@ a{color:#1d4ed8!important;}
                 </div>
                 <div style="margin-top:10px; color:#6b7280; font-size:13px;">مشتری: {{ $license->customer_name ?: '-' }}</div>
 
-                <div class="scb-acc-devices">
-                    <strong style="font-size:13px; color:#374151;">دستگاه‌ها ({{ $count }} / {{ $license->max_devices }})</strong>
-                    @forelse($licenseActivations as $activation)
-                        <div class="scb-acc-device">
-                            Device: {{ $activation->device_name ?: '-' }}<br>
-                            ID: {{ $activation->device_id }}<br>
-                            IP: {{ $activation->ip_address ?: '-' }}<br>
-                            App: {{ $activation->app_version ?: '-' }}<br>
-                            Activated: {{ $activation->activated_at ?: '-' }}<br>
-                            Last Seen: {{ $activation->last_seen_at ?: '-' }}
-                        </div>
-                    @empty
-                        <div style="color:#6b7280; margin-top:6px; font-size:12.5px;">هنوز فعال‌سازی نشده</div>
-                    @endforelse
-                </div>
+                <button type="button" class="scb-device-count-btn" onclick="scbOpenDeviceModal('scb-modal-src-devices-{{ $license->id }}', 'دستگاه‌های {{ addslashes($license->pharmacy_name ?: $license->license_key) }}')">
+                    <span class="num">{{ $count }}</span> دستگاه فعال‌شده
+                </button>
 
                 <div class="scb-acc-actions">
                     @if($license->status === 'active')
@@ -1455,6 +1468,23 @@ a{color:#1d4ed8!important;}
                     </form>
                 </div>
             </div>
+
+            <div id="scb-modal-src-devices-{{ $license->id }}" class="scb-modal-src" style="display:none;">
+                <div class="scb-acc-devices">
+                    @forelse($licenseActivations as $activation)
+                        <div class="scb-acc-device">
+                            Device: {{ $activation->device_name ?: '-' }}<br>
+                            ID: {{ $activation->device_id }}<br>
+                            IP: {{ $activation->ip_address ?: '-' }}<br>
+                            App: {{ $activation->app_version ?: '-' }}<br>
+                            Activated: {{ $activation->activated_at ?: '-' }}<br>
+                            Last Seen: {{ $activation->last_seen_at ?: '-' }}
+                        </div>
+                    @empty
+                        <div style="color:#6b7280; margin-top:6px; font-size:12.5px;">هنوز فعال‌سازی نشده</div>
+                    @endforelse
+                </div>
+            </div>
         @empty
             <div style="text-align:center; padding:30px; color:#6b7280;">هیچ لایسنسی پیدا نشد.</div>
         @endforelse
@@ -1470,6 +1500,14 @@ a{color:#1d4ed8!important;}
         <button type="button" class="scb-modal-close" onclick="scbCloseModal()" title="بستن">&times;</button>
         <div class="scb-modal-title" id="scbModalTitle2"></div>
         <div id="scbModalBody2"></div>
+    </div>
+</div>
+
+<div class="scb-modal-overlay" id="scbModalOverlay3" onclick="if(event.target===this){scbCloseDeviceModal();}">
+    <div class="scb-modal-box">
+        <button type="button" class="scb-modal-close" onclick="scbCloseDeviceModal()" title="بستن">&times;</button>
+        <div class="scb-modal-title" id="scbModalTitle3"></div>
+        <div id="scbModalBody3"></div>
     </div>
 </div>
 
@@ -1574,8 +1612,37 @@ function scbCloseModal() {
     scbModalReturnParent = null;
     scbModalReturnNext = null;
 }
+var scbDeviceModalReturnNode = null;
+var scbDeviceModalReturnParent = null;
+var scbDeviceModalReturnNext = null;
+function scbOpenDeviceModal(contentId, title) {
+    var src = document.getElementById(contentId);
+    if (!src) { return; }
+    scbDeviceModalReturnNode = src;
+    scbDeviceModalReturnParent = src.parentNode;
+    scbDeviceModalReturnNext = src.nextSibling;
+    document.getElementById('scbModalTitle3').textContent = title || '';
+    var body = document.getElementById('scbModalBody3');
+    body.innerHTML = '';
+    body.appendChild(src);
+    src.style.display = 'block';
+    document.getElementById('scbModalOverlay3').classList.add('open');
+}
+function scbCloseDeviceModal() {
+    document.getElementById('scbModalOverlay3').classList.remove('open');
+    if (scbDeviceModalReturnNode && scbDeviceModalReturnParent) {
+        scbDeviceModalReturnNode.style.display = 'none';
+        scbDeviceModalReturnParent.insertBefore(scbDeviceModalReturnNode, scbDeviceModalReturnNext);
+    }
+    scbDeviceModalReturnNode = null;
+    scbDeviceModalReturnParent = null;
+    scbDeviceModalReturnNext = null;
+}
 document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && document.getElementById('scbModalOverlay2').classList.contains('open')) {
+    if (e.key !== 'Escape') { return; }
+    if (document.getElementById('scbModalOverlay3').classList.contains('open')) {
+        scbCloseDeviceModal();
+    } else if (document.getElementById('scbModalOverlay2').classList.contains('open')) {
         scbCloseModal();
     }
 });

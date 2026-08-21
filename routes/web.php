@@ -432,6 +432,14 @@ Route::post('/admin/purchase-requests/{id}/delete', function (\Illuminate\Http\R
     scb_admin_log('delete_request', 'درخواست حذف شد: ID ' . $id);
     return redirect('/admin')->with('ok', 'درخواست حذف شد.');
 });
+
+Route::post('/admin/logs/{id}/delete', function (\Illuminate\Http\Request $request, int $id) use ($requireAdmin) {
+    if ($redirect = $requireAdmin($request)) {
+        return $redirect;
+    }
+    \Illuminate\Support\Facades\DB::table('scanbridge_admin_logs')->where('id', $id)->delete();
+    return redirect('/admin')->with('ok', 'رویداد حذف شد.');
+});
 // SCB_DELETE_ROUTES_END
 // SCANBRIDGE_PURCHASE_REQUESTS_START
 Route::post('/buy/request', function (\Illuminate\Http\Request $request) {
