@@ -799,32 +799,58 @@ a{color:#1d4ed8!important;}
 </style>
 
 <style>/*SCB_ADMIN_TABS*/
-.scb-admin-tabs { display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.scb-admin-tabs { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:22px; }
 .scb-admin-tab-btn {
-    display:inline-flex; align-items:center; gap:8px;
-    padding:12px 22px; border-radius:14px; font-size:14.5px; font-weight:bold;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+    padding:22px 16px; border-radius:20px; font-size:15px; font-weight:bold;
     background:#fff; color:#334155; border:1px solid #e5e7eb; cursor:pointer;
     font-family:'Pinar',Tahoma,Arial,sans-serif;
-    box-shadow:0 4px 14px rgba(15,23,42,.05);
+    box-shadow:0 6px 20px rgba(15,23,42,.06);
     transition:all .15s;
+    text-align:center;
 }
-.scb-admin-tab-btn:hover { border-color:#bfdbfe; }
+.scb-admin-tab-btn:hover { border-color:#bfdbfe; transform:translateY(-1px); }
 .scb-admin-tab-btn.active {
     background:linear-gradient(135deg,#1e3a8a,#2563eb);
     color:#fff; border-color:transparent;
-    box-shadow:0 8px 22px rgba(30,58,138,.28);
+    box-shadow:0 10px 26px rgba(30,58,138,.3);
+}
+.scb-admin-tab-icon {
+    width:56px; height:56px; object-fit:contain;
+    background:transparent; mix-blend-mode:multiply;
 }
 .scb-admin-tab-btn .cnt {
     background:#fee2e2; color:#dc2626; border-radius:999px;
-    padding:2px 9px; font-size:12px; font-weight:bold;
+    padding:2px 10px; font-size:12px; font-weight:bold;
+    margin-right:6px;
 }
 .scb-admin-tab-btn.active .cnt { background:rgba(255,255,255,.25); color:#fff; }
 .scb-tab-panel { display:none; }
 .scb-tab-panel.active { display:block; }
 @media (max-width: 700px) {
-    .scb-admin-tabs { gap:8px; }
-    .scb-admin-tab-btn { flex:1 1 auto; justify-content:center; padding:11px 12px; font-size:13px; }
+    .scb-admin-tabs { grid-template-columns:1fr; gap:10px; }
+    .scb-admin-tab-btn { flex-direction:row; padding:14px 16px; font-size:14px; }
+    .scb-admin-tab-icon { width:38px; height:38px; }
 }
+
+/* SCB_ADMIN_ACCORDION_ROWS */
+.scb-acc-list { display:flex; flex-direction:column; gap:10px; }
+.scb-acc-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; box-shadow:0 4px 14px rgba(15,23,42,.04); }
+.scb-acc-card.expired-row { border-color:#fed7aa; }
+.scb-acc-card.disabled-row { opacity:.85; }
+.scb-acc-head { display:flex; justify-content:space-between; align-items:center; gap:14px; flex-wrap:wrap; padding:14px 18px; cursor:pointer; user-select:none; transition:background .15s; }
+.scb-acc-head:hover { background:#f8fafc; }
+.scb-acc-head-main { display:flex; align-items:center; gap:10px; flex-wrap:wrap; flex:1; min-width:0; }
+.scb-acc-head-main .license-key { font-size:12.5px; padding:6px 10px; margin:0; }
+.scb-acc-head-meta { display:flex; align-items:center; gap:14px; font-size:12.5px; color:#6b7280; white-space:nowrap; }
+.scb-acc-chevron { width:20px; height:20px; color:#94a3b8; transition:transform .3s ease; flex-shrink:0; }
+.scb-acc-body { max-height:0; overflow:hidden; padding:0 18px; transition:max-height .4s ease, padding .4s ease; }
+.scb-acc-body.open { max-height:1600px; padding:6px 18px 20px; border-top:1px solid #f1f5f9; }
+.scb-acc-actions { display:grid; grid-template-columns:repeat(auto-fill, minmax(232px,1fr)); gap:8px; margin-top:14px; }
+.scb-acc-actions form { margin:0; }
+.scb-acc-actions .btn, .scb-acc-actions button { width:100%; }
+.scb-acc-devices { margin-top:12px; }
+.scb-acc-device { background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; padding:8px 10px; margin-top:6px; direction:ltr; text-align:left; font-size:12px; }
 </style>
 </head>
 <body>
@@ -871,12 +897,18 @@ a{color:#1d4ed8!important;}
     </section>
 
     <div class="scb-admin-tabs" id="scbAdminTabs">
-        <button type="button" class="scb-admin-tab-btn" data-tab="licenses" onclick="scbAdminShowTab('licenses')">لایسنس‌ها</button>
-        <button type="button" class="scb-admin-tab-btn" data-tab="requests" onclick="scbAdminShowTab('requests')">
-            درخواست‌های خرید و تمدید
-            @if(($newPurchaseRequests ?? 0) > 0)<span class="cnt">{{ $newPurchaseRequests }}</span>@endif
+        <button type="button" class="scb-admin-tab-btn" data-tab="licenses" onclick="scbAdminShowTab('licenses')">
+            <img class="scb-admin-tab-icon" src="/icons/tab-licenses.png" alt="" onerror="this.style.display='none'">
+            <span>لایسنس‌ها</span>
         </button>
-        <button type="button" class="scb-admin-tab-btn" data-tab="settings" onclick="scbAdminShowTab('settings')">بروزرسانی و تنظیمات</button>
+        <button type="button" class="scb-admin-tab-btn" data-tab="requests" onclick="scbAdminShowTab('requests')">
+            <img class="scb-admin-tab-icon" src="/icons/tab-requests.png" alt="" onerror="this.style.display='none'">
+            <span>درخواست‌های خرید و تمدید @if(($newPurchaseRequests ?? 0) > 0)<span class="cnt">{{ $newPurchaseRequests }}</span>@endif</span>
+        </button>
+        <button type="button" class="scb-admin-tab-btn" data-tab="settings" onclick="scbAdminShowTab('settings')">
+            <img class="scb-admin-tab-icon" src="/icons/tab-settings.png" alt="" onerror="this.style.display='none'">
+            <span>بروزرسانی و تنظیمات</span>
+        </button>
     </div>
 
     <div class="scb-tab-panel" data-tab="settings">
@@ -1071,54 +1103,13 @@ a{color:#1d4ed8!important;}
         <a class="request-filter {{ ($requestStatus ?? 'all') === 'ignored' ? 'active' : '' }}" href="/admin?request_status=ignored#purchase-requests">نادیده</a>
     </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>زمان</th>
-            <th>نام مجموعه</th>
-            <th>مسئول / موبایل</th>
-            <th>درخواست</th>
-            <th>لایسنس صادرشده</th>
-            <th>توضیحات</th>
-            <th>وضعیت</th>
-            <th>عملیات</th>
-        </tr>
-        </thead>
-        <tbody>
-        @forelse(($purchaseRequests ?? collect()) as $req)
-            <tr>
-                <td>{{ $req->created_at }}</td>
-
-                <td>{{ $req->organization_name ?: '-' }}</td>
-
-                <td>
-                    {{ $req->contact_name ?: '-' }}
-                    <br>
-                    <span style="direction:ltr; display:inline-block;">{{ $req->mobile ?: '-' }}</span>
-                </td>
-
-                <td>
-                    {{ $req->request_type ?: '-' }}
-                    <br>
+    <div class="scb-acc-list">
+    @forelse(($purchaseRequests ?? collect()) as $req)
+        <div class="scb-acc-card">
+            <div class="scb-acc-head" onclick="scbToggleAcc(this)">
+                <div class="scb-acc-head-main">
+                    <strong>{{ $req->organization_name ?: '-' }}</strong>
                     <span class="badge plan">{{ $req->plan ?: '-' }}</span>
-                    <br>
-                    تعداد سیستم: {{ $req->devices }}
-                </td>
-
-                <td>
-                    @if(!empty($req->license_key))
-                        <div class="license-box" style="min-width:280px;">
-                            <div class="license-key" style="font-size:12px;">{{ $req->license_key }}</div>
-                            <button type="button" class="btn btn-copy" onclick="copyLicense('{{ $req->license_key }}')">کپی</button>
-                        </div>
-                    @else
-                        <span style="color:#9ca3af;">هنوز صادر نشده</span>
-                    @endif
-                </td>
-
-                <td style="max-width:260px; white-space:normal;">{{ $req->description ?: '-' }}</td>
-
-                <td>
                     @if($req->status === 'new')
                         <span class="badge expired">جدید</span>
                     @elseif($req->status === 'contacted')
@@ -1128,53 +1119,72 @@ a{color:#1d4ed8!important;}
                     @else
                         <span class="badge disabled">نادیده</span>
                     @endif
-                </td>
+                </div>
+                <div class="scb-acc-head-meta">
+                    <span>{{ $req->request_type ?: '-' }}</span>
+                    <span>{{ $req->created_at }}</span>
+                    <svg class="scb-acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+            </div>
+            <div class="scb-acc-body">
+                <div style="font-size:13px; color:#374151; line-height:2;">
+                    مسئول: {{ $req->contact_name ?: '-' }}
+                    &middot; موبایل: <span style="direction:ltr; display:inline-block;">{{ $req->mobile ?: '-' }}</span>
+                    &middot; تعداد سیستم: {{ $req->devices }}
+                </div>
 
-                <td>
-                    <div class="actions">
-                        @if(empty($req->license_key))
-                            <form method="post" action="/admin/purchase-requests/{{ $req->id }}/create-license">
-                                @csrf
-                                <input type="hidden" name="plan" value="{{ $req->plan ?: 'TtacPlus' }}">
-                                <input type="hidden" name="days" value="{{ ($req->plan ?? '') === 'Trial' ? 14 : 365 }}">
-                                <button class="btn" style="background:#16a34a;" type="submit">ساخت لایسنس</button>
-                            </form>
-                        @endif
-
-                        <form method="post" action="/admin/purchase-requests/{{ $req->id }}/status">
-                            @csrf
-                            <input type="hidden" name="status" value="contacted">
-                            <button class="btn btn-blue" type="submit">تماس گرفتم</button>
-                        </form>
-
-                        <form method="post" action="/admin/purchase-requests/{{ $req->id }}/status">
-                            @csrf
-                            <input type="hidden" name="status" value="done">
-                            <button class="btn" style="background:#16a34a;" type="submit">انجام شد</button>
-                        </form>
-
-                        <form method="post" action="/admin/purchase-requests/{{ $req->id }}/status">
-                            @csrf
-                            <input type="hidden" name="status" value="ignored">
-                            <button class="btn btn-gray" type="submit">نادیده</button>
-                        </form>
-<!-- SCB_DEL_BTN_REQ -->
-                        <form method="post" action="/admin/purchase-requests/{{ $req->id }}/delete" onsubmit="return confirm('این درخواست برای همیشه حذف شود؟');">
-                            @csrf
-                            <button class="btn btn-red" type="submit">حذف</button>
-                        </form>
+                @if(!empty($req->license_key))
+                    <div class="license-box" style="max-width:340px; margin-top:8px;">
+                        <div class="license-key" style="font-size:12px;">{{ $req->license_key }}</div>
+                        <button type="button" class="btn btn-copy" onclick="copyLicense('{{ $req->license_key }}')">کپی</button>
                     </div>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="8" style="text-align:center; padding:24px; color:#6b7280;">
-                    هنوز درخواستی ثبت نشده است.
-                </td>
-            </tr>
-        @endforelse
-        </tbody>
-    </table>
+                @else
+                    <div style="color:#9ca3af; margin-top:8px; font-size:13px;">هنوز لایسنسی صادر نشده</div>
+                @endif
+
+                @if($req->description)
+                    <div style="margin-top:10px; padding:10px 12px; background:#f9fafb; border-radius:10px; font-size:13px; color:#374151; white-space:normal;">{{ $req->description }}</div>
+                @endif
+
+                <div class="scb-acc-actions">
+                    @if(empty($req->license_key))
+                        <form method="post" action="/admin/purchase-requests/{{ $req->id }}/create-license">
+                            @csrf
+                            <input type="hidden" name="plan" value="{{ $req->plan ?: 'TtacPlus' }}">
+                            <input type="hidden" name="days" value="{{ ($req->plan ?? '') === 'Trial' ? 14 : 365 }}">
+                            <button class="btn" style="background:#16a34a;" type="submit">ساخت لایسنس</button>
+                        </form>
+                    @endif
+
+                    <form method="post" action="/admin/purchase-requests/{{ $req->id }}/status">
+                        @csrf
+                        <input type="hidden" name="status" value="contacted">
+                        <button class="btn btn-blue" type="submit">تماس گرفتم</button>
+                    </form>
+
+                    <form method="post" action="/admin/purchase-requests/{{ $req->id }}/status">
+                        @csrf
+                        <input type="hidden" name="status" value="done">
+                        <button class="btn" style="background:#16a34a;" type="submit">انجام شد</button>
+                    </form>
+
+                    <form method="post" action="/admin/purchase-requests/{{ $req->id }}/status">
+                        @csrf
+                        <input type="hidden" name="status" value="ignored">
+                        <button class="btn btn-gray" type="submit">نادیده</button>
+                    </form>
+<!-- SCB_DEL_BTN_REQ -->
+                    <form method="post" action="/admin/purchase-requests/{{ $req->id }}/delete" onsubmit="return confirm('این درخواست برای همیشه حذف شود؟');">
+                        @csrf
+                        <button class="btn btn-red" type="submit">حذف</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @empty
+        <div style="text-align:center; padding:24px; color:#6b7280;">هنوز درخواستی ثبت نشده است.</div>
+    @endforelse
+    </div>
 </section>
 <!-- SCANBRIDGE_PURCHASE_REQUESTS_PANEL_END -->
     </div>
@@ -1282,135 +1292,112 @@ a{color:#1d4ed8!important;}
             <a class="license-filter {{ ($licenseFilter ?? 'all') === 'Trial' ? 'active' : '' }}" href="/admin?license_filter=Trial">Trial</a>
         </div>
 
-        <table>
-            <thead>
-            <tr>
-                <th>کد</th>
-                <th>مشتری / داروخانه</th>
-                <th>پلن</th>
-                <th>وضعیت</th>
-                <th>اعتبار</th>
-                <th>دستگاه‌ها</th>
-                <th>عملیات</th>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse($licenses as $license)
-                @php
-                    $count = (int)($activationCounts[$license->id] ?? 0);
-                    $licenseActivations = $activations[$license->id] ?? collect();
-                    $isExpired = $license->expires_at && \Carbon\Carbon::parse($license->expires_at)->isPast();
-                    $rowClass = $isExpired ? 'expired-row' : ($license->status !== 'active' ? 'disabled-row' : '');
-                @endphp
-                <tr class="{{ $rowClass }}">
-                    <td>
-                        <div class="license-box">
-                            <div class="license-key" id="lic-{{ $license->id }}">{{ $license->license_key }}</div>
-                            <button type="button" class="btn btn-copy" onclick="copyLicense('{{ $license->license_key }}')">کپی</button>
-                        </div>
-                    </td>
-                    <td>
+        <div class="scb-acc-list">
+        @forelse($licenses as $license)
+            @php
+                $count = (int)($activationCounts[$license->id] ?? 0);
+                $licenseActivations = $activations[$license->id] ?? collect();
+                $isExpired = $license->expires_at && \Carbon\Carbon::parse($license->expires_at)->isPast();
+                $rowClass = $isExpired ? 'expired-row' : ($license->status !== 'active' ? 'disabled-row' : '');
+            @endphp
+            <div class="scb-acc-card {{ $rowClass }}">
+                <div class="scb-acc-head" onclick="scbToggleAcc(this)">
+                    <div class="scb-acc-head-main">
+                        <span class="license-key">{{ $license->license_key }}</span>
                         <strong>{{ $license->pharmacy_name ?: '-' }}</strong>
-                        <br>
-                        <span style="color:#6b7280">{{ $license->customer_name ?: '-' }}</span>
-                    </td>
-                    <td>
                         <span class="badge plan">{{ $license->plan }}</span>
-                    </td>
-                    <td>
                         @if($license->status === 'active')
                             <span class="badge active">فعال</span>
                         @else
                             <span class="badge disabled">غیرفعال</span>
                         @endif
-
                         @if($isExpired)
-                            <br><br>
                             <span class="badge expired">منقضی‌شده</span>
                         @endif
-                    </td>
-                    <td>
-                        {{ $license->expires_at ?: 'بدون تاریخ' }}
-                    </td>
-                    <td>
-                        {{ $count }} / {{ $license->max_devices }}
+                    </div>
+                    <div class="scb-acc-head-meta">
+                        <span>{{ $count }} / {{ $license->max_devices }} دستگاه</span>
+                        <span>{{ $license->expires_at ?: 'بدون تاریخ' }}</span>
+                        <svg class="scb-acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </div>
+                </div>
+                <div class="scb-acc-body">
+                    <div class="license-box" style="max-width:420px;">
+                        <div class="license-key" id="lic-{{ $license->id }}">{{ $license->license_key }}</div>
+                        <button type="button" class="btn btn-copy" onclick="copyLicense('{{ $license->license_key }}')">کپی</button>
+                    </div>
+                    <div style="margin-top:10px; color:#6b7280; font-size:13px;">مشتری: {{ $license->customer_name ?: '-' }}</div>
 
-                        <details>
-                            <summary>مشاهده دستگاه‌ها</summary>
-                            @forelse($licenseActivations as $activation)
-                                <div class="activation">
-                                    Device: {{ $activation->device_name ?: '-' }}<br>
-                                    ID: {{ $activation->device_id }}<br>
-                                    IP: {{ $activation->ip_address ?: '-' }}<br>
-                                    App: {{ $activation->app_version ?: '-' }}<br>
-                                    Activated: {{ $activation->activated_at ?: '-' }}<br>
-                                    Last Seen: {{ $activation->last_seen_at ?: '-' }}
-                                </div>
-                            @empty
-                                <div style="color:#6b7280; margin-top:8px;">هنوز فعال‌سازی نشده</div>
-                            @endforelse
-                        </details>
-                    </td>
-                    <td>
-                        <div class="actions">
-                            @if($license->status === 'active')
-                                <form method="post" action="/admin/licenses/{{ $license->id }}/status">
-                                    @csrf
-                                    <input type="hidden" name="status" value="disabled">
-                                    <button class="btn btn-red" type="submit">غیرفعال کردن</button>
-                                </form>
-                            @else
-                                <form method="post" action="/admin/licenses/{{ $license->id }}/status">
-                                    @csrf
-                                    <input type="hidden" name="status" value="active">
-                                    <button class="btn btn-blue" type="submit">فعال کردن</button>
-                                </form>
-                            @endif
+                    <div class="scb-acc-devices">
+                        <strong style="font-size:13px; color:#374151;">دستگاه‌ها ({{ $count }} / {{ $license->max_devices }})</strong>
+                        @forelse($licenseActivations as $activation)
+                            <div class="scb-acc-device">
+                                Device: {{ $activation->device_name ?: '-' }}<br>
+                                ID: {{ $activation->device_id }}<br>
+                                IP: {{ $activation->ip_address ?: '-' }}<br>
+                                App: {{ $activation->app_version ?: '-' }}<br>
+                                Activated: {{ $activation->activated_at ?: '-' }}<br>
+                                Last Seen: {{ $activation->last_seen_at ?: '-' }}
+                            </div>
+                        @empty
+                            <div style="color:#6b7280; margin-top:6px; font-size:12.5px;">هنوز فعال‌سازی نشده</div>
+                        @endforelse
+                    </div>
 
-                            <form method="post" action="/admin/licenses/{{ $license->id }}/reset-devices" onsubmit="return confirm('دستگاه‌های فعال‌شده این لایسنس حذف شوند؟')">
+                    <div class="scb-acc-actions">
+                        @if($license->status === 'active')
+                            <form method="post" action="/admin/licenses/{{ $license->id }}/status">
                                 @csrf
-                                <button class="btn btn-orange" type="submit">ریست دستگاه‌ها</button>
+                                <input type="hidden" name="status" value="disabled">
+                                <button class="btn btn-red" type="submit">غیرفعال کردن</button>
                             </form>
-
-                            <form class="inline-form" method="post" action="/admin/licenses/{{ $license->id }}/renew">
+                        @else
+                            <form method="post" action="/admin/licenses/{{ $license->id }}/status">
                                 @csrf
-                                <input type="number" name="days" value="365" min="1" max="3650">
-                                <button class="btn btn-purple" type="submit">تمدید</button>
+                                <input type="hidden" name="status" value="active">
+                                <button class="btn btn-blue" type="submit">فعال کردن</button>
                             </form>
+                        @endif
 
-                            <form class="inline-form" method="post" action="/admin/licenses/{{ $license->id }}/max-devices">
-                                @csrf
-                                <input type="number" name="max_devices" value="{{ $license->max_devices }}" min="1" max="50">
-                                <button class="btn btn-gray" type="submit">تعداد</button>
-                            </form>
+                        <form method="post" action="/admin/licenses/{{ $license->id }}/reset-devices" onsubmit="return confirm('دستگاه‌های فعال‌شده این لایسنس حذف شوند؟')">
+                            @csrf
+                            <button class="btn btn-orange" type="submit">ریست دستگاه‌ها</button>
+                        </form>
 
-                            <form class="inline-form" method="post" action="/admin/licenses/{{ $license->id }}/plan">
-                                @csrf
-                                <select name="plan">
-                                    <option value="Normal" @selected($license->plan === 'Normal')>Normal</option>
-                                    <option value="Ttac" @selected($license->plan === 'Ttac')>Ttac</option>
-                                    <option value="TtacPlus" @selected($license->plan === 'TtacPlus')>TtacPlus</option>
-                                    <option value="Trial" @selected($license->plan === 'Trial')>Trial</option>
-                                </select>
-                                <button class="btn btn-blue" type="submit">تغییر پلن</button>
-                            </form>
+                        <form class="inline-form" method="post" action="/admin/licenses/{{ $license->id }}/renew">
+                            @csrf
+                            <input type="number" name="days" value="365" min="1" max="3650">
+                            <button class="btn btn-purple" type="submit">تمدید</button>
+                        </form>
+
+                        <form class="inline-form" method="post" action="/admin/licenses/{{ $license->id }}/max-devices">
+                            @csrf
+                            <input type="number" name="max_devices" value="{{ $license->max_devices }}" min="1" max="50">
+                            <button class="btn btn-gray" type="submit">تعداد</button>
+                        </form>
+
+                        <form class="inline-form" method="post" action="/admin/licenses/{{ $license->id }}/plan">
+                            @csrf
+                            <select name="plan">
+                                <option value="Normal" @selected($license->plan === 'Normal')>Normal</option>
+                                <option value="Ttac" @selected($license->plan === 'Ttac')>Ttac</option>
+                                <option value="TtacPlus" @selected($license->plan === 'TtacPlus')>TtacPlus</option>
+                                <option value="Trial" @selected($license->plan === 'Trial')>Trial</option>
+                            </select>
+                            <button class="btn btn-blue" type="submit">تغییر پلن</button>
+                        </form>
 <!-- SCB_DEL_BTN_LIC -->
-                            <form method="post" action="/admin/licenses/{{ $license->id }}/delete" onsubmit="return confirm('این لایسنس برای همیشه حذف شود؟ تمام دستگاه‌های آن هم پاک می‌شوند.');">
-                                @csrf
-                                <button class="btn btn-red" type="submit">حذف</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="7" style="text-align:center; padding:30px; color:#6b7280;">
-                        هیچ لایسنسی پیدا نشد.
-                    </td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
+                        <form method="post" action="/admin/licenses/{{ $license->id }}/delete" onsubmit="return confirm('این لایسنس برای همیشه حذف شود؟ تمام دستگاه‌های آن هم پاک می‌شوند.');">
+                            @csrf
+                            <button class="btn btn-red" type="submit">حذف</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <div style="text-align:center; padding:30px; color:#6b7280;">هیچ لایسنسی پیدا نشد.</div>
+        @endforelse
+        </div>
     </section>
     </div>
 </main>
@@ -1490,6 +1477,14 @@ scbAttachUploadProgress('installer-android-form', 'progress-installer-android-fi
 </script>
 
 <script>
+function scbToggleAcc(head) {
+    var body = head.nextElementSibling;
+    if (!body) { return; }
+    var chevron = head.querySelector('.scb-acc-chevron');
+    var willOpen = !body.classList.contains('open');
+    body.classList.toggle('open');
+    if (chevron) { chevron.style.transform = willOpen ? 'rotate(180deg)' : ''; }
+}
 function scbAdminShowTab(name) {
     document.querySelectorAll('.scb-tab-panel').forEach(function (p) {
         p.classList.toggle('active', p.getAttribute('data-tab') === name);
