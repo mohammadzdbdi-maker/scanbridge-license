@@ -266,6 +266,10 @@ Route::get('/download', function () {
     return view('site.download');
 });
 
+Route::get('/guide', function () {
+    return view('site.guide');
+});
+
 Route::get('/buy', function (Request $request) {
     $customerId = $request->session()->get('scanbridge_customer_id');
     if (!$customerId) {
