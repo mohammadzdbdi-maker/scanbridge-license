@@ -1195,6 +1195,38 @@ a{color:#1d4ed8!important;}
     })();
     </script>
 </section>
+
+<!-- SCANBRIDGE_ADMIN_LOGS_START -->
+<section class="card" id="admin-logs">
+    <h2>آخرین فعالیت‌های پنل</h2>
+
+    <div class="scb-grid-list">
+    @forelse(($adminLogs ?? collect()) as $log)
+        <div class="scb-grid-card">
+            <div class="scb-grid-badges"><span class="badge plan">{{ $log->action }}</span></div>
+            <div class="scb-grid-meta">{{ $log->created_at }}</div>
+            <button type="button" class="btn btn-blue scb-more-btn" onclick="scbOpenModal('scb-modal-src-log-{{ $loop->index }}', '{{ addslashes($log->action) }}')">اطلاعات بیشتر</button>
+        </div>
+
+        <div id="scb-modal-src-log-{{ $loop->index }}" class="scb-modal-src" style="display:none;">
+            <div style="font-size:13.5px; color:#374151; line-height:2.1;">
+                <strong>زمان:</strong> {{ $log->created_at }}<br>
+                <strong>عملیات:</strong> <span class="badge plan">{{ $log->action }}</span><br>
+                <strong>IP:</strong> <span style="direction:ltr; display:inline-block;">{{ $log->ip_address ?: '-' }}</span>
+            </div>
+            <div style="margin-top:10px; padding:10px 12px; background:#f9fafb; border-radius:10px; font-size:13px; color:#374151; white-space:normal;">{{ $log->message ?: '-' }}</div>
+            <form class="scb-log-delete-form" method="post" action="/admin/logs/{{ $log->id }}/delete" onsubmit="return confirm('این رویداد برای همیشه حذف شود؟');">
+                @csrf
+                <button class="btn btn-red" type="submit">حذف</button>
+            </form>
+        </div>
+    @empty
+        <div style="text-align:center; padding:24px; color:#6b7280;">هنوز فعالیتی ثبت نشده است.</div>
+    @endforelse
+    </div>
+</section>
+<!-- SCANBRIDGE_ADMIN_LOGS_END -->
+
     </div>
 
     <div class="scb-tab-panel" data-tab="requests">
@@ -1296,38 +1328,6 @@ a{color:#1d4ed8!important;}
 <!-- SCANBRIDGE_PURCHASE_REQUESTS_PANEL_END -->
     </div>
 
-    <div class="scb-tab-panel" data-tab="settings">
-<!-- SCANBRIDGE_ADMIN_LOGS_START -->
-<section class="card" id="admin-logs">
-    <h2>آخرین فعالیت‌های پنل</h2>
-
-    <div class="scb-grid-list">
-    @forelse(($adminLogs ?? collect()) as $log)
-        <div class="scb-grid-card">
-            <div class="scb-grid-badges"><span class="badge plan">{{ $log->action }}</span></div>
-            <div class="scb-grid-meta">{{ $log->created_at }}</div>
-            <button type="button" class="btn btn-blue scb-more-btn" onclick="scbOpenModal('scb-modal-src-log-{{ $loop->index }}', '{{ addslashes($log->action) }}')">اطلاعات بیشتر</button>
-        </div>
-
-        <div id="scb-modal-src-log-{{ $loop->index }}" class="scb-modal-src" style="display:none;">
-            <div style="font-size:13.5px; color:#374151; line-height:2.1;">
-                <strong>زمان:</strong> {{ $log->created_at }}<br>
-                <strong>عملیات:</strong> <span class="badge plan">{{ $log->action }}</span><br>
-                <strong>IP:</strong> <span style="direction:ltr; display:inline-block;">{{ $log->ip_address ?: '-' }}</span>
-            </div>
-            <div style="margin-top:10px; padding:10px 12px; background:#f9fafb; border-radius:10px; font-size:13px; color:#374151; white-space:normal;">{{ $log->message ?: '-' }}</div>
-            <form class="scb-log-delete-form" method="post" action="/admin/logs/{{ $log->id }}/delete" onsubmit="return confirm('این رویداد برای همیشه حذف شود؟');">
-                @csrf
-                <button class="btn btn-red" type="submit">حذف</button>
-            </form>
-        </div>
-    @empty
-        <div style="text-align:center; padding:24px; color:#6b7280;">هنوز فعالیتی ثبت نشده است.</div>
-    @endforelse
-    </div>
-</section>
-<!-- SCANBRIDGE_ADMIN_LOGS_END -->
-    </div>
 
     <div class="scb-tab-panel" data-tab="licenses">
 
