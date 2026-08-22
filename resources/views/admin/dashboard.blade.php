@@ -843,14 +843,19 @@ a{color:#1d4ed8!important;}
     .scb-admin-tab-icon-wrap { width:34px; height:34px; }
 }
 
-/* SCB_TABS_MATCH_STATS v2 — تراز با کادرهای آمار + آیکون بزرگ + تب فعال فقط با خط آبی */
+/* SCB_TABS_MATCH_STATS v3 — آیکون‌ها دقیقاً به سبک ۴ کادر آمار: بدون کادر سفید، در ابتدای دکمه */
 /* ۳ دکمه در عرض کامل — مجموع عرض هم‌اندازه‌ی ردیف ۴ کادر آمار */
 .scb-admin-tabs { grid-template-columns:repeat(3, 1fr)!important; }
 /* ارتفاع یکسان با کادرهای آمار */
 .stat, .scb-admin-tab-btn { min-height:80px!important; box-sizing:border-box; }
-.scb-admin-tab-btn { padding:12px 18px!important; align-items:center!important; }
-/* آیکون سه‌بعدی بزرگ‌تر داخل کادر سفید */
-.scb-admin-tab-icon-wrap { width:54px; height:54px; border-radius:14px; background:#fff; border:1px solid #eef2f7; box-shadow:0 2px 8px rgba(15,23,42,.07); }
+.scb-admin-tab-btn { padding:12px 20px!important; align-items:center!important; justify-content:flex-start!important; gap:14px!important; }
+/* آیکون بدون کادر سفید — عیناً مثل آیکون‌های کادرهای آمار (::before + multiply) */
+.scb-admin-tab-icon-wrap {
+    width:54px; height:54px; flex-shrink:0;
+    background:transparent!important; border:none!important;
+    box-shadow:none!important; border-radius:0!important; padding:0!important;
+}
+.scb-admin-tab-icon { width:100%!important; height:100%!important; object-fit:contain!important; background:transparent!important; mix-blend-mode:multiply!important; }
 /* دکمه‌ها همیشه سفید — نه hover آبی، نه پس‌زمینه آبی برای تب فعال */
 .scb-admin-tab-btn,
 .scb-admin-tab-btn:hover,
