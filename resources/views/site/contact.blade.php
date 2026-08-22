@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>تماس با Scanbridge | پشتیبانی و خرید</title>
+    <link rel="canonical" href="https://scanbridge.ir/contact">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="تماس با پشتیبانی Scanbridge برای خرید، تمدید، دریافت لایسنس و راهنمای نصب نرم‌افزار.">
     <style>

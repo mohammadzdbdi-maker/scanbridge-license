@@ -110,6 +110,7 @@
 <head>
     <meta charset="utf-8">
     <title>دانلود Scanbridge | دریافت فایل نصب نرم‌افزار</title>
+    <link rel="canonical" href="https://scanbridge.ir/download">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="دانلود آخرین نسخه نصب Scanbridge برای ویندوز به همراه راهنمای نصب، WebView2 و فعال‌سازی لایسنس.">
     <style>

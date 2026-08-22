@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>حریم خصوصی Scanbridge</title>
+    <link rel="canonical" href="https://scanbridge.ir/privacy">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="سیاست حریم خصوصی Scanbridge درباره لایسنس، اطلاعات دستگاه، پشتیبانی و استفاده از امکانات تی‌تک.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">

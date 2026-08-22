@@ -2,9 +2,10 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه</title>
+    <title>نرم‌افزار اسکن بارکد و عملیات تی‌تک داروخانه | ScanBridge</title>
+    <link rel="canonical" href="https://scanbridge.ir/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
+    <meta name="description" content="ScanBridge؛ سیستم هوشمند اسکن بارکد و عملیات تی‌تک داروخانه — کنار نرم‌افزار فعلی شما: اتصال موبایل به کامپیوتر، ثبت تی‌تک و شیرخشک، تحویل بار، تعیین وضعیت و هشدار تاریخ انقضا.">
     <style>
         @font-face {
             font-family: 'Pinar';
@@ -433,6 +434,24 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .scb-reveal:nth-child(3){transition-delay:.16s!important;}
 @media (prefers-reduced-motion:reduce){.scb-reveal{opacity:1!important;transform:none!important;transition:none!important;}}
 </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ScanBridge",
+      "url": "https://scanbridge.ir/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows 10, Windows 11",
+      "inLanguage": "fa-IR",
+      "description": "سیستم هوشمند اسکن بارکد و عملیات تی‌تک داروخانه — کنار هر نرم‌افزار داروخانه",
+      "publisher": {
+        "@type": "Organization",
+        "name": "ScanBridge",
+        "url": "https://scanbridge.ir/",
+        "logo": "https://scanbridge.ir/icons/logo.png"
+      }
+    }
+    </script>
 </head>
 <body>
 

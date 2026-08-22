@@ -20,6 +20,7 @@
 <head>
     <meta charset="utf-8">
     <title>راهنمای استفاده از ScanBridge | آموزش گام‌به‌گام</title>
+    <link rel="canonical" href="https://scanbridge.ir/guide">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="راهنمای تصویری و ویدیویی کار با نرم‌افزار ScanBridge: نصب، فعال‌سازی لایسنس، اتصال موبایل، تی‌تک، شیرخشک، تحویل بار و پشتیبانی.">
     <style>

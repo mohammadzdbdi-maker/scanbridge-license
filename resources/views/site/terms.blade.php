@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>شرایط استفاده Scanbridge</title>
+    <link rel="canonical" href="https://scanbridge.ir/terms">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="شرایط استفاده از نرم‌افزار Scanbridge، لایسنس، تی‌تک، پشتیبانی و مسئولیت کاربران.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
