@@ -242,7 +242,24 @@ Route::get('/', function () {
         return redirect('/admin');
     }
 
-    return view('site.home');
+    $planPrices = [];
+    try {
+        foreach (DB::table('scanbridge_prices')->get() as $row) {
+            $entry = $planPrices[$row->plan] ?? ['annual' => null, 'longest' => null, 'longestMonths' => 0];
+            if ((int) $row->duration_months === 12) {
+                $entry['annual'] = (int) $row->price;
+            }
+            if ((int) $row->duration_months > $entry['longestMonths']) {
+                $entry['longest'] = (int) $row->price;
+                $entry['longestMonths'] = (int) $row->duration_months;
+            }
+            $planPrices[$row->plan] = $entry;
+        }
+    } catch (\Throwable $e) {
+        $planPrices = [];
+    }
+
+    return view('site.home', ['planPrices' => $planPrices]);
 });
 
 Route::get('/download', function () {

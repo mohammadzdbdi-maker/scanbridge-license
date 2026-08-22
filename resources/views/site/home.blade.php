@@ -438,14 +438,41 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 
 @include('partials.site-header')
 
+<style>/*SCB_HOME_PROMO_V1*/
+.scb-newsbar{background:linear-gradient(90deg,#1e3a8a,#2563eb)!important;color:#fff!important;text-align:center;padding:11px 16px;font-size:14px;}
+.scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:6px;}
+.trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:3px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
+.trust-item b{color:#1e3a8a!important;font-size:14.5px;}
+.trust-item span{color:#475569!important;font-size:12.5px;}
+.trust-item a{color:#2563eb!important;font-weight:bold;}
+.plan{position:relative;}
+.plan-ribbon{position:absolute;top:-13px;right:18px;z-index:2;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:12px;font-weight:bold;padding:5px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(37,99,235,.35);}
+.plan-price{margin:2px 0 10px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;text-align:center;}
+.plan.featured .plan-price{background:#eff6ff;border-color:#dbeafe;}
+.plan-price-annual{font-size:23px;font-weight:800;color:#1e3a8a!important;line-height:1.3;}
+.plan-price-annual small{font-size:12px;font-weight:bold;color:#475569;}
+.plan-price-monthly{font-size:12.5px;color:#475569!important;margin-top:3px;}
+.plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
+.launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
+.plans-note{text-align:center;color:#64748b!important;font-size:12.5px;margin:18px auto 0;max-width:640px;}
+.enterprise-strip{text-align:center;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff!important;border-radius:16px;padding:14px 18px;font-size:14.5px;margin-top:14px;}
+.enterprise-strip a{color:#fff!important;font-weight:bold;text-decoration:underline;}
+@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}}
+</style>
+
+<div class="scb-newsbar">
+    🎉 نسخه جدید منتشر شد: <strong>هشدار تاریخ انقضا</strong> و <strong>یادآور پیام‌رسان بله</strong> + بانک بارکد پرمصرف
+</div>
+
 <header class="hero">
     <div class="hero-inner">
         <div>
-            <div class="badge">بارکد خوان تخصصی</div>
-            <h1>Scanbridge؛ اتصال سریع بارکدخوان موبایل، تی‌تک و مدیریت ثبت داروخانه</h1>
+            <div class="badge">ابزار تخصصی عملیات تی‌تک داروخانه</div>
+            <h1>سیستم هوشمند اسکن و عملیات تی‌تک داروخانه</h1>
             <p>
-                با Scanbridge بارکدخوان موبایل را به کامپیوتر وصل کنید، تاریخچه اسکن داشته باشید،
-                ثبت تی‌تک و شیر خشک را مدیریت کنید و در پلن کامل از تعیین وضعیت و تحویل بار استفاده کنید.
+                کنار هر نرم‌افزار داروخانه‌ای که دارید، ScanBridge را نصب کنید: اسکن سریع با موبایل،
+                استعلام و ثبت تی‌تک، تحویل بار، تعیین وضعیت و هشدار تاریخ انقضا —
+                بارکدخوان فعلی خود را هم نگه می‌دارید.
             </p>
             <div class="hero-actions">
                 <a class="btn btn-green" href="/buy">درخواست خرید / تمدید</a>
@@ -516,46 +543,101 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 <section id="plans" style="background:#eef2ff;">
     <div class="container">
         <div class="section-title">
-            <h2>پلن‌های Scanbridge</h2>
-            <p>بر اساس نیاز داروخانه یا کاربر انتخاب کنید</p>
+            <h2>پلن‌های ScanBridge</h2>
+            <p>کنار نرم‌افزار فعلی داروخانه — بدون نیاز به تجهیزات جدید</p>
         </div>
+
+        <div class="scb-trust">
+            <div class="trust-item">⚡<b>فعال‌سازی آنی</b><span>لایسنس آنلاین، بلافاصله پس از تأیید</span></div>
+            <div class="trust-item">🛠<b>پشتیبانی از راه دور</b><span>اتصال مستقیم تیم پشتیبانی به سیستم شما</span></div>
+            <div class="trust-item">📱<b>بدون خرید بارکدخوان جدید</b><span>با موبایل خودتان یا اسکنر فعلی کار می‌کند</span></div>
+            <div class="trust-item">🧪<b>دموی ۱۴ روزه در داروخانه شما</b><span>بدون تعهد خرید — <a href="/contact">درخواست دمو</a></span></div>
+        </div>
+
+        @php
+            $scbPlanPrice = function (string $plan) use ($planPrices) {
+                $entry = $planPrices[$plan] ?? null;
+                if (!$entry) { return null; }
+                $annual = $entry['annual'] ?? $entry['longest'];
+                return $annual ? ['annual' => (int) $annual, 'monthly' => (int) round($annual / 12)] : null;
+            };
+            $pBase = $scbPlanPrice('Normal');
+            $pTtac = $scbPlanPrice('Ttac');
+            $pPlus = $scbPlanPrice('TtacPlus');
+        @endphp
 
         <div class="plans">
             <div class="plan scb-reveal">
-                <img class="plan-icon" src="/icons/plan-normal.png" alt="">Normal</h3>
-                <p>مناسب برای اتصال بارکدخوان و تاریخچه</p>
+                <h3><img class="plan-icon" src="/icons/plan-normal.png" alt="">پایه</h3>
+                <p>مناسب برای اسکن و مدیریت بارکد</p>
+                @if($pBase)
+                    <div class="plan-price">
+                        <div class="plan-price-annual">{{ number_format($pBase['annual']) }} <small>تومان / سال</small></div>
+                        <div class="plan-price-monthly">معادل ماهانه {{ number_format($pBase['monthly']) }} تومان</div>
+                        <span class="launch-tag">قیمت دوره راه‌اندازی</span>
+                    </div>
+                @else
+                    <div class="plan-price-empty">برای قیمت هماهنگ کنید</div>
+                @endif
                 <ul>
-                    <li>اتصال بارکدخوان موبایل</li>
-                    <li>تاریخچه اسکن‌ها</li>
+                    <li>اتصال بارکدخوان موبایل (چند گوشی هم‌زمان)</li>
+                    <li>تاریخچه و جستجوی اسکن‌ها</li>
+                    <li>بانک بارکد پرمصرف</li>
                     <li>مدیریت دستگاه‌ها</li>
+                    <li>به‌روزرسانی خودکار</li>
                 </ul>
                 <a class="btn btn-dark" href="/buy?plan=Normal">درخواست خرید</a>
             </div>
 
-            <div class="plan scb-reveal">
-                <img class="plan-icon" src="/icons/plan-ttac.png" alt="">Ttac</h3>
-                <p>مناسب داروخانه‌هایی که ثبت تی‌تک نیاز دارند</p>
+            <div class="plan featured scb-reveal">
+                <span class="plan-ribbon">⭐ پیشنهاد ما برای اکثر داروخانه‌ها</span>
+                <h3><img class="plan-icon" src="/icons/plan-ttac.png" alt="">تی‌تک</h3>
+                <p>ثبت تی‌تک و شیرخشک در چند ثانیه</p>
+                @if($pTtac)
+                    <div class="plan-price">
+                        <div class="plan-price-annual">{{ number_format($pTtac['annual']) }} <small>تومان / سال</small></div>
+                        <div class="plan-price-monthly">معادل ماهانه {{ number_format($pTtac['monthly']) }} تومان</div>
+                        <span class="launch-tag">قیمت دوره راه‌اندازی</span>
+                    </div>
+                @else
+                    <div class="plan-price-empty">برای قیمت هماهنگ کنید</div>
+                @endif
                 <ul>
-                    <li>تمام امکانات Normal</li>
-                    <li>پنل تی‌تک</li>
-                    <li>ثبت شیر خشک</li>
-                    <li>خروجی Excel/PDF</li>
+                    <li>تمام امکانات پایه</li>
+                    <li>استعلام و ثبت تی‌تک + مرورگر داخلی</li>
+                    <li>ثبت شیرخشک با نسخه و بدون نسخه</li>
+                    <li>ثبت اطلاعات بیمار از موبایل</li>
+                    <li>خروجی Excel و PDF</li>
                 </ul>
                 <a class="btn btn-primary" href="/buy?plan=Ttac">درخواست خرید</a>
             </div>
 
             <div class="plan scb-reveal">
-                <img class="plan-icon" src="/icons/plan-ttacplus.png" alt="">TtacPlus</h3>
-                <p>پلن کامل برای امکانات پیشرفته داروخانه</p>
+                <h3><img class="plan-icon" src="/icons/plan-ttacplus.png" alt="">حرفه‌ای</h3>
+                <p>پلن کامل عملیات روزانه داروخانه</p>
+                @if($pPlus)
+                    <div class="plan-price">
+                        <div class="plan-price-annual">{{ number_format($pPlus['annual']) }} <small>تومان / سال</small></div>
+                        <div class="plan-price-monthly">معادل ماهانه {{ number_format($pPlus['monthly']) }} تومان</div>
+                        <span class="launch-tag">قیمت دوره راه‌اندازی</span>
+                    </div>
+                @else
+                    <div class="plan-price-empty">برای قیمت هماهنگ کنید</div>
+                @endif
                 <ul>
-                    <li>تمام امکانات Ttac</li>
-                    <li>تعیین وضعیت</li>
-                    <li>تحویل بار</li>
-                    <li>گزارش‌گیری کامل</li>
+                    <li>تمام امکانات تی‌تک</li>
+                    <li>تعیین وضعیت (تکی و گروهی)</li>
+                    <li>تحویل بار حرفه‌ای</li>
+                    <li>هشدار تاریخ انقضا + یادآور بله</li>
+                    <li>همگام‌سازی چند سیستم با یک لایسنس</li>
+                    <li>پشتیبانی اولویت‌دار</li>
                 </ul>
                 <a class="btn btn-green" href="/buy?plan=TtacPlus">درخواست خرید</a>
             </div>
         </div>
+
+        <p class="plans-note">⚠️ امکانات وابسته به سامانه تی‌تک، در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شود.</p>
+        <div class="enterprise-strip">🏢 چند شعبه یا شبکه چندسیستمی دارید؟ برای شرایط ویژه <a href="https://wa.me/989136346309">در واتساپ تماس بگیرید</a>.</div>
     </div>
 </section>
 
