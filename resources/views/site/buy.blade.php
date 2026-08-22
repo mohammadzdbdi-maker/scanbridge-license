@@ -153,7 +153,7 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta property="og:title" content="خرید و تمدید Scanbridge | درخواست لایسنس">
-    <meta property="og:description" content="خرید، تمدید یا تغییر پلن Scanbridge شامل Normal، Ttac و TtacPlus از طریق ارسال درخواست واتساپ.">
+    <meta property="og:description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir">
     <meta property="og:site_name" content="Scanbridge">
