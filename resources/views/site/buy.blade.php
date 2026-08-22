@@ -5,7 +5,7 @@
     <title>خرید و تمدید Scanbridge | درخواست لایسنس</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) از طریق ارسال درخواست واتساپ.">
+    <meta name="description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
     <style>
         @font-face {
             font-family: 'Pinar';
@@ -200,8 +200,8 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
     <div class="card">
         <h1>خرید و تمدید ScanBridge</h1>
         <p class="lead">
-            اطلاعات زیر را وارد کنید تا پیام آماده واتساپ ساخته شود.
-            همه پلن‌ها یک‌ساله هستند و بعد از ارسال درخواست، لایسنس برای شما صادر می‌شود.
+            اطلاعات زیر را وارد کنید تا درخواست شما ثبت شود.
+            همه پلن‌ها یک‌ساله هستند و بعد از تأیید، پلن در پنل کاربری شما فعال می‌شود.
         </p>
         @if(!empty($customer->name))
         <p style="color:#2563eb;font-weight:bold;font-size:13.5px;margin-top:-6px;">
@@ -256,6 +256,16 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             </div>
         </div>
 
+        <div id="scbSuccessBox" style="display:none; background:linear-gradient(135deg,#059669,#10b981); color:#fff; border-radius:22px; padding:38px 22px; text-align:center; margin-bottom:24px; box-shadow:0 14px 40px rgba(5,150,105,.25);">
+            <div style="font-size:48px; line-height:1; margin-bottom:14px;">✅</div>
+            <div style="font-size:21px; font-weight:bold; margin-bottom:10px;">درخواست شما با موفقیت ثبت شد</div>
+            <div style="font-size:14.5px; opacity:.95; line-height:2;">
+                بعد از بررسی و تأیید، پلن شما در پنل کاربری فعال خواهد شد.<br>
+                کارشناسان ما نیز برای هماهنگی با شما تماس می‌گیرند.
+            </div>
+            <a href="/panel" style="display:inline-block; margin-top:18px; background:#fff; color:#059669; font-weight:bold; border-radius:12px; padding:10px 24px; text-decoration:none;">رفتن به پنل کاربری</a>
+        </div>
+
         <div id="priceBox" style="background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; border-radius:22px; padding:32px 22px; text-align:center; margin-bottom:24px; min-height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
             <div style="font-size:15px; opacity:.85; margin-bottom:8px;">قیمت نهایی</div>
             <div style="font-size:44px; font-weight:bold;" id="priceAmount">۰ تومان</div>
@@ -263,11 +273,11 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         </div>
 
         <div class="actions">
-            <button class="green" onclick="sendWhatsApp()">ثبت درخواست و ارسال واتساپ</button>
+            <button class="green" onclick="submitRequest()">ثبت درخواست</button>
         </div>
 
         <div class="note">
-            بعد از ارسال درخواست، کد لایسنس مثل <b>SCB-XXXXX-XXXXX-XXXXX-XXXXX</b> برای شما صادر می‌شود و داخل برنامه فعال می‌کنید.
+            بعد از تأیید درخواست، کد لایسنس مثل <b>SCB-XXXXX-XXXXX-XXXXX-XXXXX</b> در پنل کاربری شما قرار می‌گیرد و داخل برنامه فعال می‌کنید.
         </div>
     </div>
 </div>
@@ -365,7 +375,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         return true;
     }
 
-    async function sendWhatsApp() {
+    async function submitRequest() {
         if (!scbValidateForm()) {
             return;
         }
@@ -380,18 +390,8 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             description: val('desc')
         };
 
-        const text =
-`سلام، برای Scanbridge درخواست دارم.
-
-نوع درخواست: ${payload.request_type}
-نام مجموعه: ${payload.organization_name}
-نام مسئول: ${payload.contact_name}
-شماره موبایل: ${payload.mobile}
-پلن موردنظر: ${payload.plan}
-تعداد سیستم: ${payload.devices}
-
-توضیحات:
-${payload.description || '-'}`;
+        const btn = document.querySelector('.actions .green');
+        if (btn) { btn.disabled = true; btn.textContent = 'در حال ثبت درخواست...'; }
 
         try {
             const res = await fetch('/buy/request', {
@@ -404,14 +404,25 @@ ${payload.description || '-'}`;
                 body: JSON.stringify(payload)
             });
             if (!res.ok) {
-                alert('نشست شما منقضی شده است. لطفاً دوباره وارد شوید.');
-                window.location.href = '/panel/login';
+                if (res.status === 401) {
+                    alert('نشست شما منقضی شده است. لطفاً دوباره وارد شوید.');
+                    window.location.href = '/panel/login';
+                } else {
+                    alert('ثبت درخواست با خطا مواجه شد. لطفاً دوباره تلاش کنید.');
+                }
                 return;
             }
-        } catch (e) {}
 
-        const url = 'https://wa.me/989136346309?text=' + encodeURIComponent(text);
-        window.open(url, '_blank');
+            document.getElementById('scbSuccessBox').style.display = '';
+            document.querySelector('.card .form').style.display = 'none';
+            document.getElementById('priceBox').style.display = 'none';
+            document.querySelector('.card .actions').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+            alert('ثبت درخواست با خطا مواجه شد. لطفاً دوباره تلاش کنید.');
+        } finally {
+            if (btn) { btn.disabled = false; btn.textContent = 'ثبت درخواست'; }
+        }
     }
 
 </script>
