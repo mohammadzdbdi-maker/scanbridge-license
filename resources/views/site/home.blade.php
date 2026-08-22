@@ -609,7 +609,6 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
                 <ul>
                     <li>اتصال بارکدخوان موبایل (چند گوشی هم‌زمان)</li>
                     <li>تاریخچه و جستجوی اسکن‌ها</li>
-                    <li>بانک بارکد پرمصرف</li>
                     <li>مدیریت دستگاه‌ها</li>
                     <li>به‌روزرسانی خودکار</li>
                 </ul>
