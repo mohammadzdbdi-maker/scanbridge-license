@@ -843,6 +843,20 @@ a{color:#1d4ed8!important;}
     .scb-admin-tab-icon-wrap { width:34px; height:34px; }
 }
 
+/* SCB_TABS_MATCH_STATS — هم‌قد و هم‌عرض کردن دکمه‌های تب با کادرهای آمار بالایی */
+/* ۳ دکمه در عرض کامل — مجموع عرض هم‌اندازه‌ی ردیف ۴ کادر آمار */
+.scb-admin-tabs { grid-template-columns:repeat(3, 1fr)!important; }
+/* ارتفاع یکسان با کادرهای آمار */
+.stat, .scb-admin-tab-btn { min-height:78px!important; box-sizing:border-box; }
+.scb-admin-tab-btn { padding:16px 20px!important; align-items:center!important; }
+/* آیکون کمی بزرگ‌تر تا در ارتفاع جدید کامل دیده شود */
+.scb-admin-tab-icon-wrap { width:46px; height:46px; }
+@media (max-width:700px) {
+    .scb-admin-tabs { grid-template-columns:1fr!important; }
+    .stat, .scb-admin-tab-btn { min-height:64px!important; }
+    .scb-admin-tab-icon-wrap { width:38px; height:38px; }
+}
+
 /* SCB_ADMIN_ACCORDION_ROWS */
 .scb-acc-list { display:flex; flex-direction:column; gap:10px; }
 .scb-acc-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; box-shadow:0 4px 14px rgba(15,23,42,.04); }
