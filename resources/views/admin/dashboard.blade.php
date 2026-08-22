@@ -863,12 +863,12 @@ a{color:#1d4ed8!important;}
 .scb-admin-tab-btn:hover { border-color:#c7d2e4!important; }
 .scb-admin-tab-btn.active { color:#1e3a8a!important; }
 /* نشانگر تب فعال: فقط یک خط آبی زیر دکمه */
-.scb-admin-tab-btn.active::after { width:72px; height:5px; bottom:0; border-radius:999px 999px 0 0; background:linear-gradient(135deg,#1e3a8a,#2563eb)!important; }
+.scb-admin-tab-btn.active::after { width:100%!important; left:0!important; transform:none!important; height:5px; bottom:0; border-radius:6px 6px 0 0; background:linear-gradient(135deg,#1e3a8a,#2563eb)!important; }
 @media (max-width:700px) {
     .scb-admin-tabs { grid-template-columns:1fr!important; }
     .stat, .scb-admin-tab-btn { min-height:64px!important; }
     .scb-admin-tab-icon-wrap { width:44px; height:44px; }
-    .scb-admin-tab-btn.active::after { width:56px; height:4px; }
+    .scb-admin-tab-btn.active::after { height:4px; }
 }
 
 /* SCB_ADMIN_ACCORDION_ROWS */
@@ -985,25 +985,6 @@ a{color:#1d4ed8!important;}
     @if(session('error'))
         <div class="alert-error">{{ session('error') }}</div>
     @endif
-
-    <section class="stats">
-        <div class="stat">
-            <div class="num">{{ $totalLicenses }}</div>
-            <div class="label">کل لایسنس‌ها</div>
-        </div>
-        <div class="stat">
-            <div class="num">{{ $activeLicenses }}</div>
-            <div class="label">فعال</div>
-        </div>
-        <div class="stat">
-            <div class="num">{{ $disabledLicenses }}</div>
-            <div class="label">غیرفعال</div>
-        </div>
-        <div class="stat">
-            <div class="num">{{ $expiredLicenses }}</div>
-            <div class="label">منقضی‌شده</div>
-        </div>
-    </section>
 
     <div class="scb-admin-tabs" id="scbAdminTabs">
         <button type="button" class="scb-admin-tab-btn" data-tab="licenses" onclick="scbAdminShowTab('licenses')">
@@ -1344,6 +1325,26 @@ a{color:#1d4ed8!important;}
     </div>
 
     <div class="scb-tab-panel" data-tab="licenses">
+
+    <section class="stats">
+        <div class="stat">
+            <div class="num">{{ $totalLicenses }}</div>
+            <div class="label">کل لایسنس‌ها</div>
+        </div>
+        <div class="stat">
+            <div class="num">{{ $activeLicenses }}</div>
+            <div class="label">فعال</div>
+        </div>
+        <div class="stat">
+            <div class="num">{{ $disabledLicenses }}</div>
+            <div class="label">غیرفعال</div>
+        </div>
+        <div class="stat">
+            <div class="num">{{ $expiredLicenses }}</div>
+            <div class="label">منقضی‌شده</div>
+        </div>
+    </section>
+
 <section class="card">
         <h2>ساخت لایسنس جدید</h2>
         <form method="post" action="/admin/licenses">
