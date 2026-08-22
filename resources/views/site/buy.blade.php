@@ -5,7 +5,7 @@
     <title>خرید و تمدید Scanbridge | درخواست لایسنس</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="خرید، تمدید یا تغییر پلن Scanbridge شامل Normal، Ttac و TtacPlus از طریق ارسال درخواست واتساپ.">
+    <meta name="description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) از طریق ارسال درخواست واتساپ.">
     <style>
         @font-face {
             font-family: 'Pinar';
@@ -198,10 +198,10 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 </div>
 <div class="wrap">
     <div class="card">
-        <h1>خرید و تمدید Scanbridge</h1>
+        <h1>خرید و تمدید ScanBridge</h1>
         <p class="lead">
             اطلاعات زیر را وارد کنید تا پیام آماده واتساپ ساخته شود.
-            بعد از ارسال پیام، لایسنس مناسب برای شما صادر می‌شود.
+            همه پلن‌ها یک‌ساله هستند و بعد از ارسال درخواست، لایسنس برای شما صادر می‌شود.
         </p>
 
         <div class="form">
@@ -223,10 +223,10 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             <div>
                 <label>پلن موردنظر</label>
                 <select id="plan">
-                    <option value="TtacPlus">TtacPlus - کامل</option>
-                    <option value="Ttac">Ttac - تی‌تک</option>
-                    <option value="Normal">Normal - بارکدخوان</option>
-                    <option value="Trial">Trial - آزمایشی</option>
+                    <option value="Ttac" selected>تی‌تک ⭐ (پیشنهاد ما برای اکثر داروخانه‌ها)</option>
+                    <option value="Normal">پایه — اسکن و تاریخچه</option>
+                    <option value="TtacPlus">حرفه‌ای — امکانات کامل</option>
+                    <option value="Trial">آزمایشی — ۱۴ روزه رایگان (دمو)</option>
                 </select>
             </div>
 
