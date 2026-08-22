@@ -444,8 +444,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .trust-icon{width:52px;height:52px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
 .trust-txt{display:flex;flex-direction:column;gap:3px;align-items:flex-start;}
 /* دکمه آبی درخواست دمو */
-.demo-btn{background:linear-gradient(135deg,#1e3a8a,#2563eb)!important;color:#fff!important;border-radius:10px;padding:6px 16px;font-size:12.5px;font-weight:bold;display:inline-block;margin-top:6px;text-decoration:none!important;box-shadow:0 4px 12px rgba(37,99,235,.3);}
-.demo-btn:hover{filter:brightness(1.1);}
+.trust-item a.demo-btn, .trust-item a.demo-btn:hover, a.demo-btn, a.demo-btn:hover{background:linear-gradient(135deg,#1e3a8a,#2563eb)!important;color:#fff!important;border-radius:10px;padding:6px 16px;font-size:12.5px;font-weight:bold;display:inline-block;margin-top:6px;text-decoration:none!important;box-shadow:0 4px 12px rgba(37,99,235,.3);}
 .trust-item b{color:#1e3a8a!important;font-size:14.5px;}
 .trust-item span{color:#475569!important;font-size:12.5px;}
 .trust-item a{color:#2563eb!important;font-weight:bold;}
@@ -465,8 +464,8 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .plan-price-monthly{font-size:12.5px;color:#475569!important;margin-top:3px;}
 .plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
 .launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
-.ttac-note{display:flex!important;align-items:center;gap:12px;background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:12px 18px;margin:20px auto 0;max-width:640px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;color:#475569!important;font-size:13px;text-align:right;}
-.ttac-note img{width:44px;height:44px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
+.ttac-note{display:flex!important;align-items:center;gap:14px;background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:16px 20px;margin:20px auto 0;width:100%!important;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;color:#475569!important;font-size:15.5px;font-weight:bold;text-align:right;}
+.ttac-note img{width:56px;height:56px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
 /* هاور: پلن زیر دست کمی بزرگ می‌شه و وایگل می‌خوره — بدون تغییر نور بقیه */
 .plans .plan:hover{z-index:6;transform:scale(1.03)!important;animation:scb-wiggle .55s ease;}
 @keyframes scb-wiggle{0%{transform:scale(1.03) rotate(0)}25%{transform:scale(1.03) rotate(-1.2deg)}50%{transform:scale(1.03) rotate(1.2deg)}75%{transform:scale(1.03) rotate(-.6deg)}100%{transform:scale(1.03) rotate(0)}}
