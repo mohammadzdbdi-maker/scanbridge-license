@@ -438,15 +438,21 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 
 @include('partials.site-header')
 
-<style>/*SCB_HOME_PROMO_V1*/
-.scb-newsbar{background:linear-gradient(90deg,#1e3a8a,#2563eb)!important;color:#fff!important;text-align:center;padding:11px 16px;font-size:14px;}
+<style>/*SCB_HOME_PROMO_V2*/
 .scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:6px;}
 .trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:3px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
 .trust-item b{color:#1e3a8a!important;font-size:14.5px;}
 .trust-item span{color:#475569!important;font-size:12.5px;}
 .trust-item a{color:#2563eb!important;font-weight:bold;}
-.plan{position:relative;}
-.plan-ribbon{position:absolute;top:-13px;right:18px;z-index:2;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:12px;font-weight:bold;padding:5px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(37,99,235,.35);}
+.plan{position:relative;transition:opacity .25s ease,filter .25s ease,transform .25s ease;}
+/* اسم پلن کنار آیکون + فونت بزرگ‌تر */
+.plan h3{display:flex!important;align-items:center!important;gap:12px!important;font-size:25px!important;margin:4px 0 2px;}
+.plan h3 .plan-icon{margin-bottom:0!important;flex-shrink:0;width:64px;height:64px;}
+/* کادر تی‌تک: قاب آبی جلب‌توجه‌کننده */
+.plan.featured{border:2.5px solid #2563eb!important;box-shadow:0 0 0 5px rgba(37,99,235,.15),0 18px 44px rgba(37,99,235,.22)!important;}
+/* روبان پیشنهاد با ستاره سه‌بعدی */
+.plan-ribbon{position:absolute;top:-13px;right:18px;z-index:2;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:12px;font-weight:bold;padding:5px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(37,99,235,.35);display:inline-flex!important;align-items:center!important;gap:6px;}
+.ribbon-star{width:22px;height:22px;object-fit:contain;}
 .plan-price{margin:2px 0 10px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;text-align:center;}
 .plan.featured .plan-price{background:#eff6ff;border-color:#dbeafe;}
 .plan-price-annual{font-size:23px;font-weight:800;color:#1e3a8a!important;line-height:1.3;}
@@ -455,14 +461,12 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
 .launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
 .plans-note{text-align:center;color:#64748b!important;font-size:12.5px;margin:18px auto 0;max-width:640px;}
-.enterprise-strip{text-align:center;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff!important;border-radius:16px;padding:14px 18px;font-size:14.5px;margin-top:14px;}
-.enterprise-strip a{color:#fff!important;font-weight:bold;text-decoration:underline;}
-@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}}
+/* هاور: پلن زیر دست وایگل می‌خوره، بقیه کم‌نور می‌شن */
+.plans:hover .plan:not(:hover){opacity:.4!important;filter:grayscale(.35) brightness(.8)!important;transform:scale(.985)!important;}
+.plans .plan:hover{opacity:1!important;filter:none!important;transform:none!important;z-index:6;animation:scb-wiggle .55s ease;}
+@keyframes scb-wiggle{0%{transform:rotate(0)}25%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}75%{transform:rotate(-.8deg)}100%{transform:rotate(0)}}
+@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}.plans:hover .plan:not(:hover){opacity:1!important;filter:none!important;transform:none!important;}}
 </style>
-
-<div class="scb-newsbar">
-    🎉 نسخه جدید منتشر شد: <strong>هشدار تاریخ انقضا</strong> و <strong>یادآور پیام‌رسان بله</strong> + بانک بارکد پرمصرف
-</div>
 
 <header class="hero">
     <div class="hero-inner">
@@ -590,7 +594,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
             </div>
 
             <div class="plan featured scb-reveal">
-                <span class="plan-ribbon">⭐ پیشنهاد ما برای اکثر داروخانه‌ها</span>
+                <span class="plan-ribbon"><img class="ribbon-star" src="/icons/ribbon-star.png" alt="">پیشنهاد ما برای اکثر داروخانه‌ها</span>
                 <h3><img class="plan-icon" src="/icons/plan-ttac.png" alt="">تی‌تک</h3>
                 <p>ثبت تی‌تک و شیرخشک در چند ثانیه</p>
                 @if($pTtac)
@@ -637,7 +641,6 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
         </div>
 
         <p class="plans-note">⚠️ امکانات وابسته به سامانه تی‌تک، در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شود.</p>
-        <div class="enterprise-strip">🏢 چند شعبه یا شبکه چندسیستمی دارید؟ برای شرایط ویژه <a href="https://wa.me/989136346309">در واتساپ تماس بگیرید</a>.</div>
     </div>
 </section>
 
