@@ -466,47 +466,47 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 
         <div class="grid-3">
             <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-barcode.png" alt="">اتصال بارکدخوان موبایل</h3>
+                <h3><img class="feat-icon" src="/icons/feature-barcode.png" alt="">اتصال بارکدخوان موبایل</h3>
                 <p>با اسکن QR، موبایل به کامپیوتر وصل می‌شود و بارکدها سریع وارد سیستم می‌شوند.</p>
             </div>
             <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-history.png" alt="">تاریخچه و خروجی</h3>
-                <p>ثبت تاریخچه اسکن‌ها، جستجو، فیلتر، خروجی Excel و PDF برای گزارش‌گیری.</p>
-            </div>
-            <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-ttac.png" alt="">تی‌تک و شیر خشک</h3>
+                <h3><img class="feat-icon" src="/icons/feature-ttac.png" alt="">تی‌تک و شیر خشک</h3>
                 <p>ورود از مرورگر داخلی، ثبت تی‌تک، فرمول شیر خشک و مدیریت عملیات مرتبط.</p>
             </div>
             <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-status.png" alt="">تعیین وضعیت</h3>
-                <p>بررسی وضعیت فرآورده و مدیریت دریافت/تایید برای داروخانه در پلن کامل.</p>
-            </div>
-            <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-delivery.png" alt="">تحویل بار</h3>
-                <p>ثبت گروهی بارکدها، افزودن به داروخانه، خروجی و مشاهده جزئیات هر ردیف.</p>
-            </div>
-            <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-license.png" alt="">لایسنس آنلاین</h3>
-                <p>فعال‌سازی امن آنلاین با پلن‌های مختلف و مدیریت لایسنس از پنل اختصاصی.</p>
-            </div>
-            <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-expiry.png" alt="" onerror="this.style.display='none'">هشدار تاریخ انقضا</h3>
+                <h3><img class="feat-icon" src="/icons/feature-expiry.png" alt="">هشدار تاریخ انقضا</h3>
                 <p>پایش خودکار اقلام و هشدار برای کالاهایی که تاریخ انقضای نزدیک دارند، با تنظیم آستانه و تکرار یادآوری دلخواه.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-bale.png" alt="" onerror="this.style.display='none'">یادآور در پیام‌رسان بله</h3>
-                <p>با یک بار فعال‌سازی، هشدارهای تاریخ انقضا علاوه بر نرم‌افزار، توی بله هم برات ارسال می‌شود.</p>
-            </div>
-            <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-barcodebank.png" alt="" onerror="this.style.display='none'">بانک بارکد پرمصرف</h3>
+                <h3><img class="feat-icon" src="/icons/feature-barcodebank.png" alt="">بانک بارکد پرمصرف</h3>
                 <p>بارکدهای پرمصرف را در گروه‌های دلخواه ذخیره کن و بین چند سیستم هم‌شبکه به‌سرعت به اشتراک بگذار.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-remote.png" alt="" onerror="this.style.display='none'">پشتیبانی از راه دور</h3>
+                <h3><img class="feat-icon" src="/icons/feature-status.png" alt="">تعیین وضعیت</h3>
+                <p>بررسی وضعیت فرآورده و مدیریت دریافت/تایید برای داروخانه در پلن کامل.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-bale.png" alt="">یادآور در پیام‌رسان بله</h3>
+                <p>با یک بار فعال‌سازی، هشدارهای تاریخ انقضا علاوه بر نرم‌افزار، توی بله هم برات ارسال می‌شود.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-history.png" alt="">تاریخچه و خروجی</h3>
+                <p>ثبت تاریخچه اسکن‌ها، جستجو، فیلتر، خروجی Excel و PDF برای گزارش‌گیری.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-delivery.png" alt="">تحویل بار</h3>
+                <p>ثبت گروهی بارکدها، افزودن به داروخانه، خروجی و مشاهده جزئیات هر ردیف.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-license.png" alt="">لایسنس آنلاین</h3>
+                <p>فعال‌سازی امن آنلاین با پلن‌های مختلف و مدیریت لایسنس از پنل اختصاصی.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-remote.png" alt="">پشتیبانی از راه دور</h3>
                 <p>با یک اتصال سریع، تیم پشتیبانی می‌تواند مستقیم مشکل را از راه دور بررسی و رفع کند.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-autoupdate.png" alt="" onerror="this.style.display='none'">به‌روزرسانی خودکار</h3>
+                <h3><img class="feat-icon" src="/icons/feature-autoupdate.png" alt="">به‌روزرسانی خودکار</h3>
                 <p>نرم‌افزار هر ۲۴ ساعت خودش بررسی می‌کند و در صورت وجود نسخه جدید، به‌سادگی مطلعت می‌کند.</p>
             </div>
         </div>
