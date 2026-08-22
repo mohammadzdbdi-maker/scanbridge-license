@@ -33,18 +33,33 @@ if (!function_exists('scb_send_sms')) {
         $sender = config('services.kavenegar.sender');
 
         if (!$apiKey) {
+            \Illuminate\Support\Facades\Log::warning('KAVENEGAR_API_KEY is not configured — OTP SMS cannot be sent.');
             return false;
         }
 
         try {
-            $response = Http::timeout(10)->get("https://api.kavenegar.com/v1/{$apiKey}/sms/send.json", [
+            $payload = [
                 'receptor' => $mobile,
-                'sender' => $sender,
                 'message' => $message,
-            ]);
+            ];
+            // خط فرستنده اختیاری است: اگر تنظیم نشده باشد، کاوه‌نگار از خط پیش‌فرض حساب استفاده می‌کند
+            if ($sender) {
+                $payload['sender'] = $sender;
+            }
+
+            $response = Http::timeout(10)->get("https://api.kavenegar.com/v1/{$apiKey}/sms/send.json", $payload);
+
+            if (!$response->successful()) {
+                \Illuminate\Support\Facades\Log::error('Kavenegar SMS send failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'receptor' => $mobile,
+                ]);
+            }
 
             return $response->successful();
         } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Kavenegar SMS exception: ' . $e->getMessage());
             return false;
         }
     }
@@ -1119,18 +1134,78 @@ Route::post('/panel/register', function (Request $request) {
         'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
     ]);
 
-    $id = DB::table('scanbridge_customers')->insertGetId([
+    $mobile = trim($data['mobile']);
+
+    $issue = scb_issue_otp($mobile, 'register');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->withInput()->with('error', 'همین الان یک کد برای این شماره ارسال شده. لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->withInput()->with('error', 'ارسال پیامک با خطا مواجه شد. لطفا دوباره تلاش کنید.');
+    }
+
+    $request->session()->put('scb_pending_register', [
         'name' => $data['name'],
-        'mobile' => $data['mobile'],
+        'mobile' => $mobile,
         'password' => bcrypt($data['password']),
+    ]);
+
+    return redirect('/panel/register/verify');
+});
+
+Route::get('/panel/register/verify', function (Request $request) {
+    $pending = $request->session()->get('scb_pending_register');
+    if (!$pending) {
+        return redirect('/panel/register');
+    }
+
+    return view('site.panel.verify', ['mobile' => $pending['mobile']]);
+});
+
+Route::post('/panel/register/verify', function (Request $request) {
+    $pending = $request->session()->get('scb_pending_register');
+    if (!$pending) {
+        return redirect('/panel/register');
+    }
+
+    $data = $request->validate([
+        'code' => 'required|string|max:10',
+    ]);
+
+    if (!scb_check_otp($pending['mobile'], 'register', trim($data['code']))) {
+        return back()->with('error', 'کد وارد شده صحیح نیست یا منقضی شده است.');
+    }
+
+    $id = DB::table('scanbridge_customers')->insertGetId([
+        'name' => $pending['name'],
+        'mobile' => $pending['mobile'],
+        'password' => $pending['password'],
         'created_at' => now(),
         'updated_at' => now(),
     ]);
 
+    $request->session()->forget('scb_pending_register');
     $request->session()->put('scanbridge_customer_id', $id);
     $request->session()->regenerate();
 
     return redirect('/panel');
+});
+
+Route::post('/panel/register/resend', function (Request $request) {
+    $pending = $request->session()->get('scb_pending_register');
+    if (!$pending) {
+        return redirect('/panel/register');
+    }
+
+    $issue = scb_issue_otp($pending['mobile'], 'register');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->with('error', 'لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->with('error', 'ارسال پیامک با خطا مواجه شد.');
+    }
+
+    return back()->with('ok', 'کد جدید ارسال شد.');
 });
 
 Route::get('/panel/login', function () {
@@ -1161,6 +1236,90 @@ Route::post('/panel/logout', function (Request $request) {
     $request->session()->regenerateToken();
 
     return redirect('/panel/login');
+});
+
+// SCANBRIDGE_PASSWORD_RESET_START
+Route::get('/panel/forgot-password', function () {
+    return view('site.panel.forgot-password');
+});
+
+Route::post('/panel/forgot-password', function (Request $request) {
+    $data = $request->validate([
+        'mobile' => 'required|string|max:20',
+    ]);
+
+    $mobile = trim($data['mobile']);
+    $customer = DB::table('scanbridge_customers')->where('mobile', $mobile)->first();
+
+    if (!$customer) {
+        return back()->withInput()->with('error', 'شماره موبایلی با این مشخصات پیدا نشد.');
+    }
+
+    $issue = scb_issue_otp($mobile, 'reset');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->withInput()->with('error', 'همین الان یک کد برای این شماره ارسال شده. لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->withInput()->with('error', 'ارسال پیامک با خطا مواجه شد. لطفا دوباره تلاش کنید.');
+    }
+
+    $request->session()->put('scb_pending_reset_mobile', $mobile);
+
+    return redirect('/panel/reset-password');
+});
+
+Route::get('/panel/reset-password', function (Request $request) {
+    $mobile = $request->session()->get('scb_pending_reset_mobile');
+    if (!$mobile) {
+        return redirect('/panel/forgot-password');
+    }
+
+    return view('site.panel.reset-password', ['mobile' => $mobile]);
+});
+
+Route::post('/panel/reset-password', function (Request $request) {
+    $mobile = $request->session()->get('scb_pending_reset_mobile');
+    if (!$mobile) {
+        return redirect('/panel/forgot-password');
+    }
+
+    $data = $request->validate([
+        'code' => 'required|string|max:10',
+        'password' => 'required|string|min:6|confirmed',
+    ], [
+        'password.confirmed' => 'تکرار رمز عبور مطابقت ندارد.',
+        'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
+    ]);
+
+    if (!scb_check_otp($mobile, 'reset', trim($data['code']))) {
+        return back()->with('error', 'کد وارد شده صحیح نیست یا منقضی شده است.');
+    }
+
+    DB::table('scanbridge_customers')->where('mobile', $mobile)->update([
+        'password' => bcrypt($data['password']),
+        'updated_at' => now(),
+    ]);
+
+    $request->session()->forget('scb_pending_reset_mobile');
+
+    return redirect('/panel/login')->with('ok', 'رمز عبور با موفقیت تغییر کرد. حالا وارد شوید.');
+});
+
+Route::post('/panel/reset-password/resend', function (Request $request) {
+    $mobile = $request->session()->get('scb_pending_reset_mobile');
+    if (!$mobile) {
+        return redirect('/panel/forgot-password');
+    }
+
+    $issue = scb_issue_otp($mobile, 'reset');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->with('error', 'لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->with('error', 'ارسال پیامک با خطا مواجه شد.');
+    }
+
+    return back()->with('ok', 'کد جدید ارسال شد.');
 });
 // SCANBRIDGE_PASSWORD_RESET_END
 
