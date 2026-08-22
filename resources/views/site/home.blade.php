@@ -440,7 +440,9 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 
 <style>/*SCB_HOME_PROMO_V2*/
 .scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:6px;}
-.trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:3px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
+.trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
+.trust-icon{width:52px;height:52px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
+.trust-txt{display:flex;flex-direction:column;gap:3px;}
 .trust-item b{color:#1e3a8a!important;font-size:14.5px;}
 .trust-item span{color:#475569!important;font-size:12.5px;}
 .trust-item a{color:#2563eb!important;font-weight:bold;}
@@ -552,10 +554,10 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
         </div>
 
         <div class="scb-trust">
-            <div class="trust-item">⚡<b>فعال‌سازی آنی</b><span>لایسنس آنلاین، بلافاصله پس از تأیید</span></div>
-            <div class="trust-item">🛠<b>پشتیبانی از راه دور</b><span>اتصال مستقیم تیم پشتیبانی به سیستم شما</span></div>
-            <div class="trust-item">📱<b>بدون خرید بارکدخوان جدید</b><span>با موبایل خودتان یا اسکنر فعلی کار می‌کند</span></div>
-            <div class="trust-item">🧪<b>دموی ۱۴ روزه در داروخانه شما</b><span>بدون تعهد خرید — <a href="/contact">درخواست دمو</a></span></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-instant.png" alt=""><div class="trust-txt"><b>فعال‌سازی آنی</b><span>لایسنس آنلاین، بلافاصله پس از تأیید</span></div></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-support.png" alt=""><div class="trust-txt"><b>پشتیبانی از راه دور</b><span>اتصال مستقیم تیم پشتیبانی به سیستم شما</span></div></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-mobile.png" alt=""><div class="trust-txt"><b>بدون خرید بارکدخوان جدید</b><span>با موبایل خودتان یا اسکنر فعلی کار می‌کند</span></div></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-demo.png" alt=""><div class="trust-txt"><b>دموی ۱۴ روزه در داروخانه شما</b><span>بدون تعهد خرید — <a href="/contact">درخواست دمو</a></span></div></div>
         </div>
 
         @php
