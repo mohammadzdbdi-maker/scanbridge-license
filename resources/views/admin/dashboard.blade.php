@@ -843,18 +843,27 @@ a{color:#1d4ed8!important;}
     .scb-admin-tab-icon-wrap { width:34px; height:34px; }
 }
 
-/* SCB_TABS_MATCH_STATS — هم‌قد و هم‌عرض کردن دکمه‌های تب با کادرهای آمار بالایی */
+/* SCB_TABS_MATCH_STATS v2 — تراز با کادرهای آمار + آیکون بزرگ + تب فعال فقط با خط آبی */
 /* ۳ دکمه در عرض کامل — مجموع عرض هم‌اندازه‌ی ردیف ۴ کادر آمار */
 .scb-admin-tabs { grid-template-columns:repeat(3, 1fr)!important; }
 /* ارتفاع یکسان با کادرهای آمار */
-.stat, .scb-admin-tab-btn { min-height:78px!important; box-sizing:border-box; }
-.scb-admin-tab-btn { padding:16px 20px!important; align-items:center!important; }
-/* آیکون کمی بزرگ‌تر تا در ارتفاع جدید کامل دیده شود */
-.scb-admin-tab-icon-wrap { width:46px; height:46px; }
+.stat, .scb-admin-tab-btn { min-height:80px!important; box-sizing:border-box; }
+.scb-admin-tab-btn { padding:12px 18px!important; align-items:center!important; }
+/* آیکون سه‌بعدی بزرگ‌تر داخل کادر سفید */
+.scb-admin-tab-icon-wrap { width:54px; height:54px; border-radius:14px; background:#fff; border:1px solid #eef2f7; box-shadow:0 2px 8px rgba(15,23,42,.07); }
+/* دکمه‌ها همیشه سفید — نه hover آبی، نه پس‌زمینه آبی برای تب فعال */
+.scb-admin-tab-btn,
+.scb-admin-tab-btn:hover,
+.scb-admin-tab-btn.active { background:#fff!important; border-color:#e5e7eb!important; }
+.scb-admin-tab-btn:hover { border-color:#c7d2e4!important; }
+.scb-admin-tab-btn.active { color:#1e3a8a!important; }
+/* نشانگر تب فعال: فقط یک خط آبی زیر دکمه */
+.scb-admin-tab-btn.active::after { width:72px; height:5px; bottom:0; border-radius:999px 999px 0 0; background:linear-gradient(135deg,#1e3a8a,#2563eb)!important; }
 @media (max-width:700px) {
     .scb-admin-tabs { grid-template-columns:1fr!important; }
     .stat, .scb-admin-tab-btn { min-height:64px!important; }
-    .scb-admin-tab-icon-wrap { width:38px; height:38px; }
+    .scb-admin-tab-icon-wrap { width:44px; height:44px; }
+    .scb-admin-tab-btn.active::after { width:56px; height:4px; }
 }
 
 /* SCB_ADMIN_ACCORDION_ROWS */
