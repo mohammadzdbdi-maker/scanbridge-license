@@ -1574,7 +1574,10 @@ Route::post('/admin/prices', function (\Illuminate\Http\Request $request) use ($
     }
 
     $plans = ['Normal', 'Ttac', 'TtacPlus'];
-    $durations = [1, 3, 6, 12];
+    $durations = [12]; // فقط پلن یک‌ساله
+
+    // مدت‌های غیرسالانه دیگر پشتیبانی نمی‌شوند — ردیف‌های قدیمی پاک شوند
+    DB::table('scanbridge_prices')->whereNotIn('duration_months', [12])->delete();
 
     foreach ($plans as $plan) {
         foreach ($durations as $d) {

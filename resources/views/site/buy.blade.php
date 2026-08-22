@@ -230,16 +230,6 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                 </select>
             </div>
 
-            <div id="durationWrap">
-                <label>مدت زمان</label>
-                <select id="duration">
-                    <option value="1">۱ ماهه</option>
-                    <option value="3">۳ ماهه</option>
-                    <option value="6">۶ ماهه</option>
-                    <option value="12">یک‌ساله</option>
-                </select>
-            </div>
-
             <div>
                 <label>تعداد سیستم</label>
                 <input id="devices" type="number" value="1" min="1" max="50">
@@ -287,21 +277,17 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 
     function updatePrice() {
         const plan = document.getElementById('plan').value;
-        const durationEl = document.getElementById('duration');
-        const durationWrap = document.getElementById('durationWrap');
         const devices = parseInt(document.getElementById('devices').value || '1', 10);
         const priceAmount = document.getElementById('priceAmount');
         const priceDetail = document.getElementById('priceDetail');
 
         if (plan === 'Trial') {
-            durationWrap.style.display = 'none';
             priceAmount.textContent = 'رایگان';
             priceDetail.textContent = 'نسخه آزمایشی ۱۴ روزه';
             return;
         }
-        durationWrap.style.display = '';
 
-        const duration = parseInt(durationEl.value, 10);
+        const duration = 12; // فقط پلن یک‌ساله
         const basePrice = (scbPrices[plan] && scbPrices[plan][duration]) ? scbPrices[plan][duration] : 0;
         const deviceInfo = scbDeviceData[plan] || { base_devices: 1, price_per_extra_device: 0 };
         const extraDevices = Math.max(0, devices - deviceInfo.base_devices);
@@ -311,9 +297,9 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         priceAmount.textContent = scbFormatToman(total);
 
         if (extraDevices > 0) {
-            priceDetail.textContent = 'شامل ' + extraDevices + ' دستگاه اضافه، هر کدام ' + deviceInfo.price_per_extra_device.toLocaleString('en-US') + ' تومان';
+            priceDetail.textContent = 'یک‌ساله — شامل ' + extraDevices + ' دستگاه اضافه، هر کدام ' + deviceInfo.price_per_extra_device.toLocaleString('en-US') + ' تومان';
         } else {
-            priceDetail.textContent = '';
+            priceDetail.textContent = 'یک‌ساله';
         }
     }
 
@@ -331,7 +317,6 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             document.getElementById('plan').value = planFromUrl;
         }
         document.getElementById('plan').addEventListener('change', updatePrice);
-        document.getElementById('duration').addEventListener('change', updatePrice);
         document.getElementById('devices').addEventListener('input', updatePrice);
         updatePrice();
     })();

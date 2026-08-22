@@ -439,7 +439,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 @include('partials.site-header')
 
 <style>/*SCB_HOME_PROMO_V2*/
-.scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:6px;}
+.scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:28px!important;}
 .trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
 .trust-icon{width:52px;height:52px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
 .trust-txt{display:flex;flex-direction:column;gap:3px;}
@@ -463,11 +463,10 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
 .launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
 .plans-note{text-align:center;color:#64748b!important;font-size:12.5px;margin:18px auto 0;max-width:640px;}
-/* هاور: پلن زیر دست وایگل می‌خوره، بقیه کم‌نور می‌شن */
-.plans:hover .plan:not(:hover){opacity:.4!important;filter:grayscale(.35) brightness(.8)!important;transform:scale(.985)!important;}
-.plans .plan:hover{opacity:1!important;filter:none!important;transform:none!important;z-index:6;animation:scb-wiggle .55s ease;}
-@keyframes scb-wiggle{0%{transform:rotate(0)}25%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}75%{transform:rotate(-.8deg)}100%{transform:rotate(0)}}
-@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}.plans:hover .plan:not(:hover){opacity:1!important;filter:none!important;transform:none!important;}}
+/* هاور: پلن زیر دست کمی بزرگ می‌شه و وایگل می‌خوره — بدون تغییر نور بقیه */
+.plans .plan:hover{z-index:6;transform:scale(1.03)!important;animation:scb-wiggle .55s ease;}
+@keyframes scb-wiggle{0%{transform:scale(1.03) rotate(0)}25%{transform:scale(1.03) rotate(-1.2deg)}50%{transform:scale(1.03) rotate(1.2deg)}75%{transform:scale(1.03) rotate(-.6deg)}100%{transform:scale(1.03) rotate(0)}}
+@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}}
 </style>
 
 <header class="hero">

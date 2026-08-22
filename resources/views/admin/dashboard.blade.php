@@ -1094,7 +1094,7 @@ a{color:#1d4ed8!important;}
 
         @php
             $planLabels = ['Normal' => 'Normal', 'Ttac' => 'Ttac', 'TtacPlus' => 'TtacPlus'];
-            $durationLabels = [1 => '۱ ماهه', 3 => '۳ ماهه', 6 => '۶ ماهه', 12 => 'یک‌ساله'];
+            $durationLabels = [12 => 'یک‌ساله'];
         @endphp
 
         <div style="overflow-x:auto;">
