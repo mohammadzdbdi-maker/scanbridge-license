@@ -465,7 +465,8 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .plan-price-monthly{font-size:12.5px;color:#475569!important;margin-top:3px;}
 .plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
 .launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
-.plans-note{text-align:center;color:#64748b!important;font-size:12.5px;margin:18px auto 0;max-width:640px;}
+.ttac-note{display:flex!important;align-items:center;gap:12px;background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:12px 18px;margin:20px auto 0;max-width:640px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;color:#475569!important;font-size:13px;text-align:right;}
+.ttac-note img{width:44px;height:44px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
 /* هاور: پلن زیر دست کمی بزرگ می‌شه و وایگل می‌خوره — بدون تغییر نور بقیه */
 .plans .plan:hover{z-index:6;transform:scale(1.03)!important;animation:scb-wiggle .55s ease;}
 @keyframes scb-wiggle{0%{transform:scale(1.03) rotate(0)}25%{transform:scale(1.03) rotate(-1.2deg)}50%{transform:scale(1.03) rotate(1.2deg)}75%{transform:scale(1.03) rotate(-.6deg)}100%{transform:scale(1.03) rotate(0)}}
@@ -644,7 +645,10 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
             </div>
         </div>
 
-        <p class="plans-note">⚠️ امکانات وابسته به سامانه تی‌تک، در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شود.</p>
+        <div class="ttac-note">
+            <img src="/icons/icon-warning.png" alt="">
+            <span>امکانات وابسته به سامانه تی‌تک، در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شود.</span>
+        </div>
     </div>
 </section>
 

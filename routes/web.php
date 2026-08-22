@@ -266,7 +266,14 @@ Route::get('/download', function () {
     return view('site.download');
 });
 
-Route::get('/buy', function () {
+Route::get('/buy', function (Request $request) {
+    $customerId = $request->session()->get('scanbridge_customer_id');
+    if (!$customerId) {
+        $request->session()->put('scb_intended', $request->fullUrl());
+        return redirect('/panel/login')->with('error', 'برای ثبت درخواست خرید، ابتدا وارد حساب خود شوید یا ثبت‌نام کنید.');
+    }
+    $customer = DB::table('scanbridge_customers')->where('id', $customerId)->first();
+
     $pricesRaw = DB::table('scanbridge_prices')->get();
     $prices = [];
     foreach ($pricesRaw as $p) {
@@ -284,6 +291,7 @@ Route::get('/buy', function () {
     return view('site.buy', [
         'pricingData' => $prices,
         'deviceData' => $deviceData,
+        'customer' => $customer,
     ]);
 });
 
@@ -575,6 +583,10 @@ Route::post('/admin/logs/{id}/delete', function (\Illuminate\Http\Request $reque
 // SCB_DELETE_ROUTES_END
 // SCANBRIDGE_PURCHASE_REQUESTS_START
 Route::post('/buy/request', function (\Illuminate\Http\Request $request) {
+    if (!$request->session()->get('scanbridge_customer_id')) {
+        return response()->json(['success' => false, 'error' => 'برای ثبت درخواست، ابتدا وارد حساب خود شوید.'], 401);
+    }
+
     $data = $request->validate([
         'organization_name' => 'nullable|string|max:255',
         'contact_name' => 'nullable|string|max:255',
@@ -1205,7 +1217,9 @@ Route::post('/panel/register/verify', function (Request $request) {
     $request->session()->put('scanbridge_customer_id', $id);
     $request->session()->regenerate();
 
-    return redirect('/panel');
+    $scbIntended = $request->session()->get('scb_intended', '/panel');
+    $request->session()->forget('scb_intended');
+    return redirect($scbIntended);
 });
 
 Route::post('/panel/register/resend', function (Request $request) {
@@ -1244,7 +1258,9 @@ Route::post('/panel/login', function (Request $request) {
     $request->session()->put('scanbridge_customer_id', $customer->id);
     $request->session()->regenerate();
 
-    return redirect('/panel');
+    $scbIntended = $request->session()->get('scb_intended', '/panel');
+    $request->session()->forget('scb_intended');
+    return redirect($scbIntended);
 });
 
 Route::post('/panel/logout', function (Request $request) {

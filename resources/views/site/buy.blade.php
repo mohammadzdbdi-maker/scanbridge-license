@@ -203,6 +203,11 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             اطلاعات زیر را وارد کنید تا پیام آماده واتساپ ساخته شود.
             همه پلن‌ها یک‌ساله هستند و بعد از ارسال درخواست، لایسنس برای شما صادر می‌شود.
         </p>
+        @if(!empty($customer->name))
+        <p style="color:#2563eb;font-weight:bold;font-size:13.5px;margin-top:-6px;">
+            سلام {{ $customer->name }} 👋 این درخواست با حساب پنل شما ثبت می‌شود.
+        </p>
+        @endif
 
         <div class="form">
             <div>
@@ -212,12 +217,12 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 
             <div>
                 <label>نام مسئول</label>
-                <input id="contactName" placeholder="نام و نام خانوادگی">
+                <input id="contactName" placeholder="نام و نام خانوادگی" value="{{ $customer->name ?? '' }}">
             </div>
 
             <div>
                 <label>شماره موبایل</label>
-                <input id="mobile" placeholder="09xxxxxxxxx" dir="ltr">
+                <input id="mobile" placeholder="09xxxxxxxxx" dir="ltr" value="{{ $customer->mobile ?? '' }}">
             </div>
 
             <div>
@@ -389,7 +394,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 ${payload.description || '-'}`;
 
         try {
-            await fetch('/buy/request', {
+            const res = await fetch('/buy/request', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -398,6 +403,11 @@ ${payload.description || '-'}`;
                 },
                 body: JSON.stringify(payload)
             });
+            if (!res.ok) {
+                alert('نشست شما منقضی شده است. لطفاً دوباره وارد شوید.');
+                window.location.href = '/panel/login';
+                return;
+            }
         } catch (e) {}
 
         const url = 'https://wa.me/989136346309?text=' + encodeURIComponent(text);
