@@ -1169,6 +1169,25 @@ Route::post('/panel/register', function (Request $request) {
 
     $mobile = trim($data['mobile']);
 
+    // ورود/ثبت‌نام با کد پیامکی (OTP) فعلاً با کلید SMS_OTP_ENABLED کنترل می‌شود.
+    // تا وقتی خط خدماتی کاوه‌نگار آماده نشده، ثبت‌نام مستقیم و بدون پیامک انجام می‌شود
+    // و کاربر بلافاصله وارد پنل می‌شود. کل جریان OTP (کد، صفحه تأیید، ارسال مجدد) دست‌نخورده
+    // باقی مانده و بعداً فقط با true کردن همین کلید برمی‌گردد.
+    if (!config('services.scanbridge.sms_otp_enabled')) {
+        $id = DB::table('scanbridge_customers')->insertGetId([
+            'name' => $data['name'],
+            'mobile' => $mobile,
+            'password' => bcrypt($data['password']),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $request->session()->put('scanbridge_customer_id', $id);
+        $request->session()->regenerate();
+
+        return redirect('/panel');
+    }
+
     $issue = scb_issue_otp($mobile, 'register');
     if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
         return back()->withInput()->with('error', 'همین الان یک کد برای این شماره ارسال شده. لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
@@ -1277,10 +1296,18 @@ Route::post('/panel/logout', function (Request $request) {
 
 // SCANBRIDGE_PASSWORD_RESET_START
 Route::get('/panel/forgot-password', function () {
+    if (!config('services.scanbridge.sms_otp_enabled')) {
+        return redirect('/panel/login')->with('error', 'بازیابی رمز عبور فعلاً غیرفعال است. لطفاً با پشتیبانی (واتساپ) تماس بگیرید تا رمز شما را بازنشانی کنند.');
+    }
+
     return view('site.panel.forgot-password');
 });
 
 Route::post('/panel/forgot-password', function (Request $request) {
+    if (!config('services.scanbridge.sms_otp_enabled')) {
+        return redirect('/panel/login')->with('error', 'بازیابی رمز عبور فعلاً غیرفعال است. لطفاً با پشتیبانی (واتساپ) تماس بگیرید تا رمز شما را بازنشانی کنند.');
+    }
+
     $data = $request->validate([
         'mobile' => 'required|string|max:20',
     ]);

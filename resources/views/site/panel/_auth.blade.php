@@ -75,7 +75,9 @@ label{display:block;font-weight:bold;font-size:13.5px;margin-bottom:6px;color:#3
 <input type="password" id="pw-login" name="password" required placeholder="رمز عبور">
 <button class="eye" type="button" onclick="togglePassword('pw-login', this)" title="نمایش رمز"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
 </div>
+@if(config('services.scanbridge.sms_otp_enabled'))
 <div class="forgot-link"><a href="/panel/forgot-password">رمز عبور را فراموش کرده‌اید؟</a></div>
+@endif
 <button class="btn" type="submit">ورود</button>
 </form>
 @else
