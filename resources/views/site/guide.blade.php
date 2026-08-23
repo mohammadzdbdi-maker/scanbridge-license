@@ -12,6 +12,7 @@
         'barcodebank'  => '', // بانک بارکد پرمصرف
         'expiry'       => '', // هشدار انقضا و یادآور بله
         'support'      => '', // پشتیبانی و تیکت
+        'modemlock'    => '', // قفل اینترنت پرسنل (مودم)
     ];
 @endphp
 
@@ -134,6 +135,7 @@
         <a href="#g-delivery">تحویل بار</a>
         <a href="#g-barcodebank">بانک بارکد</a>
         <a href="#g-expiry">هشدار انقضا</a>
+        <a href="#g-modemlock">قفل مودم</a>
         <a href="#g-support">پشتیبانی</a>
     </div>
 
@@ -253,6 +255,27 @@
             <li>از آن به بعد هشدارها هم در برنامه و هم در بله برایتان ارسال می‌شود.</li>
         </ol>
         @include('site.guide._video', ['key' => 'expiry', 'title' => 'هشدار انقضا و یادآور بله'])
+    </div>
+
+    {{-- قفل اینترنت پرسنل (مودم) --}}
+    <div class="g-card" id="g-modemlock">
+        <div class="g-head">
+            <img src="/icons/trust-mobile.png" alt="">
+            <h2>قفل اینترنت پرسنل (تنظیم مودم)</h2>
+        </div>
+        <p class="g-sub">گوشی‌های پرسنل به وای‌فای داروخانه وصل می‌شوند، اما فقط ScanBridge کار می‌کند — بدون اینترنت (مخصوص پلن‌های تی‌تک و حرفه‌ای)</p>
+        <ol class="g-steps">
+            <li>با پشتیبانی ScanBridge در ارتباط باشید؛ تنظیمات مودم داروخانه را از راه دور یا تلفنی با هم انجام می‌دهیم.</li>
+            <li>مودم طوری تنظیم می‌شود که گوشی‌های پرسنل <b>اینترنت نداشته باشند</b> اما ارتباطشان با سیستم و اسکن ScanBridge کاملاً سالم بماند.</li>
+            <li>از آن به بعد گوشی پرسنل فقط یک ابزار اسکن است — نه بیشتر؛ حتی اگر بخواهد هم نمی‌تواند دور بزند.</li>
+            <li>هر وقت خواستید (مثلاً گوشی جدید برای پرسنل)، با یک پیام به پشتیبانی، تنظیم به‌روز می‌شود.</li>
+        </ol>
+        <div class="g-tip">🔒 <span><b>چرا مودم؟</b> محدودیت از سمت مودم داروخانه است، نه گوشی پرسنل — پس قابل غیرفعال‌کردن توسط پرسنل نیست و همه‌ی گوشی‌ها (اندروید و آیفون) را می‌گیرد.</span></div>
+        <div style="text-align:center; background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; border-radius:16px; padding:16px 18px; margin-top:14px;">
+            <div style="font-size:15px; font-weight:bold; margin-bottom:6px;">این سرویس روی پلن‌های تی‌تک و حرفه‌ای فعال است</div>
+            <a href="https://wa.me/989136346309" style="display:inline-block; background:#fff; color:#1e3a8a; font-weight:bold; border-radius:12px; padding:10px 24px; text-decoration:none;">درخواست فعال‌سازی از پشتیبانی</a>
+        </div>
+        @include('site.guide._video', ['key' => 'modemlock', 'title' => 'قفل اینترنت پرسنل'])
     </div>
 
     {{-- ۸. پشتیبانی --}}

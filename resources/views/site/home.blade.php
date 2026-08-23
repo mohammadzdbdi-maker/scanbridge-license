@@ -634,6 +634,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
                     <li>ثبت شیرخشک با نسخه و بدون نسخه</li>
                     <li>ثبت اطلاعات بیمار از موبایل</li>
                     <li>خروجی Excel و PDF</li>
+                    <li>🔒 قفل اینترنت پرسنل (فعال‌سازی توسط پشتیبانی)</li>
                 </ul>
                 <a class="btn btn-primary" href="/buy?plan=Ttac">درخواست خرید</a>
             </div>
@@ -654,8 +655,10 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
                     <li>تمام امکانات تی‌تک</li>
                     <li>تعیین وضعیت (تکی و گروهی)</li>
                     <li>تحویل بار حرفه‌ای</li>
+                    <li>بانک بارکد پرمصرف</li>
                     <li>هشدار تاریخ انقضا + یادآور بله</li>
                     <li>همگام‌سازی چند سیستم با یک لایسنس</li>
+                    <li>🔒 قفل اینترنت پرسنل (فعال‌سازی توسط پشتیبانی)</li>
                     <li>پشتیبانی اولویت‌دار</li>
                 </ul>
                 <a class="btn btn-green" href="/buy?plan=TtacPlus">درخواست خرید</a>
