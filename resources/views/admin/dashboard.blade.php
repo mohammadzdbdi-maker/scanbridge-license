@@ -1404,6 +1404,29 @@ a{color:#1d4ed8!important;}
     </section>
 
     <section class="card">
+        <h2>بازنشانی رمز مشتری</h2>
+        <p style="color:#6b7280; margin-top:0; font-size:13px;">
+            اگر مشتری رمز ورود به پنل کاربری را فراموش کرده، با شماره موبایلش پیدا کنید و برایش رمز جدید بگذارید
+            (رمز جدید را برای مشتری در واتساپ ارسال کنید).
+        </p>
+        <form method="post" action="/admin/customers/reset-password" class="form-grid">
+            @csrf
+            <div>
+                <label>شماره موبایل مشتری</label>
+                <input type="text" name="mobile" value="{{ old('mobile') }}" placeholder="09xxxxxxxxx" required>
+            </div>
+            <div>
+                <label>رمز عبور جدید</label>
+                <input type="text" name="password" required minlength="6" placeholder="حداقل ۶ کاراکتر">
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" type="submit">بازنشانی رمز</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
         <h2>لیست لایسنس‌ها</h2>
 
         <div class="license-filter-bar">

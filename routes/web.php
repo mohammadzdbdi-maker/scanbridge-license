@@ -1614,6 +1614,37 @@ Route::post('/admin/upload-installer-android', function (\Illuminate\Http\Reques
 });
 // SCANBRIDGE_ANDROID_DOWNLOAD_END
 
+// SCANBRIDGE_ADMIN_CUSTOMER_RESET_START
+Route::post('/admin/customers/reset-password', function (\Illuminate\Http\Request $request) use ($requireAdmin) {
+    if ($redirect = $requireAdmin($request)) {
+        return $redirect;
+    }
+
+    $data = $request->validate([
+        'mobile' => 'required|string|max:20',
+        'password' => 'required|string|min:6',
+    ], [
+        'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
+    ]);
+
+    $mobile = trim($data['mobile']);
+    $customer = DB::table('scanbridge_customers')->where('mobile', $mobile)->first();
+
+    if (!$customer) {
+        return back()->withInput()->with('error', 'مشتری‌ای با این شماره موبایل پیدا نشد.');
+    }
+
+    DB::table('scanbridge_customers')->where('id', $customer->id)->update([
+        'password' => bcrypt($data['password']),
+        'updated_at' => now(),
+    ]);
+
+    scb_admin_log('reset_customer_password', 'customer: ' . $customer->name . ' (' . $mobile . ')');
+
+    return back()->with('ok', 'رمز عبور «' . $customer->name . '» با موفقیت بازنشانی شد.');
+});
+// SCANBRIDGE_ADMIN_CUSTOMER_RESET_END
+
 // SCANBRIDGE_PRICES_SAVE_START
 Route::post('/admin/prices', function (\Illuminate\Http\Request $request) use ($requireAdmin) {
     if ($redirect = $requireAdmin($request)) {
