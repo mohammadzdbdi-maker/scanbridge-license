@@ -1138,6 +1138,28 @@ Route::post('/admin/upload-installer', function (\Illuminate\Http\Request $reque
 
     $file->move($downloadDir, 'Scanbridge-Setup.exe');
 
+    // نوشتن فایل آپدیت برای آپدیتر خودکار نرم‌افزار ویندوز (جایگزین کامل صفحه‌ی PHP قدیمی)
+    $version = trim((string) $request->input('version', ''));
+    if ($version !== '') {
+        $message = trim((string) $request->input('message', ''));
+        if ($message === '') {
+            $message = 'نسخه جدید ' . $version . ' منتشر شد';
+        }
+        $feed = [
+            'version' => $version,
+            'message' => $message,
+            'url' => 'https://scanbridge.ir/downloads/Scanbridge-Setup.exe',
+        ];
+        if (!is_dir(public_path('app'))) {
+            @mkdir(public_path('app'), 0775, true);
+        }
+        @file_put_contents(
+            public_path('app/update-desktop.json'),
+            json_encode($feed, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+        );
+        scb_admin_log('update_desktop_json', 'فایل آپدیت ویندوز نوشته شد: ' . $version);
+    }
+
     scb_admin_log('upload_installer', 'نسخه جدید فایل نصب آپلود شد: ' . $originalName);
 
     return redirect('/admin')->with('ok', 'فایل نصب جدید با موفقیت آپلود شد.');
@@ -1609,6 +1631,29 @@ Route::post('/admin/upload-installer-android', function (\Illuminate\Http\Reques
         @rename($target, $downloadDir . '/' . $backupName);
     }
     $file->move($downloadDir, 'Scanbridge.apk');
+
+    // نوشتن فایل آپدیت اپ اندروید (آپدیتر درون‌برنامه‌ای /scanbridge.ir/app/update.json)
+    $version = trim((string) $request->input('version', ''));
+    if ($version !== '') {
+        $message = trim((string) $request->input('message', ''));
+        if ($message === '') {
+            $message = 'نسخه جدید ' . $version . ' منتشر شد';
+        }
+        $feed = [
+            'version' => $version,
+            'message' => $message,
+            'url' => 'https://scanbridge.ir/downloads/Scanbridge.apk',
+        ];
+        if (!is_dir(public_path('app'))) {
+            @mkdir(public_path('app'), 0775, true);
+        }
+        @file_put_contents(
+            public_path('app/update.json'),
+            json_encode($feed, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+        );
+        scb_admin_log('update_android_json', 'فایل آپدیت اندروید نوشته شد: ' . $version);
+    }
+
     scb_admin_log('upload_installer_android', 'نسخه جدید اپلیکیشن اندروید آپلود شد: ' . $originalName);
     return redirect('/admin')->with('ok', 'فایل نصب اندروید با موفقیت آپلود شد.');
 });

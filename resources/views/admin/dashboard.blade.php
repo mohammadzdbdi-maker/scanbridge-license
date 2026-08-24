@@ -1022,6 +1022,8 @@ a{color:#1d4ed8!important;}
         @csrf
 
         <input type="file" name="installer" accept=".exe" required>
+        <input type="text" name="version" placeholder="شماره نسخه، مثلا 2.1.0" style="margin-top:8px;">
+        <input type="text" name="message" placeholder="توضیح کوتاه آپدیت (اختیاری)" style="margin-top:8px;">
 
         <div class="scb-icon-btn-row">
             <button class="scb-icon-btn" type="submit" title="آپلود فایل نصب جدید">
@@ -1051,6 +1053,8 @@ a{color:#1d4ed8!important;}
         @csrf
 
         <input type="file" name="installer_android" accept=".apk" required>
+        <input type="text" name="version" placeholder="شماره نسخه، مثلا 1.1" style="margin-top:8px;">
+        <input type="text" name="message" placeholder="توضیح کوتاه آپدیت (اختیاری)" style="margin-top:8px;">
 
         <div class="scb-icon-btn-row">
             <button class="scb-icon-btn" type="submit" title="آپلود فایل APK جدید">
