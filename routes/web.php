@@ -33,18 +33,33 @@ if (!function_exists('scb_send_sms')) {
         $sender = config('services.kavenegar.sender');
 
         if (!$apiKey) {
+            \Illuminate\Support\Facades\Log::warning('KAVENEGAR_API_KEY is not configured — OTP SMS cannot be sent.');
             return false;
         }
 
         try {
-            $response = Http::timeout(10)->get("https://api.kavenegar.com/v1/{$apiKey}/sms/send.json", [
+            $payload = [
                 'receptor' => $mobile,
-                'sender' => $sender,
                 'message' => $message,
-            ]);
+            ];
+            // خط فرستنده اختیاری است: اگر تنظیم نشده باشد، کاوه‌نگار از خط پیش‌فرض حساب استفاده می‌کند
+            if ($sender) {
+                $payload['sender'] = $sender;
+            }
+
+            $response = Http::timeout(10)->get("https://api.kavenegar.com/v1/{$apiKey}/sms/send.json", $payload);
+
+            if (!$response->successful()) {
+                \Illuminate\Support\Facades\Log::error('Kavenegar SMS send failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'receptor' => $mobile,
+                ]);
+            }
 
             return $response->successful();
         } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Kavenegar SMS exception: ' . $e->getMessage());
             return false;
         }
     }
@@ -227,14 +242,42 @@ Route::get('/', function () {
         return redirect('/admin');
     }
 
-    return view('site.home');
+    $planPrices = [];
+    try {
+        foreach (DB::table('scanbridge_prices')->get() as $row) {
+            $entry = $planPrices[$row->plan] ?? ['annual' => null, 'longest' => null, 'longestMonths' => 0];
+            if ((int) $row->duration_months === 12) {
+                $entry['annual'] = (int) $row->price;
+            }
+            if ((int) $row->duration_months > $entry['longestMonths']) {
+                $entry['longest'] = (int) $row->price;
+                $entry['longestMonths'] = (int) $row->duration_months;
+            }
+            $planPrices[$row->plan] = $entry;
+        }
+    } catch (\Throwable $e) {
+        $planPrices = [];
+    }
+
+    return view('site.home', ['planPrices' => $planPrices]);
 });
 
 Route::get('/download', function () {
     return view('site.download');
 });
 
-Route::get('/buy', function () {
+Route::get('/guide', function () {
+    return view('site.guide');
+});
+
+Route::get('/buy', function (Request $request) {
+    $customerId = $request->session()->get('scanbridge_customer_id');
+    if (!$customerId) {
+        $request->session()->put('scb_intended', $request->fullUrl());
+        return redirect('/panel/login')->with('error', 'برای ثبت درخواست خرید، ابتدا وارد حساب خود شوید یا ثبت‌نام کنید.');
+    }
+    $customer = DB::table('scanbridge_customers')->where('id', $customerId)->first();
+
     $pricesRaw = DB::table('scanbridge_prices')->get();
     $prices = [];
     foreach ($pricesRaw as $p) {
@@ -252,6 +295,7 @@ Route::get('/buy', function () {
     return view('site.buy', [
         'pricingData' => $prices,
         'deviceData' => $deviceData,
+        'customer' => $customer,
     ]);
 });
 
@@ -543,6 +587,10 @@ Route::post('/admin/logs/{id}/delete', function (\Illuminate\Http\Request $reque
 // SCB_DELETE_ROUTES_END
 // SCANBRIDGE_PURCHASE_REQUESTS_START
 Route::post('/buy/request', function (\Illuminate\Http\Request $request) {
+    if (!$request->session()->get('scanbridge_customer_id')) {
+        return response()->json(['success' => false, 'error' => 'برای ثبت درخواست، ابتدا وارد حساب خود شوید.'], 401);
+    }
+
     $data = $request->validate([
         'organization_name' => 'nullable|string|max:255',
         'contact_name' => 'nullable|string|max:255',
@@ -1090,6 +1138,28 @@ Route::post('/admin/upload-installer', function (\Illuminate\Http\Request $reque
 
     $file->move($downloadDir, 'Scanbridge-Setup.exe');
 
+    // نوشتن فایل آپدیت برای آپدیتر خودکار نرم‌افزار ویندوز (جایگزین کامل صفحه‌ی PHP قدیمی)
+    $version = trim((string) $request->input('version', ''));
+    if ($version !== '') {
+        $message = trim((string) $request->input('message', ''));
+        if ($message === '') {
+            $message = 'نسخه جدید ' . $version . ' منتشر شد';
+        }
+        $feed = [
+            'version' => $version,
+            'message' => $message,
+            'url' => 'https://scanbridge.ir/downloads/Scanbridge-Setup.exe',
+        ];
+        if (!is_dir(public_path('app'))) {
+            @mkdir(public_path('app'), 0775, true);
+        }
+        @file_put_contents(
+            public_path('app/update-desktop.json'),
+            json_encode($feed, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+        );
+        scb_admin_log('update_desktop_json', 'فایل آپدیت ویندوز نوشته شد: ' . $version);
+    }
+
     scb_admin_log('upload_installer', 'نسخه جدید فایل نصب آپلود شد: ' . $originalName);
 
     return redirect('/admin')->with('ok', 'فایل نصب جدید با موفقیت آپلود شد.');
@@ -1119,18 +1189,99 @@ Route::post('/panel/register', function (Request $request) {
         'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
     ]);
 
-    $id = DB::table('scanbridge_customers')->insertGetId([
+    $mobile = trim($data['mobile']);
+
+    // ورود/ثبت‌نام با کد پیامکی (OTP) فعلاً با کلید SMS_OTP_ENABLED کنترل می‌شود.
+    // تا وقتی خط خدماتی کاوه‌نگار آماده نشده، ثبت‌نام مستقیم و بدون پیامک انجام می‌شود
+    // و کاربر بلافاصله وارد پنل می‌شود. کل جریان OTP (کد، صفحه تأیید، ارسال مجدد) دست‌نخورده
+    // باقی مانده و بعداً فقط با true کردن همین کلید برمی‌گردد.
+    if (!config('services.scanbridge.sms_otp_enabled')) {
+        $id = DB::table('scanbridge_customers')->insertGetId([
+            'name' => $data['name'],
+            'mobile' => $mobile,
+            'password' => bcrypt($data['password']),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $request->session()->put('scanbridge_customer_id', $id);
+        $request->session()->regenerate();
+
+        return redirect('/panel');
+    }
+
+    $issue = scb_issue_otp($mobile, 'register');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->withInput()->with('error', 'همین الان یک کد برای این شماره ارسال شده. لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->withInput()->with('error', 'ارسال پیامک با خطا مواجه شد. لطفا دوباره تلاش کنید.');
+    }
+
+    $request->session()->put('scb_pending_register', [
         'name' => $data['name'],
-        'mobile' => $data['mobile'],
+        'mobile' => $mobile,
         'password' => bcrypt($data['password']),
+    ]);
+
+    return redirect('/panel/register/verify');
+});
+
+Route::get('/panel/register/verify', function (Request $request) {
+    $pending = $request->session()->get('scb_pending_register');
+    if (!$pending) {
+        return redirect('/panel/register');
+    }
+
+    return view('site.panel.verify', ['mobile' => $pending['mobile']]);
+});
+
+Route::post('/panel/register/verify', function (Request $request) {
+    $pending = $request->session()->get('scb_pending_register');
+    if (!$pending) {
+        return redirect('/panel/register');
+    }
+
+    $data = $request->validate([
+        'code' => 'required|string|max:10',
+    ]);
+
+    if (!scb_check_otp($pending['mobile'], 'register', trim($data['code']))) {
+        return back()->with('error', 'کد وارد شده صحیح نیست یا منقضی شده است.');
+    }
+
+    $id = DB::table('scanbridge_customers')->insertGetId([
+        'name' => $pending['name'],
+        'mobile' => $pending['mobile'],
+        'password' => $pending['password'],
         'created_at' => now(),
         'updated_at' => now(),
     ]);
 
+    $request->session()->forget('scb_pending_register');
     $request->session()->put('scanbridge_customer_id', $id);
     $request->session()->regenerate();
 
-    return redirect('/panel');
+    $scbIntended = $request->session()->get('scb_intended', '/panel');
+    $request->session()->forget('scb_intended');
+    return redirect($scbIntended);
+});
+
+Route::post('/panel/register/resend', function (Request $request) {
+    $pending = $request->session()->get('scb_pending_register');
+    if (!$pending) {
+        return redirect('/panel/register');
+    }
+
+    $issue = scb_issue_otp($pending['mobile'], 'register');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->with('error', 'لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->with('error', 'ارسال پیامک با خطا مواجه شد.');
+    }
+
+    return back()->with('ok', 'کد جدید ارسال شد.');
 });
 
 Route::get('/panel/login', function () {
@@ -1152,7 +1303,9 @@ Route::post('/panel/login', function (Request $request) {
     $request->session()->put('scanbridge_customer_id', $customer->id);
     $request->session()->regenerate();
 
-    return redirect('/panel');
+    $scbIntended = $request->session()->get('scb_intended', '/panel');
+    $request->session()->forget('scb_intended');
+    return redirect($scbIntended);
 });
 
 Route::post('/panel/logout', function (Request $request) {
@@ -1161,6 +1314,98 @@ Route::post('/panel/logout', function (Request $request) {
     $request->session()->regenerateToken();
 
     return redirect('/panel/login');
+});
+
+// SCANBRIDGE_PASSWORD_RESET_START
+Route::get('/panel/forgot-password', function () {
+    if (!config('services.scanbridge.sms_otp_enabled')) {
+        return redirect('/panel/login')->with('error', 'بازیابی رمز عبور فعلاً غیرفعال است. لطفاً با پشتیبانی (واتساپ) تماس بگیرید تا رمز شما را بازنشانی کنند.');
+    }
+
+    return view('site.panel.forgot-password');
+});
+
+Route::post('/panel/forgot-password', function (Request $request) {
+    if (!config('services.scanbridge.sms_otp_enabled')) {
+        return redirect('/panel/login')->with('error', 'بازیابی رمز عبور فعلاً غیرفعال است. لطفاً با پشتیبانی (واتساپ) تماس بگیرید تا رمز شما را بازنشانی کنند.');
+    }
+
+    $data = $request->validate([
+        'mobile' => 'required|string|max:20',
+    ]);
+
+    $mobile = trim($data['mobile']);
+    $customer = DB::table('scanbridge_customers')->where('mobile', $mobile)->first();
+
+    if (!$customer) {
+        return back()->withInput()->with('error', 'شماره موبایلی با این مشخصات پیدا نشد.');
+    }
+
+    $issue = scb_issue_otp($mobile, 'reset');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->withInput()->with('error', 'همین الان یک کد برای این شماره ارسال شده. لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->withInput()->with('error', 'ارسال پیامک با خطا مواجه شد. لطفا دوباره تلاش کنید.');
+    }
+
+    $request->session()->put('scb_pending_reset_mobile', $mobile);
+
+    return redirect('/panel/reset-password');
+});
+
+Route::get('/panel/reset-password', function (Request $request) {
+    $mobile = $request->session()->get('scb_pending_reset_mobile');
+    if (!$mobile) {
+        return redirect('/panel/forgot-password');
+    }
+
+    return view('site.panel.reset-password', ['mobile' => $mobile]);
+});
+
+Route::post('/panel/reset-password', function (Request $request) {
+    $mobile = $request->session()->get('scb_pending_reset_mobile');
+    if (!$mobile) {
+        return redirect('/panel/forgot-password');
+    }
+
+    $data = $request->validate([
+        'code' => 'required|string|max:10',
+        'password' => 'required|string|min:6|confirmed',
+    ], [
+        'password.confirmed' => 'تکرار رمز عبور مطابقت ندارد.',
+        'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
+    ]);
+
+    if (!scb_check_otp($mobile, 'reset', trim($data['code']))) {
+        return back()->with('error', 'کد وارد شده صحیح نیست یا منقضی شده است.');
+    }
+
+    DB::table('scanbridge_customers')->where('mobile', $mobile)->update([
+        'password' => bcrypt($data['password']),
+        'updated_at' => now(),
+    ]);
+
+    $request->session()->forget('scb_pending_reset_mobile');
+
+    return redirect('/panel/login')->with('ok', 'رمز عبور با موفقیت تغییر کرد. حالا وارد شوید.');
+});
+
+Route::post('/panel/reset-password/resend', function (Request $request) {
+    $mobile = $request->session()->get('scb_pending_reset_mobile');
+    if (!$mobile) {
+        return redirect('/panel/forgot-password');
+    }
+
+    $issue = scb_issue_otp($mobile, 'reset');
+    if (!$issue['ok'] && ($issue['wait'] ?? 0) > 0) {
+        return back()->with('error', 'لطفا ' . $issue['wait'] . ' ثانیه دیگر تلاش کنید.');
+    }
+    if (!$issue['ok']) {
+        return back()->with('error', 'ارسال پیامک با خطا مواجه شد.');
+    }
+
+    return back()->with('ok', 'کد جدید ارسال شد.');
 });
 // SCANBRIDGE_PASSWORD_RESET_END
 
@@ -1386,10 +1631,64 @@ Route::post('/admin/upload-installer-android', function (\Illuminate\Http\Reques
         @rename($target, $downloadDir . '/' . $backupName);
     }
     $file->move($downloadDir, 'Scanbridge.apk');
+
+    // نوشتن فایل آپدیت اپ اندروید (آپدیتر درون‌برنامه‌ای /scanbridge.ir/app/update.json)
+    $version = trim((string) $request->input('version', ''));
+    if ($version !== '') {
+        $message = trim((string) $request->input('message', ''));
+        if ($message === '') {
+            $message = 'نسخه جدید ' . $version . ' منتشر شد';
+        }
+        $feed = [
+            'version' => $version,
+            'message' => $message,
+            'url' => 'https://scanbridge.ir/downloads/Scanbridge.apk',
+        ];
+        if (!is_dir(public_path('app'))) {
+            @mkdir(public_path('app'), 0775, true);
+        }
+        @file_put_contents(
+            public_path('app/update.json'),
+            json_encode($feed, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT)
+        );
+        scb_admin_log('update_android_json', 'فایل آپدیت اندروید نوشته شد: ' . $version);
+    }
+
     scb_admin_log('upload_installer_android', 'نسخه جدید اپلیکیشن اندروید آپلود شد: ' . $originalName);
     return redirect('/admin')->with('ok', 'فایل نصب اندروید با موفقیت آپلود شد.');
 });
 // SCANBRIDGE_ANDROID_DOWNLOAD_END
+
+// SCANBRIDGE_ADMIN_CUSTOMER_RESET_START
+Route::post('/admin/customers/reset-password', function (\Illuminate\Http\Request $request) use ($requireAdmin) {
+    if ($redirect = $requireAdmin($request)) {
+        return $redirect;
+    }
+
+    $data = $request->validate([
+        'mobile' => 'required|string|max:20',
+        'password' => 'required|string|min:6',
+    ], [
+        'password.min' => 'رمز عبور باید حداقل ۶ کاراکتر باشد.',
+    ]);
+
+    $mobile = trim($data['mobile']);
+    $customer = DB::table('scanbridge_customers')->where('mobile', $mobile)->first();
+
+    if (!$customer) {
+        return back()->withInput()->with('error', 'مشتری‌ای با این شماره موبایل پیدا نشد.');
+    }
+
+    DB::table('scanbridge_customers')->where('id', $customer->id)->update([
+        'password' => bcrypt($data['password']),
+        'updated_at' => now(),
+    ]);
+
+    scb_admin_log('reset_customer_password', 'customer: ' . $customer->name . ' (' . $mobile . ')');
+
+    return back()->with('ok', 'رمز عبور «' . $customer->name . '» با موفقیت بازنشانی شد.');
+});
+// SCANBRIDGE_ADMIN_CUSTOMER_RESET_END
 
 // SCANBRIDGE_PRICES_SAVE_START
 Route::post('/admin/prices', function (\Illuminate\Http\Request $request) use ($requireAdmin) {
@@ -1398,7 +1697,10 @@ Route::post('/admin/prices', function (\Illuminate\Http\Request $request) use ($
     }
 
     $plans = ['Normal', 'Ttac', 'TtacPlus'];
-    $durations = [1, 3, 6, 12];
+    $durations = [12]; // فقط پلن یک‌ساله
+
+    // مدت‌های غیرسالانه دیگر پشتیبانی نمی‌شوند — ردیف‌های قدیمی پاک شوند
+    DB::table('scanbridge_prices')->whereNotIn('duration_months', [12])->delete();
 
     foreach ($plans as $plan) {
         foreach ($durations as $d) {

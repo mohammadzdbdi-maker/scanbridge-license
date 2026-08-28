@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>درباره Scanbridge | نرم‌افزار مدیریت بارکد و تی‌تک</title>
+    <link rel="canonical" href="https://scanbridge.ir/about">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="درباره نرم‌افزار Scanbridge و امکانات آن برای اتصال بارکدخوان موبایل، مدیریت تی‌تک، تاریخچه و عملیات داروخانه.">
     <style>

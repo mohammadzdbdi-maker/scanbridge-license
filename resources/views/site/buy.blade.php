@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <title>خرید و تمدید Scanbridge | درخواست لایسنس</title>
+    <link rel="canonical" href="https://scanbridge.ir/buy">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="خرید، تمدید یا تغییر پلن Scanbridge شامل Normal، Ttac و TtacPlus از طریق ارسال درخواست واتساپ.">
+    <meta name="description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
     <style>
         @font-face {
             font-family: 'Pinar';
@@ -153,7 +154,7 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta property="og:title" content="خرید و تمدید Scanbridge | درخواست لایسنس">
-    <meta property="og:description" content="خرید، تمدید یا تغییر پلن Scanbridge شامل Normal، Ttac و TtacPlus از طریق ارسال درخواست واتساپ.">
+    <meta property="og:description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir">
     <meta property="og:site_name" content="Scanbridge">
@@ -198,11 +199,16 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 </div>
 <div class="wrap">
     <div class="card">
-        <h1>خرید و تمدید Scanbridge</h1>
+        <h1>خرید و تمدید ScanBridge</h1>
         <p class="lead">
-            اطلاعات زیر را وارد کنید تا پیام آماده واتساپ ساخته شود.
-            بعد از ارسال پیام، لایسنس مناسب برای شما صادر می‌شود.
+            اطلاعات زیر را وارد کنید تا درخواست شما ثبت شود.
+            همه پلن‌ها یک‌ساله هستند و بعد از تأیید، پلن در پنل کاربری شما فعال می‌شود.
         </p>
+        @if(!empty($customer->name))
+        <p style="color:#2563eb;font-weight:bold;font-size:13.5px;margin-top:-6px;">
+            سلام {{ $customer->name }} 👋 این درخواست با حساب پنل شما ثبت می‌شود.
+        </p>
+        @endif
 
         <div class="form">
             <div>
@@ -212,31 +218,21 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 
             <div>
                 <label>نام مسئول</label>
-                <input id="contactName" placeholder="نام و نام خانوادگی">
+                <input id="contactName" placeholder="نام و نام خانوادگی" value="{{ $customer->name ?? '' }}">
             </div>
 
             <div>
                 <label>شماره موبایل</label>
-                <input id="mobile" placeholder="09xxxxxxxxx" dir="ltr">
+                <input id="mobile" placeholder="09xxxxxxxxx" dir="ltr" value="{{ $customer->mobile ?? '' }}">
             </div>
 
             <div>
                 <label>پلن موردنظر</label>
                 <select id="plan">
-                    <option value="TtacPlus">TtacPlus - کامل</option>
-                    <option value="Ttac">Ttac - تی‌تک</option>
-                    <option value="Normal">Normal - بارکدخوان</option>
-                    <option value="Trial">Trial - آزمایشی</option>
-                </select>
-            </div>
-
-            <div id="durationWrap">
-                <label>مدت زمان</label>
-                <select id="duration">
-                    <option value="1">۱ ماهه</option>
-                    <option value="3">۳ ماهه</option>
-                    <option value="6">۶ ماهه</option>
-                    <option value="12">یک‌ساله</option>
+                    <option value="Ttac" selected>تی‌تک ⭐ (پیشنهاد ما برای اکثر داروخانه‌ها)</option>
+                    <option value="Normal">پایه — اسکن و تاریخچه</option>
+                    <option value="TtacPlus">حرفه‌ای — امکانات کامل</option>
+                    <option value="Trial">آزمایشی — ۱۴ روزه رایگان (دمو)</option>
                 </select>
             </div>
 
@@ -261,6 +257,16 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             </div>
         </div>
 
+        <div id="scbSuccessBox" style="display:none; background:linear-gradient(135deg,#059669,#10b981); color:#fff; border-radius:22px; padding:38px 22px; text-align:center; margin-bottom:24px; box-shadow:0 14px 40px rgba(5,150,105,.25);">
+            <div style="font-size:48px; line-height:1; margin-bottom:14px;">✅</div>
+            <div style="font-size:21px; font-weight:bold; margin-bottom:10px;">درخواست شما با موفقیت ثبت شد</div>
+            <div style="font-size:14.5px; opacity:.95; line-height:2;">
+                بعد از بررسی و تأیید، پلن شما در پنل کاربری فعال خواهد شد.<br>
+                کارشناسان ما نیز برای هماهنگی با شما تماس می‌گیرند.
+            </div>
+            <a href="/panel" style="display:inline-block; margin-top:18px; background:#fff; color:#059669; font-weight:bold; border-radius:12px; padding:10px 24px; text-decoration:none;">رفتن به پنل کاربری</a>
+        </div>
+
         <div id="priceBox" style="background:linear-gradient(135deg,#1e3a8a,#2563eb); color:#fff; border-radius:22px; padding:32px 22px; text-align:center; margin-bottom:24px; min-height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
             <div style="font-size:15px; opacity:.85; margin-bottom:8px;">قیمت نهایی</div>
             <div style="font-size:44px; font-weight:bold;" id="priceAmount">۰ تومان</div>
@@ -268,11 +274,11 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         </div>
 
         <div class="actions">
-            <button class="green" onclick="sendWhatsApp()">ثبت درخواست و ارسال واتساپ</button>
+            <button class="green" onclick="submitRequest()">ثبت درخواست</button>
         </div>
 
         <div class="note">
-            بعد از ارسال درخواست، کد لایسنس مثل <b>SCB-XXXXX-XXXXX-XXXXX-XXXXX</b> برای شما صادر می‌شود و داخل برنامه فعال می‌کنید.
+            بعد از تأیید درخواست، کد لایسنس مثل <b>SCB-XXXXX-XXXXX-XXXXX-XXXXX</b> در پنل کاربری شما قرار می‌گیرد و داخل برنامه فعال می‌کنید.
         </div>
     </div>
 </div>
@@ -287,21 +293,17 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 
     function updatePrice() {
         const plan = document.getElementById('plan').value;
-        const durationEl = document.getElementById('duration');
-        const durationWrap = document.getElementById('durationWrap');
         const devices = parseInt(document.getElementById('devices').value || '1', 10);
         const priceAmount = document.getElementById('priceAmount');
         const priceDetail = document.getElementById('priceDetail');
 
         if (plan === 'Trial') {
-            durationWrap.style.display = 'none';
             priceAmount.textContent = 'رایگان';
             priceDetail.textContent = 'نسخه آزمایشی ۱۴ روزه';
             return;
         }
-        durationWrap.style.display = '';
 
-        const duration = parseInt(durationEl.value, 10);
+        const duration = 12; // فقط پلن یک‌ساله
         const basePrice = (scbPrices[plan] && scbPrices[plan][duration]) ? scbPrices[plan][duration] : 0;
         const deviceInfo = scbDeviceData[plan] || { base_devices: 1, price_per_extra_device: 0 };
         const extraDevices = Math.max(0, devices - deviceInfo.base_devices);
@@ -311,9 +313,9 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         priceAmount.textContent = scbFormatToman(total);
 
         if (extraDevices > 0) {
-            priceDetail.textContent = 'شامل ' + extraDevices + ' دستگاه اضافه، هر کدام ' + deviceInfo.price_per_extra_device.toLocaleString('en-US') + ' تومان';
+            priceDetail.textContent = 'یک‌ساله — شامل ' + extraDevices + ' دستگاه اضافه، هر کدام ' + deviceInfo.price_per_extra_device.toLocaleString('en-US') + ' تومان';
         } else {
-            priceDetail.textContent = '';
+            priceDetail.textContent = 'یک‌ساله';
         }
     }
 
@@ -331,7 +333,6 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             document.getElementById('plan').value = planFromUrl;
         }
         document.getElementById('plan').addEventListener('change', updatePrice);
-        document.getElementById('duration').addEventListener('change', updatePrice);
         document.getElementById('devices').addEventListener('input', updatePrice);
         updatePrice();
     })();
@@ -375,7 +376,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
         return true;
     }
 
-    async function sendWhatsApp() {
+    async function submitRequest() {
         if (!scbValidateForm()) {
             return;
         }
@@ -390,21 +391,11 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
             description: val('desc')
         };
 
-        const text =
-`سلام، برای Scanbridge درخواست دارم.
-
-نوع درخواست: ${payload.request_type}
-نام مجموعه: ${payload.organization_name}
-نام مسئول: ${payload.contact_name}
-شماره موبایل: ${payload.mobile}
-پلن موردنظر: ${payload.plan}
-تعداد سیستم: ${payload.devices}
-
-توضیحات:
-${payload.description || '-'}`;
+        const btn = document.querySelector('.actions .green');
+        if (btn) { btn.disabled = true; btn.textContent = 'در حال ثبت درخواست...'; }
 
         try {
-            await fetch('/buy/request', {
+            const res = await fetch('/buy/request', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -413,10 +404,26 @@ ${payload.description || '-'}`;
                 },
                 body: JSON.stringify(payload)
             });
-        } catch (e) {}
+            if (!res.ok) {
+                if (res.status === 401) {
+                    alert('نشست شما منقضی شده است. لطفاً دوباره وارد شوید.');
+                    window.location.href = '/panel/login';
+                } else {
+                    alert('ثبت درخواست با خطا مواجه شد. لطفاً دوباره تلاش کنید.');
+                }
+                return;
+            }
 
-        const url = 'https://wa.me/989136346309?text=' + encodeURIComponent(text);
-        window.open(url, '_blank');
+            document.getElementById('scbSuccessBox').style.display = '';
+            document.querySelector('.card .form').style.display = 'none';
+            document.getElementById('priceBox').style.display = 'none';
+            document.querySelector('.card .actions').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (e) {
+            alert('ثبت درخواست با خطا مواجه شد. لطفاً دوباره تلاش کنید.');
+        } finally {
+            if (btn) { btn.disabled = false; btn.textContent = 'ثبت درخواست'; }
+        }
     }
 
 </script>

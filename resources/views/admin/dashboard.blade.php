@@ -843,6 +843,39 @@ a{color:#1d4ed8!important;}
     .scb-admin-tab-icon-wrap { width:34px; height:34px; }
 }
 
+/* SCB_TABS_MATCH_STATS v4 — تب فعال با قاب آبی دورتادور + فونت بزرگ‌تر */
+/* ۳ دکمه در عرض کامل — مجموع عرض هم‌اندازه‌ی ردیف ۴ کادر آمار */
+.scb-admin-tabs { grid-template-columns:repeat(3, 1fr)!important; }
+/* ارتفاع یکسان با کادرهای آمار */
+.stat, .scb-admin-tab-btn { min-height:80px!important; box-sizing:border-box!important; }
+.scb-admin-tab-btn { padding:12px 20px!important; align-items:center!important; justify-content:flex-start!important; gap:14px!important; font-size:17px!important; }
+.scb-admin-tab-btn .cnt { font-size:13px; }
+/* فونت بزرگ‌تر کادرهای آمار */
+.stat .num { font-size:30px!important; }
+.stat .label { font-size:14.5px!important; }
+/* آیکون بدون کادر سفید — عیناً مثل آیکون‌های کادرهای آمار (::before + multiply) */
+.scb-admin-tab-icon-wrap {
+    width:54px; height:54px; flex-shrink:0;
+    background:transparent!important; border:none!important;
+    box-shadow:none!important; border-radius:0!important; padding:0!important;
+}
+.scb-admin-tab-icon { width:100%!important; height:100%!important; object-fit:contain!important; background:transparent!important; mix-blend-mode:multiply!important; }
+/* دکمه‌ها همیشه سفید با قاب یکنواخت ۲px — تا با فعال‌شدن جابه‌جا نشن */
+.scb-admin-tab-btn,
+.scb-admin-tab-btn:hover,
+.scb-admin-tab-btn.active { background:#fff!important; border:2px solid #e5e7eb!important; }
+.scb-admin-tab-btn:hover { border-color:#c7d2e4!important; }
+/* تب فعال: قاب آبی دورتادور + هاله‌ی ملایم آبی */
+.scb-admin-tab-btn.active { color:#1e3a8a!important; border-color:#2563eb!important; box-shadow:0 0 0 4px rgba(37,99,235,.12), 0 6px 18px rgba(15,23,42,.05)!important; }
+/* حذف خط زیرین — نشانگر تب فعال حالا قاب آبی کامل است */
+.scb-admin-tab-btn.active::after { display:none!important; content:none!important; }
+@media (max-width:700px) {
+    .scb-admin-tabs { grid-template-columns:1fr!important; }
+    .stat, .scb-admin-tab-btn { min-height:64px!important; }
+    .scb-admin-tab-btn { font-size:15px!important; }
+    .scb-admin-tab-icon-wrap { width:44px; height:44px; }
+}
+
 /* SCB_ADMIN_ACCORDION_ROWS */
 .scb-acc-list { display:flex; flex-direction:column; gap:10px; }
 .scb-acc-card { background:#fff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; box-shadow:0 4px 14px rgba(15,23,42,.04); }
@@ -958,25 +991,6 @@ a{color:#1d4ed8!important;}
         <div class="alert-error">{{ session('error') }}</div>
     @endif
 
-    <section class="stats">
-        <div class="stat">
-            <div class="num">{{ $totalLicenses }}</div>
-            <div class="label">کل لایسنس‌ها</div>
-        </div>
-        <div class="stat">
-            <div class="num">{{ $activeLicenses }}</div>
-            <div class="label">فعال</div>
-        </div>
-        <div class="stat">
-            <div class="num">{{ $disabledLicenses }}</div>
-            <div class="label">غیرفعال</div>
-        </div>
-        <div class="stat">
-            <div class="num">{{ $expiredLicenses }}</div>
-            <div class="label">منقضی‌شده</div>
-        </div>
-    </section>
-
     <div class="scb-admin-tabs" id="scbAdminTabs">
         <button type="button" class="scb-admin-tab-btn" data-tab="licenses" onclick="scbAdminShowTab('licenses')">
             <span class="scb-admin-tab-icon-wrap"><img class="scb-admin-tab-icon" src="/icons/tab-licenses.png" alt="" onerror="this.parentElement.style.display='none'"></span>
@@ -1008,6 +1022,8 @@ a{color:#1d4ed8!important;}
         @csrf
 
         <input type="file" name="installer" accept=".exe" required>
+        <input type="text" name="version" placeholder="شماره نسخه، مثلا 2.1.0" style="margin-top:8px;">
+        <input type="text" name="message" placeholder="توضیح کوتاه آپدیت (اختیاری)" style="margin-top:8px;">
 
         <div class="scb-icon-btn-row">
             <button class="scb-icon-btn" type="submit" title="آپلود فایل نصب جدید">
@@ -1037,6 +1053,8 @@ a{color:#1d4ed8!important;}
         @csrf
 
         <input type="file" name="installer_android" accept=".apk" required>
+        <input type="text" name="version" placeholder="شماره نسخه، مثلا 1.1" style="margin-top:8px;">
+        <input type="text" name="message" placeholder="توضیح کوتاه آپدیت (اختیاری)" style="margin-top:8px;">
 
         <div class="scb-icon-btn-row">
             <button class="scb-icon-btn" type="submit" title="آپلود فایل APK جدید">
@@ -1080,7 +1098,7 @@ a{color:#1d4ed8!important;}
 
         @php
             $planLabels = ['Normal' => 'Normal', 'Ttac' => 'Ttac', 'TtacPlus' => 'TtacPlus'];
-            $durationLabels = [1 => '۱ ماهه', 3 => '۳ ماهه', 6 => '۶ ماهه', 12 => 'یک‌ساله'];
+            $durationLabels = [12 => 'یک‌ساله'];
         @endphp
 
         <div style="overflow-x:auto;">
@@ -1181,6 +1199,38 @@ a{color:#1d4ed8!important;}
     })();
     </script>
 </section>
+
+<!-- SCANBRIDGE_ADMIN_LOGS_START -->
+<section class="card" id="admin-logs">
+    <h2>آخرین فعالیت‌های پنل</h2>
+
+    <div class="scb-grid-list">
+    @forelse(($adminLogs ?? collect()) as $log)
+        <div class="scb-grid-card">
+            <div class="scb-grid-badges"><span class="badge plan">{{ $log->action }}</span></div>
+            <div class="scb-grid-meta">{{ $log->created_at }}</div>
+            <button type="button" class="btn btn-blue scb-more-btn" onclick="scbOpenModal('scb-modal-src-log-{{ $loop->index }}', '{{ addslashes($log->action) }}')">اطلاعات بیشتر</button>
+        </div>
+
+        <div id="scb-modal-src-log-{{ $loop->index }}" class="scb-modal-src" style="display:none;">
+            <div style="font-size:13.5px; color:#374151; line-height:2.1;">
+                <strong>زمان:</strong> {{ $log->created_at }}<br>
+                <strong>عملیات:</strong> <span class="badge plan">{{ $log->action }}</span><br>
+                <strong>IP:</strong> <span style="direction:ltr; display:inline-block;">{{ $log->ip_address ?: '-' }}</span>
+            </div>
+            <div style="margin-top:10px; padding:10px 12px; background:#f9fafb; border-radius:10px; font-size:13px; color:#374151; white-space:normal;">{{ $log->message ?: '-' }}</div>
+            <form class="scb-log-delete-form" method="post" action="/admin/logs/{{ $log->id }}/delete" onsubmit="return confirm('این رویداد برای همیشه حذف شود؟');">
+                @csrf
+                <button class="btn btn-red" type="submit">حذف</button>
+            </form>
+        </div>
+    @empty
+        <div style="text-align:center; padding:24px; color:#6b7280;">هنوز فعالیتی ثبت نشده است.</div>
+    @endforelse
+    </div>
+</section>
+<!-- SCANBRIDGE_ADMIN_LOGS_END -->
+
     </div>
 
     <div class="scb-tab-panel" data-tab="requests">
@@ -1282,40 +1332,28 @@ a{color:#1d4ed8!important;}
 <!-- SCANBRIDGE_PURCHASE_REQUESTS_PANEL_END -->
     </div>
 
-    <div class="scb-tab-panel" data-tab="settings">
-<!-- SCANBRIDGE_ADMIN_LOGS_START -->
-<section class="card" id="admin-logs">
-    <h2>آخرین فعالیت‌های پنل</h2>
-
-    <div class="scb-grid-list">
-    @forelse(($adminLogs ?? collect()) as $log)
-        <div class="scb-grid-card">
-            <div class="scb-grid-badges"><span class="badge plan">{{ $log->action }}</span></div>
-            <div class="scb-grid-meta">{{ $log->created_at }}</div>
-            <button type="button" class="btn btn-blue scb-more-btn" onclick="scbOpenModal('scb-modal-src-log-{{ $loop->index }}', '{{ addslashes($log->action) }}')">اطلاعات بیشتر</button>
-        </div>
-
-        <div id="scb-modal-src-log-{{ $loop->index }}" class="scb-modal-src" style="display:none;">
-            <div style="font-size:13.5px; color:#374151; line-height:2.1;">
-                <strong>زمان:</strong> {{ $log->created_at }}<br>
-                <strong>عملیات:</strong> <span class="badge plan">{{ $log->action }}</span><br>
-                <strong>IP:</strong> <span style="direction:ltr; display:inline-block;">{{ $log->ip_address ?: '-' }}</span>
-            </div>
-            <div style="margin-top:10px; padding:10px 12px; background:#f9fafb; border-radius:10px; font-size:13px; color:#374151; white-space:normal;">{{ $log->message ?: '-' }}</div>
-            <form class="scb-log-delete-form" method="post" action="/admin/logs/{{ $log->id }}/delete" onsubmit="return confirm('این رویداد برای همیشه حذف شود؟');">
-                @csrf
-                <button class="btn btn-red" type="submit">حذف</button>
-            </form>
-        </div>
-    @empty
-        <div style="text-align:center; padding:24px; color:#6b7280;">هنوز فعالیتی ثبت نشده است.</div>
-    @endforelse
-    </div>
-</section>
-<!-- SCANBRIDGE_ADMIN_LOGS_END -->
-    </div>
 
     <div class="scb-tab-panel" data-tab="licenses">
+
+    <section class="stats">
+        <div class="stat">
+            <div class="num">{{ $totalLicenses }}</div>
+            <div class="label">کل لایسنس‌ها</div>
+        </div>
+        <div class="stat">
+            <div class="num">{{ $activeLicenses }}</div>
+            <div class="label">فعال</div>
+        </div>
+        <div class="stat">
+            <div class="num">{{ $disabledLicenses }}</div>
+            <div class="label">غیرفعال</div>
+        </div>
+        <div class="stat">
+            <div class="num">{{ $expiredLicenses }}</div>
+            <div class="label">منقضی‌شده</div>
+        </div>
+    </section>
+
 <section class="card">
         <h2>ساخت لایسنس جدید</h2>
         <form method="post" action="/admin/licenses">
@@ -1366,6 +1404,29 @@ a{color:#1d4ed8!important;}
             </div>
             <button class="btn btn-search" type="submit">جستجو</button>
             <a class="btn btn-gray" href="/admin">پاک کردن</a>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>بازنشانی رمز مشتری</h2>
+        <p style="color:#6b7280; margin-top:0; font-size:13px;">
+            اگر مشتری رمز ورود به پنل کاربری را فراموش کرده، با شماره موبایلش پیدا کنید و برایش رمز جدید بگذارید
+            (رمز جدید را برای مشتری در واتساپ ارسال کنید).
+        </p>
+        <form method="post" action="/admin/customers/reset-password" class="form-grid">
+            @csrf
+            <div>
+                <label>شماره موبایل مشتری</label>
+                <input type="text" name="mobile" value="{{ old('mobile') }}" placeholder="09xxxxxxxxx" required>
+            </div>
+            <div>
+                <label>رمز عبور جدید</label>
+                <input type="text" name="password" required minlength="6" placeholder="حداقل ۶ کاراکتر">
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <button class="btn btn-primary" type="submit">بازنشانی رمز</button>
+            </div>
         </form>
     </section>
 

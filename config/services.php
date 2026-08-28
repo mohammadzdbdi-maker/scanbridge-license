@@ -36,4 +36,11 @@ return [
         'sender' => env('KAVENEGAR_SENDER'),
     ],
 
+    // کلید روشن/خاموشِ ثبت‌نام و بازیابی رمز با کد پیامکی (OTP).
+    // تا زمان آماده شدن خط خدماتی کاوه‌نگار، خاموش (false) بماند — ثبت‌نام مستقیم انجام می‌شود.
+    // برای فعال‌سازی بعداً: در .env مقدار SMS_OTP_ENABLED=true بگذارید.
+    'scanbridge' => [
+        'sms_otp_enabled' => env('SMS_OTP_ENABLED', false),
+    ],
+
 ];

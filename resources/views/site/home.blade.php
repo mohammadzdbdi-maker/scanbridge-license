@@ -2,9 +2,14 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه</title>
+    <title>نرم‌افزار اسکن بارکد و عملیات تی‌تک داروخانه | ScanBridge</title>
+    <link rel="canonical" href="https://scanbridge.ir/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
     <meta name="description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، استعلام قیمت دارو، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
+=======
+    <meta name="description" content="ScanBridge؛ سیستم هوشمند اسکن بارکد و عملیات تی‌تک داروخانه — کنار نرم‌افزار فعلی شما: اتصال موبایل به کامپیوتر، ثبت تی‌تک و شیرخشک، تحویل بار، تعیین وضعیت و هشدار تاریخ انقضا.">
+>>>>>>> b611aec2e753f6b2c6b3e2d25334418f0a11f55f
     <style>
         @font-face {
             font-family: 'Pinar';
@@ -433,19 +438,77 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 .scb-reveal:nth-child(3){transition-delay:.16s!important;}
 @media (prefers-reduced-motion:reduce){.scb-reveal{opacity:1!important;transform:none!important;transition:none!important;}}
 </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "ScanBridge",
+      "url": "https://scanbridge.ir/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows 10, Windows 11",
+      "inLanguage": "fa-IR",
+      "description": "سیستم هوشمند اسکن بارکد و عملیات تی‌تک داروخانه — کنار هر نرم‌افزار داروخانه",
+      "publisher": {
+        "@type": "Organization",
+        "name": "ScanBridge",
+        "url": "https://scanbridge.ir/",
+        "logo": "https://scanbridge.ir/icons/logo.png"
+      }
+    }
+    </script>
 </head>
 <body>
 
 @include('partials.site-header')
 
+<style>/*SCB_HOME_PROMO_V2*/
+.scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:28px!important;}
+.trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
+.trust-icon{width:52px;height:52px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
+.trust-txt{display:flex;flex-direction:column;gap:3px;align-items:flex-start;}
+/* دکمه آبی درخواست دمو */
+.trust-item a.demo-btn, .trust-item a.demo-btn:hover, a.demo-btn, a.demo-btn:hover{background:linear-gradient(135deg,#1e3a8a,#2563eb)!important;color:#fff!important;border-radius:10px;padding:6px 16px;font-size:12.5px;font-weight:bold;display:inline-block;margin-top:6px;text-decoration:none!important;box-shadow:0 4px 12px rgba(37,99,235,.3);}
+.trust-item b{color:#1e3a8a!important;font-size:14.5px;}
+.trust-item span{color:#475569!important;font-size:12.5px;}
+.trust-item a{color:#2563eb!important;font-weight:bold;}
+.plan{position:relative;transition:opacity .25s ease,filter .25s ease,transform .25s ease;}
+/* اسم پلن کنار آیکون + فونت بزرگ‌تر */
+.plan h3{display:flex!important;align-items:center!important;gap:12px!important;font-size:25px!important;margin:4px 0 2px;}
+.plan h3 .plan-icon{margin-bottom:0!important;flex-shrink:0;width:64px;height:64px;}
+/* کادر تی‌تک: قاب آبی جلب‌توجه‌کننده */
+.plan.featured{border:2.5px solid #2563eb!important;box-shadow:0 0 0 5px rgba(37,99,235,.15),0 18px 44px rgba(37,99,235,.22)!important;}
+/* روبان پیشنهاد با ستاره سه‌بعدی */
+.plan-ribbon{position:absolute;top:-13px;right:18px;z-index:2;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:12px;font-weight:bold;padding:5px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(37,99,235,.35);display:inline-flex!important;align-items:center!important;gap:6px;}
+.ribbon-star{width:22px;height:22px;object-fit:contain;}
+.plan-price{margin:2px 0 10px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;text-align:center;}
+.plan.featured .plan-price{background:#eff6ff;border-color:#dbeafe;}
+.plan-price-annual{font-size:23px;font-weight:800;color:#1e3a8a!important;line-height:1.3;}
+.plan-price-annual small{font-size:12px;font-weight:bold;color:#475569;}
+.plan-price-monthly{font-size:12.5px;color:#475569!important;margin-top:3px;}
+.plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
+.launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
+.ttac-note{display:flex!important;align-items:center;gap:14px;background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:16px 20px;margin:20px auto 0;width:100%!important;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;color:#475569!important;font-size:15.5px;font-weight:bold;text-align:right;}
+.ttac-note img{width:56px;height:56px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
+/* هاور: پلن زیر دست کمی بزرگ می‌شه و وایگل می‌خوره — بدون تغییر نور بقیه */
+.plans .plan:hover{z-index:6;transform:scale(1.03)!important;animation:scb-wiggle .55s ease;}
+@keyframes scb-wiggle{0%{transform:scale(1.03) rotate(0)}25%{transform:scale(1.03) rotate(-1.2deg)}50%{transform:scale(1.03) rotate(1.2deg)}75%{transform:scale(1.03) rotate(-.6deg)}100%{transform:scale(1.03) rotate(0)}}
+@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}}
+</style>
+
 <header class="hero">
     <div class="hero-inner">
         <div>
-            <div class="badge">بارکد خوان تخصصی</div>
-            <h1>Scanbridge؛ اتصال سریع بارکدخوان موبایل، تی‌تک و مدیریت ثبت داروخانه</h1>
+            <div class="badge">ابزار تخصصی عملیات تی‌تک داروخانه</div>
+            <h1>سیستم هوشمند اسکن و عملیات تی‌تک داروخانه</h1>
             <p>
+<<<<<<< HEAD
                 با Scanbridge بارکدخوان موبایل را به کامپیوتر وصل کنید، تاریخچه اسکن داشته باشید،
                 ثبت تی‌تک و شیر خشک را مدیریت کنید، قیمت دارو را استعلام بگیرید و در پلن کامل از تعیین وضعیت و تحویل بار استفاده کنید.
+=======
+                کنار هر نرم‌افزار داروخانه‌ای که دارید، ScanBridge را نصب کنید: اسکن سریع با موبایل،
+                استعلام و ثبت تی‌تک، تحویل بار، تعیین وضعیت و هشدار تاریخ انقضا —
+                بارکدخوان فعلی خود را هم نگه می‌دارید.
+>>>>>>> b611aec2e753f6b2c6b3e2d25334418f0a11f55f
             </p>
             <div class="hero-actions">
                 <a class="btn btn-green" href="/buy">درخواست خرید / تمدید</a>
@@ -466,47 +529,47 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 
         <div class="grid-3">
             <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-barcode.png" alt="">اتصال بارکدخوان موبایل</h3>
+                <h3><img class="feat-icon" src="/icons/feature-barcode.png" alt="">اتصال بارکدخوان موبایل</h3>
                 <p>با اسکن QR، موبایل به کامپیوتر وصل می‌شود و بارکدها سریع وارد سیستم می‌شوند.</p>
             </div>
             <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-history.png" alt="">تاریخچه و خروجی</h3>
-                <p>ثبت تاریخچه اسکن‌ها، جستجو، فیلتر، خروجی Excel و PDF برای گزارش‌گیری.</p>
-            </div>
-            <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-ttac.png" alt="">تی‌تک و شیر خشک</h3>
+                <h3><img class="feat-icon" src="/icons/feature-ttac.png" alt="">تی‌تک و شیر خشک</h3>
                 <p>ورود از مرورگر داخلی، ثبت تی‌تک، فرمول شیر خشک و مدیریت عملیات مرتبط.</p>
             </div>
             <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-status.png" alt="">تعیین وضعیت</h3>
-                <p>بررسی وضعیت فرآورده و مدیریت دریافت/تایید برای داروخانه در پلن کامل.</p>
-            </div>
-            <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-delivery.png" alt="">تحویل بار</h3>
-                <p>ثبت گروهی بارکدها، افزودن به داروخانه، خروجی و مشاهده جزئیات هر ردیف.</p>
-            </div>
-            <div class="card scb-reveal">
-                <img class="feat-icon" src="/icons/feature-license.png" alt="">لایسنس آنلاین</h3>
-                <p>فعال‌سازی امن آنلاین با پلن‌های مختلف و مدیریت لایسنس از پنل اختصاصی.</p>
-            </div>
-            <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-expiry.png" alt="" onerror="this.style.display='none'">هشدار تاریخ انقضا</h3>
+                <h3><img class="feat-icon" src="/icons/feature-expiry.png" alt="">هشدار تاریخ انقضا</h3>
                 <p>پایش خودکار اقلام و هشدار برای کالاهایی که تاریخ انقضای نزدیک دارند، با تنظیم آستانه و تکرار یادآوری دلخواه.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-bale.png" alt="" onerror="this.style.display='none'">یادآور در پیام‌رسان بله</h3>
-                <p>با یک بار فعال‌سازی، هشدارهای تاریخ انقضا علاوه بر نرم‌افزار، توی بله هم برات ارسال می‌شود.</p>
-            </div>
-            <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-barcodebank.png" alt="" onerror="this.style.display='none'">بانک بارکد پرمصرف</h3>
+                <h3><img class="feat-icon" src="/icons/feature-barcodebank.png" alt="">بانک بارکد پرمصرف</h3>
                 <p>بارکدهای پرمصرف را در گروه‌های دلخواه ذخیره کن و بین چند سیستم هم‌شبکه به‌سرعت به اشتراک بگذار.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-remote.png" alt="" onerror="this.style.display='none'">پشتیبانی از راه دور</h3>
+                <h3><img class="feat-icon" src="/icons/feature-status.png" alt="">تعیین وضعیت</h3>
+                <p>بررسی وضعیت فرآورده و مدیریت دریافت/تایید برای داروخانه در پلن کامل.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-bale.png" alt="">یادآور در پیام‌رسان بله</h3>
+                <p>با یک بار فعال‌سازی، هشدارهای تاریخ انقضا علاوه بر نرم‌افزار، توی بله هم برات ارسال می‌شود.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-history.png" alt="">تاریخچه و خروجی</h3>
+                <p>ثبت تاریخچه اسکن‌ها، جستجو، فیلتر، خروجی Excel و PDF برای گزارش‌گیری.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-delivery.png" alt="">تحویل بار</h3>
+                <p>ثبت گروهی بارکدها، افزودن به داروخانه، خروجی و مشاهده جزئیات هر ردیف.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-license.png" alt="">لایسنس آنلاین</h3>
+                <p>فعال‌سازی امن آنلاین با پلن‌های مختلف و مدیریت لایسنس از پنل اختصاصی.</p>
+            </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-remote.png" alt="">پشتیبانی از راه دور</h3>
                 <p>با یک اتصال سریع، تیم پشتیبانی می‌تواند مستقیم مشکل را از راه دور بررسی و رفع کند.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-autoupdate.png" alt="" onerror="this.style.display='none'">به‌روزرسانی خودکار</h3>
+                <h3><img class="feat-icon" src="/icons/feature-autoupdate.png" alt="">به‌روزرسانی خودکار</h3>
                 <p>نرم‌افزار هر ۲۴ ساعت خودش بررسی می‌کند و در صورت وجود نسخه جدید، به‌سادگی مطلعت می‌کند.</p>
             </div>
             <div class="card scb-reveal">
@@ -520,46 +583,112 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 <section id="plans" style="background:#eef2ff;">
     <div class="container">
         <div class="section-title">
-            <h2>پلن‌های Scanbridge</h2>
-            <p>بر اساس نیاز داروخانه یا کاربر انتخاب کنید</p>
+            <h2>پلن‌های ScanBridge</h2>
+            <p>کنار نرم‌افزار فعلی داروخانه — بدون نیاز به تجهیزات جدید</p>
         </div>
+
+        <div class="scb-trust">
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-instant.png" alt=""><div class="trust-txt"><b>فعال‌سازی آنی</b><span>لایسنس آنلاین، بلافاصله پس از تأیید</span></div></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-support.png" alt=""><div class="trust-txt"><b>پشتیبانی از راه دور</b><span>اتصال مستقیم تیم پشتیبانی به سیستم شما</span></div></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-mobile.png" alt=""><div class="trust-txt"><b>بدون خرید بارکدخوان جدید</b><span>با موبایل خودتان یا اسکنر فعلی کار می‌کند</span></div></div>
+            <div class="trust-item"><img class="trust-icon" src="/icons/trust-demo.png" alt=""><div class="trust-txt"><b>دموی ۱۴ روزه در داروخانه شما</b><span>بدون تعهد خرید</span><a class="demo-btn" href="/buy?plan=Trial">درخواست دمو</a></div></div>
+        </div>
+
+        @php
+            $scbPlanPrice = function (string $plan) use ($planPrices) {
+                $entry = $planPrices[$plan] ?? null;
+                if (!$entry) { return null; }
+                $annual = $entry['annual'] ?? $entry['longest'];
+                return $annual ? ['annual' => (int) $annual, 'monthly' => (int) round($annual / 12)] : null;
+            };
+            $pBase = $scbPlanPrice('Normal');
+            $pTtac = $scbPlanPrice('Ttac');
+            $pPlus = $scbPlanPrice('TtacPlus');
+        @endphp
 
         <div class="plans">
             <div class="plan scb-reveal">
-                <img class="plan-icon" src="/icons/plan-normal.png" alt="">Normal</h3>
-                <p>مناسب برای اتصال بارکدخوان و تاریخچه</p>
+                <h3><img class="plan-icon" src="/icons/plan-normal.png" alt="">پایه</h3>
+                <p>مناسب برای اسکن و مدیریت بارکد</p>
+                @if($pBase)
+                    <div class="plan-price">
+                        <div class="plan-price-annual">{{ number_format($pBase['annual']) }} <small>تومان / سال</small></div>
+                        <div class="plan-price-monthly">معادل ماهانه {{ number_format($pBase['monthly']) }} تومان</div>
+                        <span class="launch-tag">قیمت دوره راه‌اندازی</span>
+                    </div>
+                @else
+                    <div class="plan-price-empty">برای قیمت هماهنگ کنید</div>
+                @endif
                 <ul>
-                    <li>اتصال بارکدخوان موبایل</li>
-                    <li>تاریخچه اسکن‌ها</li>
+                    <li>اتصال بارکدخوان موبایل (چند گوشی هم‌زمان)</li>
+                    <li>تاریخچه و جستجوی اسکن‌ها</li>
                     <li>مدیریت دستگاه‌ها</li>
+                    <li>به‌روزرسانی خودکار</li>
                 </ul>
                 <a class="btn btn-dark" href="/buy?plan=Normal">درخواست خرید</a>
             </div>
 
-            <div class="plan scb-reveal">
-                <img class="plan-icon" src="/icons/plan-ttac.png" alt="">Ttac</h3>
-                <p>مناسب داروخانه‌هایی که ثبت تی‌تک نیاز دارند</p>
+            <div class="plan featured scb-reveal">
+                <span class="plan-ribbon"><img class="ribbon-star" src="/icons/ribbon-star.png" alt="">پیشنهاد ما برای اکثر داروخانه‌ها</span>
+                <h3><img class="plan-icon" src="/icons/plan-ttac.png" alt="">تی‌تک</h3>
+                <p>ثبت تی‌تک و شیرخشک در چند ثانیه</p>
+                @if($pTtac)
+                    <div class="plan-price">
+                        <div class="plan-price-annual">{{ number_format($pTtac['annual']) }} <small>تومان / سال</small></div>
+                        <div class="plan-price-monthly">معادل ماهانه {{ number_format($pTtac['monthly']) }} تومان</div>
+                        <span class="launch-tag">قیمت دوره راه‌اندازی</span>
+                    </div>
+                @else
+                    <div class="plan-price-empty">برای قیمت هماهنگ کنید</div>
+                @endif
                 <ul>
+<<<<<<< HEAD
                     <li>تمام امکانات Normal</li>
                     <li>پنل تی‌تک</li>
                     <li>استعلام قیمت دارو</li>
                     <li>ثبت شیر خشک</li>
                     <li>خروجی Excel/PDF</li>
+=======
+                    <li>تمام امکانات پایه</li>
+                    <li>استعلام و ثبت تی‌تک + مرورگر داخلی</li>
+                    <li>ثبت شیرخشک با نسخه و بدون نسخه</li>
+                    <li>ثبت اطلاعات بیمار از موبایل</li>
+                    <li>خروجی Excel و PDF</li>
+                    <li>🔒 قفل اینترنت پرسنل (فعال‌سازی توسط پشتیبانی)</li>
+>>>>>>> b611aec2e753f6b2c6b3e2d25334418f0a11f55f
                 </ul>
                 <a class="btn btn-primary" href="/buy?plan=Ttac">درخواست خرید</a>
             </div>
 
             <div class="plan scb-reveal">
-                <img class="plan-icon" src="/icons/plan-ttacplus.png" alt="">TtacPlus</h3>
-                <p>پلن کامل برای امکانات پیشرفته داروخانه</p>
+                <h3><img class="plan-icon" src="/icons/plan-ttacplus.png" alt="">حرفه‌ای</h3>
+                <p>پلن کامل عملیات روزانه داروخانه</p>
+                @if($pPlus)
+                    <div class="plan-price">
+                        <div class="plan-price-annual">{{ number_format($pPlus['annual']) }} <small>تومان / سال</small></div>
+                        <div class="plan-price-monthly">معادل ماهانه {{ number_format($pPlus['monthly']) }} تومان</div>
+                        <span class="launch-tag">قیمت دوره راه‌اندازی</span>
+                    </div>
+                @else
+                    <div class="plan-price-empty">برای قیمت هماهنگ کنید</div>
+                @endif
                 <ul>
-                    <li>تمام امکانات Ttac</li>
-                    <li>تعیین وضعیت</li>
-                    <li>تحویل بار</li>
-                    <li>گزارش‌گیری کامل</li>
+                    <li>تمام امکانات تی‌تک</li>
+                    <li>تعیین وضعیت (تکی و گروهی)</li>
+                    <li>تحویل بار حرفه‌ای</li>
+                    <li>بانک بارکد پرمصرف</li>
+                    <li>هشدار تاریخ انقضا + یادآور بله</li>
+                    <li>همگام‌سازی چند سیستم با یک لایسنس</li>
+                    <li>🔒 قفل اینترنت پرسنل (فعال‌سازی توسط پشتیبانی)</li>
+                    <li>پشتیبانی اولویت‌دار</li>
                 </ul>
                 <a class="btn btn-green" href="/buy?plan=TtacPlus">درخواست خرید</a>
             </div>
+        </div>
+
+        <div class="ttac-note">
+            <img src="/icons/icon-warning.png" alt="">
+            <span>امکانات وابسته به سامانه تی‌تک، در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شود.</span>
         </div>
     </div>
 </section>

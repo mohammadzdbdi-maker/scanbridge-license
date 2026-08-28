@@ -130,6 +130,7 @@
             <a href="/#plans">پلن‌ها</a>
             <a href="/download">دانلود</a>
             <a href="/buy">خرید / تمدید</a>
+            <a href="/guide">راهنما 🎓</a>
             <a href="/about">درباره ما</a>
             <a href="/contact">تماس با ما</a>
             <a class="scb-whatsapp" href="https://wa.me/989136346309">واتساپ</a>
