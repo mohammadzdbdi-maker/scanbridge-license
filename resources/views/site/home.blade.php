@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
+    <meta name="description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، استعلام قیمت دارو، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
     <style>
         @font-face {
             font-family: 'Pinar';
@@ -346,7 +346,7 @@
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta property="og:title" content="Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه">
-    <meta property="og:description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
+    <meta property="og:description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، استعلام قیمت دارو، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir">
     <meta property="og:site_name" content="Scanbridge">
@@ -445,7 +445,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
             <h1>Scanbridge؛ اتصال سریع بارکدخوان موبایل، تی‌تک و مدیریت ثبت داروخانه</h1>
             <p>
                 با Scanbridge بارکدخوان موبایل را به کامپیوتر وصل کنید، تاریخچه اسکن داشته باشید،
-                ثبت تی‌تک و شیر خشک را مدیریت کنید و در پلن کامل از تعیین وضعیت و تحویل بار استفاده کنید.
+                ثبت تی‌تک و شیر خشک را مدیریت کنید، قیمت دارو را استعلام بگیرید و در پلن کامل از تعیین وضعیت و تحویل بار استفاده کنید.
             </p>
             <div class="hero-actions">
                 <a class="btn btn-green" href="/buy">درخواست خرید / تمدید</a>
@@ -509,6 +509,10 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
                 <h3><img class="feat-icon" src="/icons/feature-autoupdate.png" alt="" onerror="this.style.display='none'">به‌روزرسانی خودکار</h3>
                 <p>نرم‌افزار هر ۲۴ ساعت خودش بررسی می‌کند و در صورت وجود نسخه جدید، به‌سادگی مطلعت می‌کند.</p>
             </div>
+            <div class="card scb-reveal">
+                <h3><img class="feat-icon" src="/icons/feature-price.png" alt="" onerror="this.style.display='none'">استعلام قیمت دارو</h3>
+                <p>با نام، اسکن بارکد یا کد ژنریک، قیمت فرآورده را مستقیم از تی‌تک استعلام بگیرید؛ بین چند نتیجه‌ی مشابه، بالاترین قیمت واقعی خودکار انتخاب و نمایش داده می‌شود.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -538,6 +542,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
                 <ul>
                     <li>تمام امکانات Normal</li>
                     <li>پنل تی‌تک</li>
+                    <li>استعلام قیمت دارو</li>
                     <li>ثبت شیر خشک</li>
                     <li>خروجی Excel/PDF</li>
                 </ul>
