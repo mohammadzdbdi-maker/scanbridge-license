@@ -143,14 +143,14 @@
         <ol class="g-steps">
             <li>از صفحه‌ی <b>دانلود</b> سایت، آخرین نسخه‌ی نصب ScanBridge را دریافت کنید.
                 <div class="g-shots">
-                    <img src="/guide/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
-                    <img src="/guide/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
+                    <img src="/guide-photos/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
+                    <img src="/guide-photos/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
                 </div>
             </li>
             <li>فایل نصب را اجرا کنید و مراحل نصب را دنبال کنید.
                 <div class="g-shots">
-                    <img src="/guide/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
-                    <img src="/guide/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
+                    <img src="/guide-photos/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
+                    <img src="/guide-photos/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
                 </div>
             </li>
             <li>اگر <b>WebView2</b> روی سیستم نصب نباشد، نصب‌کننده خودش آن را همراه برنامه نصب می‌کند.</li>
