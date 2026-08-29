@@ -74,15 +74,21 @@
         }
         .g-tip b { color: #1e3a8a; }
 
-        .g-gallery { margin-top: 16px; padding-top: 14px; border-top: 1px dashed #e2e8f0; }
-        .g-gallery-label { font-size: 13.5px; font-weight: bold; color: #1e3a8a; margin-bottom: 8px; }
-        .g-gallery-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
-        .g-gallery-thumbs img {
+        .g-gallery { margin-top: 16px; padding-top: 14px; border-top: 1px dashed #e2e8f0; text-align: center; }
+        .g-gallery-label { font-size: 13.5px; font-weight: bold; color: #1e3a8a; margin-bottom: 10px; }
+        .g-gallery-thumbs { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+        .g-gallery-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: zoom-in; }
+        .g-gallery-item img {
             width: 90px; height: 50px; object-fit: cover; border-radius: 8px;
             border: 1px solid #e2e8f0; box-shadow: 0 3px 8px rgba(15,23,42,.08);
-            cursor: zoom-in; transition: transform .15s, box-shadow .15s;
+            transition: transform .15s, box-shadow .15s;
         }
-        .g-gallery-thumbs img:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15,23,42,.15); }
+        .g-gallery-item:hover img { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15,23,42,.15); }
+        .g-gallery-num {
+            width: 18px; height: 18px; border-radius: 50%; background: #eef2ff;
+            color: #1e3a8a; font-size: 11px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+        }
 
         .g-lightbox {
             display: none; position: fixed; inset: 0; z-index: 100;
@@ -123,7 +129,7 @@
             ol.g-steps li { padding-right: 46px; }
             ol.g-steps li::before { width: 30px; height: 30px; font-size: 13px; }
             .g-head h2 { font-size: 18px; }
-            .g-gallery-thumbs img { width: 74px; height: 42px; }
+            .g-gallery-item img { width: 74px; height: 42px; }
             .g-lightbox-nav { width: 38px; height: 38px; font-size: 20px; }
             .g-lightbox-prev { right: 8px; }
             .g-lightbox-next { left: 8px; }
@@ -170,11 +176,23 @@
 
         <div class="g-gallery">
             <div class="g-gallery-label">📷 راهنمای تصویری</div>
-            <div class="g-gallery-thumbs">
-                <img src="/guide-photos/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy" onclick="gOpenLightbox(0)">
-                <img src="/guide-photos/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy" onclick="gOpenLightbox(1)">
-                <img src="/guide-photos/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy" onclick="gOpenLightbox(2)">
-                <img src="/guide-photos/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy" onclick="gOpenLightbox(3)">
+            <div class="g-gallery-thumbs" dir="ltr">
+                <div class="g-gallery-item" onclick="gOpenLightbox(0)">
+                    <img src="/guide-photos/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy">
+                    <span class="g-gallery-num">1</span>
+                </div>
+                <div class="g-gallery-item" onclick="gOpenLightbox(1)">
+                    <img src="/guide-photos/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy">
+                    <span class="g-gallery-num">2</span>
+                </div>
+                <div class="g-gallery-item" onclick="gOpenLightbox(2)">
+                    <img src="/guide-photos/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy">
+                    <span class="g-gallery-num">3</span>
+                </div>
+                <div class="g-gallery-item" onclick="gOpenLightbox(3)">
+                    <img src="/guide-photos/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy">
+                    <span class="g-gallery-num">4</span>
+                </div>
             </div>
         </div>
     </div>
