@@ -74,12 +74,39 @@
         }
         .g-tip b { color: #1e3a8a; }
 
+        .g-shots { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .g-shots img {
+            width: 160px; height: 86px; object-fit: cover; border-radius: 10px;
+            border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(15,23,42,.08);
+            cursor: zoom-in; transition: transform .15s, box-shadow .15s;
+        }
+        .g-shots img:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(15,23,42,.15); }
+
+        .g-lightbox {
+            display: none; position: fixed; inset: 0; z-index: 100;
+            background: rgba(15,23,42,.82); padding: 30px;
+            align-items: center; justify-content: center; cursor: zoom-out;
+        }
+        .g-lightbox.open { display: flex; }
+        .g-lightbox img {
+            max-width: min(100%, 1100px); max-height: 100%;
+            border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.4);
+        }
+        .g-lightbox-close {
+            position: absolute; top: 18px; left: 18px;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #fff; color: #1e3a8a; font-size: 20px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            border: none; cursor: pointer;
+        }
+
         @media (max-width: 640px) {
             .g-toc { position: static; }
             .g-sub { margin-right: 0; }
             ol.g-steps li { padding-right: 46px; }
             ol.g-steps li::before { width: 30px; height: 30px; font-size: 13px; }
             .g-head h2 { font-size: 18px; }
+            .g-shots img { width: 130px; height: 70px; }
         }
     </style>
 </head>
@@ -114,8 +141,18 @@
         </div>
         <p class="g-sub">از دانلود تا اولین اجرای برنامه روی ویندوز</p>
         <ol class="g-steps">
-            <li>از صفحه‌ی <b>دانلود</b> سایت، آخرین نسخه‌ی نصب ScanBridge را دریافت کنید.</li>
-            <li>فایل نصب را اجرا کنید و مراحل نصب را دنبال کنید.</li>
+            <li>از صفحه‌ی <b>دانلود</b> سایت، آخرین نسخه‌ی نصب ScanBridge را دریافت کنید.
+                <div class="g-shots">
+                    <img src="/guide/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
+                    <img src="/guide/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
+                </div>
+            </li>
+            <li>فایل نصب را اجرا کنید و مراحل نصب را دنبال کنید.
+                <div class="g-shots">
+                    <img src="/guide/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
+                    <img src="/guide/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
+                </div>
+            </li>
             <li>اگر <b>WebView2</b> روی سیستم نصب نباشد، نصب‌کننده خودش آن را همراه برنامه نصب می‌کند.</li>
             <li>پس از پایان نصب، برنامه را اجرا کنید — آیکون ScanBridge روی دسکتاپ ساخته می‌شود.</li>
         </ol>
@@ -255,5 +292,22 @@
 </div>
 
 @include('partials.site-footer')
+
+<div class="g-lightbox" id="g-lightbox" onclick="gCloseLightbox()">
+    <button class="g-lightbox-close" onclick="event.stopPropagation(); gCloseLightbox()">✕</button>
+    <img id="g-lightbox-img" src="" alt="">
+</div>
+<script>
+    function gOpenLightbox(src) {
+        document.getElementById('g-lightbox-img').src = src;
+        document.getElementById('g-lightbox').classList.add('open');
+    }
+    function gCloseLightbox() {
+        document.getElementById('g-lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') gCloseLightbox();
+    });
+</script>
 </body>
 </html>
