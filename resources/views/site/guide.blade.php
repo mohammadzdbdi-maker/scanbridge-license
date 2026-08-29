@@ -74,30 +74,47 @@
         }
         .g-tip b { color: #1e3a8a; }
 
-        .g-shots { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-        .g-shots img {
-            width: 160px; height: 86px; object-fit: cover; border-radius: 10px;
-            border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(15,23,42,.08);
+        .g-gallery { margin-top: 16px; padding-top: 14px; border-top: 1px dashed #e2e8f0; }
+        .g-gallery-label { font-size: 13.5px; font-weight: bold; color: #1e3a8a; margin-bottom: 8px; }
+        .g-gallery-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+        .g-gallery-thumbs img {
+            width: 90px; height: 50px; object-fit: cover; border-radius: 8px;
+            border: 1px solid #e2e8f0; box-shadow: 0 3px 8px rgba(15,23,42,.08);
             cursor: zoom-in; transition: transform .15s, box-shadow .15s;
         }
-        .g-shots img:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(15,23,42,.15); }
+        .g-gallery-thumbs img:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15,23,42,.15); }
 
         .g-lightbox {
             display: none; position: fixed; inset: 0; z-index: 100;
-            background: rgba(15,23,42,.82); padding: 30px;
-            align-items: center; justify-content: center; cursor: zoom-out;
+            background: rgba(15,23,42,.86); padding: 30px;
+            align-items: center; justify-content: center;
         }
         .g-lightbox.open { display: flex; }
         .g-lightbox img {
             max-width: min(100%, 1100px); max-height: 100%;
             border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.4);
+            cursor: pointer;
         }
         .g-lightbox-close {
             position: absolute; top: 18px; left: 18px;
             width: 40px; height: 40px; border-radius: 50%;
             background: #fff; color: #1e3a8a; font-size: 20px; font-weight: bold;
             display: flex; align-items: center; justify-content: center;
-            border: none; cursor: pointer;
+            border: none; cursor: pointer; z-index: 2;
+        }
+        .g-lightbox-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 46px; height: 46px; border-radius: 50%;
+            background: #fff; color: #1e3a8a; font-size: 24px; font-weight: bold;
+            border: none; cursor: pointer; z-index: 2;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .g-lightbox-prev { right: 18px; }
+        .g-lightbox-next { left: 18px; }
+        .g-lightbox-counter {
+            position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+            color: #fff; font-size: 13px; background: rgba(0,0,0,.4);
+            padding: 4px 14px; border-radius: 999px;
         }
 
         @media (max-width: 640px) {
@@ -106,7 +123,10 @@
             ol.g-steps li { padding-right: 46px; }
             ol.g-steps li::before { width: 30px; height: 30px; font-size: 13px; }
             .g-head h2 { font-size: 18px; }
-            .g-shots img { width: 130px; height: 70px; }
+            .g-gallery-thumbs img { width: 74px; height: 42px; }
+            .g-lightbox-nav { width: 38px; height: 38px; font-size: 20px; }
+            .g-lightbox-prev { right: 8px; }
+            .g-lightbox-next { left: 8px; }
         }
     </style>
 </head>
@@ -141,22 +161,22 @@
         </div>
         <p class="g-sub">از دانلود تا اولین اجرای برنامه روی ویندوز</p>
         <ol class="g-steps">
-            <li>از صفحه‌ی <b>دانلود</b> سایت، آخرین نسخه‌ی نصب ScanBridge را دریافت کنید.
-                <div class="g-shots">
-                    <img src="/guide-photos/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
-                    <img src="/guide-photos/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
-                </div>
-            </li>
-            <li>فایل نصب را اجرا کنید و مراحل نصب را دنبال کنید.
-                <div class="g-shots">
-                    <img src="/guide-photos/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy" onclick="gOpenLightbox(this.src)">
-                    <img src="/guide-photos/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy" onclick="gOpenLightbox(this.src)">
-                </div>
-            </li>
+            <li>از صفحه‌ی <b>دانلود</b> سایت، آخرین نسخه‌ی نصب ScanBridge را دریافت کنید.</li>
+            <li>فایل نصب را اجرا کنید و مراحل نصب را دنبال کنید.</li>
             <li>اگر <b>WebView2</b> روی سیستم نصب نباشد، نصب‌کننده خودش آن را همراه برنامه نصب می‌کند.</li>
             <li>پس از پایان نصب، برنامه را اجرا کنید — آیکون ScanBridge روی دسکتاپ ساخته می‌شود.</li>
         </ol>
         <div class="g-tip">💡 <span><b>نکته:</b> اگر آنتی‌ویروس یا فایروال اجازه‌ی اجرا نخواست، اجازه دهید — ScanBridge برای اتصال موبایل و لایسنس به شبکه محلی و اینترنت نیاز دارد.</span></div>
+
+        <div class="g-gallery">
+            <div class="g-gallery-label">📷 راهنمای تصویری</div>
+            <div class="g-gallery-thumbs">
+                <img src="/guide-photos/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy" onclick="gOpenLightbox(0)">
+                <img src="/guide-photos/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy" onclick="gOpenLightbox(1)">
+                <img src="/guide-photos/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy" onclick="gOpenLightbox(2)">
+                <img src="/guide-photos/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy" onclick="gOpenLightbox(3)">
+            </div>
+        </div>
     </div>
 
     {{-- ۲. لایسنس --}}
@@ -295,18 +315,49 @@
 
 <div class="g-lightbox" id="g-lightbox" onclick="gCloseLightbox()">
     <button class="g-lightbox-close" onclick="event.stopPropagation(); gCloseLightbox()">✕</button>
-    <img id="g-lightbox-img" src="" alt="">
+    <button class="g-lightbox-nav g-lightbox-prev" onclick="gPrev(event)">‹</button>
+    <img id="g-lightbox-img" src="" alt="" onclick="event.stopPropagation(); gNext()">
+    <button class="g-lightbox-nav g-lightbox-next" onclick="gNext(event)">›</button>
+    <div class="g-lightbox-counter" id="g-lightbox-counter"></div>
 </div>
 <script>
-    function gOpenLightbox(src) {
-        document.getElementById('g-lightbox-img').src = src;
+    var gImages = [
+        { src: '/guide-photos/install-download-1.jpg', alt: 'دانلود از سایت - مرحله ۱' },
+        { src: '/guide-photos/install-download-2.jpg', alt: 'دانلود از سایت - مرحله ۲' },
+        { src: '/guide-photos/install-run-1.jpg', alt: 'اجرای فایل نصب - مرحله ۱' },
+        { src: '/guide-photos/install-run-2.jpg', alt: 'اجرای فایل نصب - مرحله ۲' }
+    ];
+    var gIndex = 0;
+
+    function gRenderLightbox() {
+        var item = gImages[gIndex];
+        document.getElementById('g-lightbox-img').src = item.src;
+        document.getElementById('g-lightbox-img').alt = item.alt;
+        document.getElementById('g-lightbox-counter').textContent = (gIndex + 1) + ' / ' + gImages.length;
+    }
+    function gOpenLightbox(i) {
+        gIndex = i;
+        gRenderLightbox();
         document.getElementById('g-lightbox').classList.add('open');
+    }
+    function gNext(e) {
+        if (e) e.stopPropagation();
+        gIndex = (gIndex + 1) % gImages.length;
+        gRenderLightbox();
+    }
+    function gPrev(e) {
+        if (e) e.stopPropagation();
+        gIndex = (gIndex - 1 + gImages.length) % gImages.length;
+        gRenderLightbox();
     }
     function gCloseLightbox() {
         document.getElementById('g-lightbox').classList.remove('open');
     }
     document.addEventListener('keydown', function (e) {
+        if (!document.getElementById('g-lightbox').classList.contains('open')) return;
         if (e.key === 'Escape') gCloseLightbox();
+        if (e.key === 'ArrowLeft') gNext();
+        if (e.key === 'ArrowRight') gPrev();
     });
 </script>
 </body>
