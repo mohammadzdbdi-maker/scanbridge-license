@@ -333,9 +333,9 @@
 
 <div class="g-lightbox" id="g-lightbox" onclick="gCloseLightbox()">
     <button class="g-lightbox-close" onclick="event.stopPropagation(); gCloseLightbox()">✕</button>
-    <button class="g-lightbox-nav g-lightbox-prev" onclick="gPrev(event)">‹</button>
+    <button class="g-lightbox-nav g-lightbox-prev" dir="ltr" onclick="gPrev(event)">‹</button>
     <img id="g-lightbox-img" src="" alt="" onclick="event.stopPropagation(); gNext()">
-    <button class="g-lightbox-nav g-lightbox-next" onclick="gNext(event)">›</button>
+    <button class="g-lightbox-nav g-lightbox-next" dir="ltr" onclick="gNext(event)">›</button>
     <div class="g-lightbox-counter" id="g-lightbox-counter"></div>
 </div>
 <script>
