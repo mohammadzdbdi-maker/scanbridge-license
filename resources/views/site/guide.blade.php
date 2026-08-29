@@ -1,21 +1,3 @@
-@php
-    // ─── ویدیوهای آموزشی آپارات ───
-    // برای هر بخش، ویدیو را در aparat.com آپلود کنید و «هش» آن را اینجا وارد کنید.
-    // هش را از لینک ویدیو بردارید: aparat.com/v/XXXXX  →  فقط XXXXX
-    // مثال: 'install' => 'abc12',
-    $videos = [
-        'install'      => '', // نصب و راه‌اندازی
-        'license'      => '', // فعال‌سازی لایسنس
-        'pairing'      => '', // اتصال موبایل
-        'ttac'         => '', // تی‌تک و شیرخشک
-        'delivery'     => '', // تحویل بار و تعیین وضعیت
-        'barcodebank'  => '', // بانک بارکد پرمصرف
-        'expiry'       => '', // هشدار انقضا و یادآور بله
-        'support'      => '', // پشتیبانی و تیکت
-        'modemlock'    => '', // قفل اینترنت پرسنل (مودم)
-    ];
-@endphp
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -92,21 +74,6 @@
         }
         .g-tip b { color: #1e3a8a; }
 
-        .g-video { margin-top: 18px; }
-        .g-video-frame {
-            position: relative; width: 100%; padding-top: 56.25%;
-            border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0;
-            background: #0f172a;
-        }
-        .g-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-        .g-video-soon {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-            border: 2px dashed #c7d2fe; border-radius: 16px; padding: 34px 16px;
-            color: #64748b; font-size: 14px; background: #f8fafc;
-        }
-        .g-video-soon span.big { font-size: 34px; }
-        .g-video-cap { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 6px; }
-
         @media (max-width: 640px) {
             .g-toc { position: static; }
             .g-sub { margin-right: 0; }
@@ -153,7 +120,6 @@
             <li>پس از پایان نصب، برنامه را اجرا کنید — آیکون ScanBridge روی دسکتاپ ساخته می‌شود.</li>
         </ol>
         <div class="g-tip">💡 <span><b>نکته:</b> اگر آنتی‌ویروس یا فایروال اجازه‌ی اجرا نخواست، اجازه دهید — ScanBridge برای اتصال موبایل و لایسنس به شبکه محلی و اینترنت نیاز دارد.</span></div>
-        @include('site.guide._video', ['key' => 'install', 'title' => 'نصب و راه‌اندازی'])
     </div>
 
     {{-- ۲. لایسنس --}}
@@ -170,7 +136,6 @@
             <li>اتصال اینترنت لازم است؛ پس از تأیید آنلاین، پلن و تاریخ انقضای شما نمایش داده می‌شود.</li>
         </ol>
         <div class="g-tip">💡 <span><b>نکته:</b> هر لایسنس روی تعداد مشخصی سیستم فعال می‌شود. برای انتقال به سیستم جدید، از پنل کاربری یا از طریق پشتیبانی درخواست <b>ریست دستگاه</b> بدهید.</span></div>
-        @include('site.guide._video', ['key' => 'license', 'title' => 'فعال‌سازی لایسنس'])
     </div>
 
     {{-- ۳. اتصال موبایل --}}
@@ -189,7 +154,6 @@
             <li>می‌توانید هم‌زمان از <b>چند گوشی</b> برای اسکن استفاده کنید.</li>
         </ol>
         <div class="g-tip">💡 <span><b>نکته:</b> داروخانه بدون وای‌فای یا اینترنتِ پرسنل؟ از «حالت داروخانه» داخل اپ استفاده کنید — اینترنت گوشی کامل قطع می‌شود و فقط ارتباط با سیستم روی شبکه‌ی محلی باز می‌ماند.</span></div>
-        @include('site.guide._video', ['key' => 'pairing', 'title' => 'اتصال موبایل به کامپیوتر'])
     </div>
 
     {{-- ۴. تی‌تک و شیرخشک --}}
@@ -207,7 +171,6 @@
             <li>تأیید نهایی — ثبت در تاریخچه انجام و در صورت نیاز قابل خروجی گرفتن است.</li>
         </ol>
         <div class="g-tip">💡 <span><b>نکته:</b> امکانات تی‌تک در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شوند.</span></div>
-        @include('site.guide._video', ['key' => 'ttac', 'title' => 'ثبت تی‌تک و شیرخشک'])
     </div>
 
     {{-- ۵. تحویل بار و تعیین وضعیت --}}
@@ -223,7 +186,6 @@
             <li>خروجی کامل لیست را در Excel یا PDF دریافت کنید.</li>
             <li>در بخش <b>تعیین وضعیت</b>، اقلام دلخواه را انتخاب و به‌صورت تکی یا <b>گروهی</b> وضعیت‌دهی کنید.</li>
         </ol>
-        @include('site.guide._video', ['key' => 'delivery', 'title' => 'تحویل بار و تعیین وضعیت'])
     </div>
 
     {{-- ۶. بانک بارکد پرمصرف --}}
@@ -238,7 +200,6 @@
             <li>هر بار لازم بود، بدون اسکن مجدد، از بانک انتخاب کنید.</li>
             <li>بانک بین چند سیستم <b>هم‌شبکه</b> به‌سرعت به اشتراک گذاشته می‌شود.</li>
         </ol>
-        @include('site.guide._video', ['key' => 'barcodebank', 'title' => 'بانک بارکد پرمصرف'])
     </div>
 
     {{-- ۷. هشدار انقضا و یادآور بله --}}
@@ -254,7 +215,6 @@
             <li>برای دریافت یادآور در <b>پیام‌رسان بله</b>، یک بار اتصال بله را فعال کنید.</li>
             <li>از آن به بعد هشدارها هم در برنامه و هم در بله برایتان ارسال می‌شود.</li>
         </ol>
-        @include('site.guide._video', ['key' => 'expiry', 'title' => 'هشدار انقضا و یادآور بله'])
     </div>
 
     {{-- قفل اینترنت پرسنل (مودم) --}}
@@ -275,7 +235,6 @@
             <div style="font-size:15px; font-weight:bold; margin-bottom:6px;">این سرویس روی پلن‌های تی‌تک و حرفه‌ای فعال است</div>
             <a href="https://wa.me/989136346309" style="display:inline-block; background:#fff; color:#1e3a8a; font-weight:bold; border-radius:12px; padding:10px 24px; text-decoration:none;">درخواست فعال‌سازی از پشتیبانی</a>
         </div>
-        @include('site.guide._video', ['key' => 'modemlock', 'title' => 'قفل اینترنت پرسنل'])
     </div>
 
     {{-- ۸. پشتیبانی --}}
@@ -291,7 +250,6 @@
             <li>پاسخ پشتیبانی به‌صورت گفتگوی رفت‌وبرگشتی در همان تیکت نمایش داده می‌شود.</li>
             <li>در صورت نیاز به بررسی مستقیم، تیم پشتیبانی از طریق <b>اتصال از راه دور</b> مشکل را رفع می‌کند.</li>
         </ol>
-        @include('site.guide._video', ['key' => 'support', 'title' => 'پشتیبانی و ثبت تیکت'])
     </div>
 
 </div>
