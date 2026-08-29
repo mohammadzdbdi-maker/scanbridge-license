@@ -115,8 +115,8 @@
             border: none; cursor: pointer; z-index: 2;
             display: flex; align-items: center; justify-content: center;
         }
-        .g-lightbox-prev { right: 18px; }
-        .g-lightbox-next { left: 18px; }
+        .g-lightbox-prev { left: 18px; }
+        .g-lightbox-next { right: 18px; }
         .g-lightbox-counter {
             position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
             color: #fff; font-size: 13px; background: rgba(0,0,0,.4);
@@ -131,8 +131,8 @@
             .g-head h2 { font-size: 18px; }
             .g-gallery-item img { width: 74px; height: 42px; }
             .g-lightbox-nav { width: 38px; height: 38px; font-size: 20px; }
-            .g-lightbox-prev { right: 8px; }
-            .g-lightbox-next { left: 8px; }
+            .g-lightbox-prev { left: 8px; }
+            .g-lightbox-next { right: 8px; }
         }
     </style>
 </head>
