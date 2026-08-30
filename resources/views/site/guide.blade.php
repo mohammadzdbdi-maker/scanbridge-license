@@ -17,11 +17,39 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Pinar', Tahoma, Arial, sans-serif;
-            background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 340px);
+            background: #f8fafc;
             color: #0f172a;
             line-height: 1.9;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
-        .wrap { max-width: 980px; margin: 0 auto; padding: 34px 20px 60px; }
+        body::before {
+            content: "";
+            position: fixed;
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle at center, rgba(37,99,235,.85) 0%, rgba(37,99,235,.45) 35%, transparent 68%);
+            filter: blur(70px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            top: 10%;
+            right: -220px;
+            width: 560px;
+            height: 560px;
+            background: radial-gradient(circle at center, rgba(30,58,138,.35), transparent 70%);
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .wrap { max-width: 980px; margin: 0 auto; padding: 34px 20px 60px; position: relative; z-index: 1; }
 
         .g-hero { text-align: center; margin-bottom: 26px; }
         .g-hero h1 { color: #1e3a8a; font-size: 30px; margin-bottom: 8px; }
@@ -30,9 +58,9 @@
         .g-toc {
             display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
             position: sticky; top: 78px; z-index: 30;
-            background: rgba(248,250,252,.94); backdrop-filter: blur(10px);
+            background: rgba(255,255,255,.6); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
             padding: 12px 8px; border-radius: 16px; margin-bottom: 30px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid rgba(255,255,255,.75);
         }
         .g-toc a {
             background: #fff; border: 1px solid #e2e8f0; color: #1e3a8a;
@@ -42,8 +70,10 @@
         .g-toc a:hover { background: #1e3a8a; color: #fff; border-color: #1e3a8a; }
 
         .g-card {
-            background: #fff; border: 1px solid #e5e7eb; border-radius: 22px;
-            box-shadow: 0 12px 34px rgba(15,23,42,.07);
+            background: rgba(255,255,255,.68);
+            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(255,255,255,.8); border-radius: 22px;
+            box-shadow: 0 12px 34px rgba(30,58,138,.10);
             padding: 26px 26px 22px; margin-bottom: 26px; scroll-margin-top: 150px;
         }
         .g-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }

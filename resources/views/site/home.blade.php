@@ -84,6 +84,14 @@
         }
         h1 { font-size: 38px; line-height: 1.4; margin: 0 0 var(--sp-4); color: var(--text); }
         .hero p { color: var(--muted); font-size: 17px; margin: 0; }
+        .hero-lead {
+            display: inline-block;
+            background: rgba(255,255,255,.55);
+            backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,.7);
+            border-radius: 18px;
+            padding: var(--sp-3) var(--sp-6);
+        }
 
         .chooser {
             max-width: 980px; margin: 0 auto; padding: 0 20px var(--sp-16);
@@ -171,7 +179,7 @@
     <div class="container">
         <div class="badge">اسکن بارکد و مدیریت عملیات، کنار نرم‌افزار فعلی شما</div>
         <h1>ScanBridge برای هر کسب‌وکاری که بارکد اسکن می‌کند</h1>
-        <p>کسب‌وکار خودتان را انتخاب کنید تا امکانات و پلن‌های مخصوص همان حوزه را ببینید.</p>
+        <div class="hero-lead"><p>کسب‌وکار خودتان را انتخاب کنید تا امکانات و پلن‌های مخصوص همان حوزه را ببینید.</p></div>
     </div>
 </header>
 
