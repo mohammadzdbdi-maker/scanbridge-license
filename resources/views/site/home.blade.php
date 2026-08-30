@@ -6,7 +6,33 @@
     <link rel="canonical" href="https://scanbridge.ir/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="ScanBridge؛ سیستم هوشمند اسکن بارکد و عملیات تی‌تک داروخانه — کنار نرم‌افزار فعلی شما: اتصال موبایل به کامپیوتر، ثبت تی‌تک و شیرخشک، استعلام قیمت دارو، تحویل بار، تعیین وضعیت و هشدار تاریخ انقضا.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:title" content="Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه">
+    <meta property="og:description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، استعلام قیمت دارو، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scanbridge.ir">
+    <meta property="og:site_name" content="Scanbridge">
+
     <style>
+        /* ===== Design tokens (Phase 1 foundation) ===== */
+        :root {
+            --bg: #f7f8fa;
+            --surface: #ffffff;
+            --elevated: #f2f4f7;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --accent: #1e3a8a;
+            --accent-2: #2563eb;
+            --green: #16a34a;
+            --orange: #f97316;
+            --radius-btn: 12px;
+            --radius-card: 24px;
+            --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px;
+            --sp-6: 24px; --sp-8: 32px; --sp-10: 40px; --sp-12: 48px; --sp-16: 64px;
+            --font: 'Pinar', Tahoma, Arial, sans-serif;
+        }
+
         @font-face {
             font-family: 'Pinar';
             src: url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');
@@ -18,19 +44,21 @@
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: 'Pinar', Tahoma, Arial, sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-            line-height: 1.9;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.75;
         }
         a { text-decoration: none; }
+
+        /* ===== Nav (shared with site-header partial) ===== */
         .nav {
             position: sticky;
             top: 0;
             z-index: 10;
             background: rgba(255,255,255,.92);
             backdrop-filter: blur(14px);
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--border);
         }
         .nav-inner {
             max-width: 1180px;
@@ -46,394 +74,181 @@
             gap: 10px;
             font-size: 24px;
             font-weight: bold;
-            color: #1e3a8a;
+            color: var(--accent);
             direction: ltr;
         }
-        .logo-bars {
-            display: inline-flex;
-            gap: 4px;
-        }
-        .logo-bars span {
-            width: 7px;
-            height: 28px;
-            border-radius: 5px;
-            display: block;
-        }
-        .b1 { background:#1e3a8a; }
-        .b2 { background:#f59e0b; }
-        .b3 { background:#2563eb; }
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .nav-links a {
-            color: #334155;
+        .logo-bars { display: inline-flex; gap: 4px; }
+        .logo-bars span { width: 7px; height: 28px; border-radius: 5px; display: block; }
+        .b1 { background: var(--accent); }
+        .b2 { background: var(--orange); }
+        .b3 { background: var(--accent-2); }
+        .nav-links { display: flex; align-items: center; gap: 10px; }
+        .nav-links a { color: #334155; font-weight: bold; padding: 8px 12px; border-radius: var(--sp-3); }
+        .nav-links a:hover { background: var(--elevated); }
+        .nav-links .nav-btn {
+            background: var(--accent-2) !important;
+            color: #fff !important;
+            border-radius: var(--radius-btn);
+            padding: 8px 18px !important;
             font-weight: bold;
-            padding: 8px 12px;
-            border-radius: 12px;
+            white-space: nowrap;
         }
-        .nav-links a:hover { background: #eef2ff; }
+        .nav-links .nav-btn:hover { background: #1d4ed8 !important; }
+
+        /* ===== Buttons ===== */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: 16px;
-            padding: 12px 20px;
+            border-radius: var(--radius-btn);
+            padding: 12px 22px;
             font-weight: bold;
             color: white;
             border: 0;
             cursor: pointer;
+            transition: transform .15s ease, filter .15s ease;
         }
-        .btn-primary { background: #2563eb; }
-        .btn-green { background: #16a34a; }
-        .btn-orange { background: #f97316; }
-        .btn-dark { background: #0f172a; }
-        .hero {
-            background:
-                radial-gradient(circle at top left, rgba(37,99,235,.18), transparent 35%),
-                linear-gradient(135deg, #0f172a, #1e3a8a 55%, #2563eb);
-            color: white;
-            padding: 70px 20px;
-        }
+        .btn:hover { filter: brightness(1.06); }
+        .btn:active { transform: scale(.98); }
+        .btn-primary { background: var(--accent-2); }
+        .btn-green { background: var(--green); }
+        .btn-orange { background: var(--orange); }
+        .btn-dark { background: var(--text); }
+        .btn-outline { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+
+        /* ===== Hero ===== */
+        .hero { padding: var(--sp-16) 20px var(--sp-12); }
         .hero-inner {
             max-width: 1180px;
             margin: auto;
             display: grid;
             grid-template-columns: 1.05fr .95fr;
-            gap: 34px;
+            gap: var(--sp-8);
             align-items: center;
         }
         .badge {
             display: inline-block;
-            background: rgba(255,255,255,.14);
-            border: 1px solid rgba(255,255,255,.25);
-            padding: 6px 12px;
+            background: var(--elevated);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 6px 14px;
             border-radius: 999px;
-            margin-bottom: 18px;
+            margin-bottom: var(--sp-5);
             font-weight: bold;
+            font-size: 13px;
         }
-        h1 {
-            font-size: 44px;
-            line-height: 1.45;
-            margin: 0 0 18px;
-        }
-        .hero p {
-            color: #dbeafe;
-            font-size: 18px;
-            margin: 0 0 26px;
-        }
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .mock {
-            background: rgba(255,255,255,.12);
-            border: 1px solid rgba(255,255,255,.22);
-            border-radius: 28px;
-            padding: 22px;
-            box-shadow: 0 30px 80px rgba(0,0,0,.28);
-        }
-        .mock-card {
-            background: white;
-            color: #0f172a;
-            border-radius: 22px;
-            padding: 22px;
-        }
+        h1 { font-size: 44px; line-height: 1.35; margin: 0 0 var(--sp-4); color: var(--text); }
+        .hero p { color: var(--muted); font-size: 17px; margin: 0 0 var(--sp-6); }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+        /* Revived "app preview" mock card for the hero's right column */
+        .mock { background: var(--elevated); border: 1px solid var(--border); border-radius: 28px; padding: var(--sp-5); }
+        .mock-card { background: var(--surface); color: var(--text); border-radius: var(--radius-card); padding: var(--sp-5); box-shadow: 0 12px 40px rgba(15,23,42,.06); }
+        .mock-card-title { font-weight: bold; color: var(--accent); margin-bottom: var(--sp-3); }
         .mock-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 12px;
-            margin-top: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg); border: 1px solid var(--border); border-radius: var(--sp-4);
+            padding: var(--sp-3) var(--sp-4); margin-top: var(--sp-2); font-size: 14px;
         }
-        .dot {
-            width: 10px;
-            height: 10px;
-            background: #22c55e;
-            border-radius: 50%;
-            display: inline-block;
-            margin-left: 6px;
-        }
-        section {
-            padding: 58px 20px;
-        }
-        .container {
-            max-width: 1180px;
-            margin: auto;
-        }
-        .section-title {
-            text-align: center;
-            margin-bottom: 34px;
-        }
-        .section-title h2 {
-            color: #1e3a8a;
-            font-size: 30px;
-            margin: 0 0 8px;
-        }
-        .section-title p {
-            color: #64748b;
-            margin: 0;
-        }
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
+        .dot { width: 10px; height: 10px; background: var(--green); border-radius: 50%; display: inline-block; }
+
+        section { padding: var(--sp-12) 20px; }
+        .container { max-width: 1180px; margin: auto; }
+        .section-title { text-align: center; margin-bottom: var(--sp-8); }
+        .section-title h2 { color: var(--accent); font-size: 30px; margin: 0 0 var(--sp-2); }
+        .section-title p { color: var(--muted); margin: 0; }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
         .card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 24px;
-            padding: 22px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-card);
+            padding: var(--sp-6);
             box-shadow: 0 12px 40px rgba(15,23,42,.06);
         }
-        .card h3 {
-            margin: 0 0 10px;
-            color: #1e3a8a;
-            font-size: 20px;
-        }
-        .card p {
-            color: #64748b;
-            margin: 0;
-        }
-        .plans {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
+        .card h3 { margin: 0 0 var(--sp-3); color: var(--accent); font-size: 20px; }
+        .card p { color: var(--muted); margin: 0; }
+        .feat-icon { width: 56px; height: 56px; border-radius: 16px; object-fit: cover; margin-bottom: var(--sp-3); display: block; background: transparent; mix-blend-mode: multiply; }
+
+        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
         .plan {
-            background: white;
-            border: 1px solid #e5e7eb;
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 26px;
-            padding: 24px;
+            padding: var(--sp-6);
             box-shadow: 0 12px 40px rgba(15,23,42,.06);
+            display: flex; flex-direction: column; height: 100%;
+            position: relative;
+            transition: transform .2s ease, box-shadow .2s ease;
         }
-        .plan.featured {
-            border: 2px solid #2563eb;
-            transform: translateY(-6px);
+        .plan:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(15,23,42,.1); }
+        .plan.featured { border: 2px solid var(--accent-2); box-shadow: 0 0 0 5px rgba(37,99,235,.12), 0 18px 44px rgba(37,99,235,.18); }
+        .plan-icon { width: 64px; height: 64px; border-radius: 18px; object-fit: cover; background: transparent; mix-blend-mode: multiply; flex-shrink: 0; }
+        .plan h3 { display: flex; align-items: center; gap: var(--sp-3); margin: 4px 0 2px; color: var(--accent); font-size: 24px; }
+        .plan > p { color: var(--muted); margin: 0 0 var(--sp-3); }
+        .plan ul { padding: 0; list-style: none; margin: var(--sp-4) 0; flex: 1 1 auto; }
+        .plan li { padding: 7px 0; color: #334155; }
+        .plan li::before { content: "✓"; color: var(--green); font-weight: bold; margin-left: var(--sp-2); }
+        .plan a.btn { margin-top: auto; }
+        .plan-ribbon {
+            position: absolute; top: -13px; right: 18px; z-index: 2;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
+            font-size: 12px; font-weight: bold; padding: 5px 14px; border-radius: 999px;
+            display: inline-flex; align-items: center; gap: 6px;
         }
-        .plan h3 {
-            margin: 0 0 8px;
-            color: #1e3a8a;
-            font-size: 23px;
+        .ribbon-star { width: 20px; height: 20px; object-fit: contain; }
+        .plan-price { margin: 2px 0 var(--sp-3); padding: var(--sp-3); background: var(--bg); border: 1px solid var(--border); border-radius: var(--sp-4); text-align: center; }
+        .plan.featured .plan-price { background: #eff6ff; border-color: #dbeafe; }
+        .plan-price-annual { font-size: 23px; font-weight: 800; color: var(--accent); line-height: 1.3; }
+        .plan-price-annual small { font-size: 12px; font-weight: bold; color: var(--muted); }
+        .plan-price-monthly { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+        .plan-price-empty { font-size: 13px; color: var(--muted); text-align: center; margin: 2px 0 var(--sp-3); }
+        .launch-tag { display: inline-block; background: #fee2e2; color: #dc2626; font-size: 11px; font-weight: bold; border-radius: 999px; padding: 2px 10px; margin-top: 6px; }
+
+        .scb-trust { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: var(--sp-3); margin-bottom: var(--sp-8); }
+        .trust-item { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: var(--sp-4); display: flex; align-items: center; gap: var(--sp-3); font-size: 14.5px; box-shadow: 0 8px 22px rgba(15,23,42,.06); }
+        .trust-icon { width: 52px; height: 52px; object-fit: contain; flex-shrink: 0; background: transparent; mix-blend-mode: multiply; }
+        .trust-txt { display: flex; flex-direction: column; gap: 3px; align-items: flex-start; }
+        .trust-item b { color: var(--accent); font-size: 14.5px; }
+        .trust-item span { color: var(--muted); font-size: 12.5px; }
+        .trust-item a.demo-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff !important;
+            border-radius: 10px; padding: 6px 16px; font-size: 12.5px; font-weight: bold;
+            display: inline-block; margin-top: 6px;
         }
-        .plan ul {
-            padding: 0;
-            list-style: none;
-            margin: 18px 0;
+        .ttac-note {
+            display: flex; align-items: center; gap: var(--sp-4); background: var(--surface); border: 1px solid var(--border);
+            border-radius: 16px; padding: var(--sp-4) var(--sp-5); margin: var(--sp-5) auto 0; width: 100%;
+            box-shadow: 0 8px 22px rgba(15,23,42,.06); color: var(--muted); font-size: 15.5px; font-weight: bold;
         }
-        .plan li {
-            padding: 7px 0;
-            color: #334155;
-        }
-        .plan li::before {
-            content: "✓";
-            color: #16a34a;
-            font-weight: bold;
-            margin-left: 8px;
-        }
+        .ttac-note img { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; background: transparent; mix-blend-mode: multiply; }
+
         .cta {
-            background: linear-gradient(135deg, #1e3a8a, #2563eb);
-            color: white;
-            border-radius: 30px;
-            padding: 34px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 18px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: white; border-radius: 30px; padding: var(--sp-8);
+            display: flex; justify-content: space-between; align-items: center; gap: var(--sp-5);
         }
-        .cta h2 { margin: 0 0 8px; }
+        .cta h2 { margin: 0 0 var(--sp-2); }
         .cta p { margin: 0; color: #dbeafe; }
-        footer {
-            background: #0f172a;
-            color: #cbd5e1;
-            padding: 28px 20px;
-            text-align: center;
-        }
+
+        footer { background: var(--text); color: #cbd5e1; padding: var(--sp-6) 20px; text-align: center; }
+
+        .brand-logo { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; vertical-align: middle; background: transparent; mix-blend-mode: multiply; }
+
+        .scb-reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1); }
+        .scb-reveal.scb-show { opacity: 1; transform: translateY(0); }
+        .scb-reveal:nth-child(2) { transition-delay: .08s; }
+        .scb-reveal:nth-child(3) { transition-delay: .16s; }
+        @media (prefers-reduced-motion: reduce) { .scb-reveal { opacity: 1; transform: none; transition: none; } }
+
         @media (max-width: 900px) {
-            .hero-inner, .grid-3, .plans {
-                grid-template-columns: 1fr;
-            }
+            .hero-inner, .grid-3, .plans { grid-template-columns: 1fr; }
             h1 { font-size: 32px; }
-            .nav-inner {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .cta {
-                flex-direction: column;
-                align-items: stretch;
-            }
+            .nav-inner { flex-direction: column; gap: 12px; }
+            .cta { flex-direction: column; align-items: stretch; }
         }
-    
-/* SCANBRIDGE_HERO_USER_BOX_START */
-.user-box-title {
-    margin: 0 0 8px;
-    color: #1e3a8a;
-    font-size: 22px;
-    text-align: center;
-}
+    </style>
 
-.user-box-desc {
-    margin: 0 0 16px;
-    color: #64748b;
-    font-size: 13px;
-    text-align: center;
-    line-height: 1.9;
-}
-
-.user-input {
-    width: 100%;
-    height: 46px;
-    border: 1px solid #d1d5db;
-    border-radius: 16px;
-    padding: 0 14px;
-    font-size: 14px;
-    outline: none;
-    margin-bottom: 12px;
-    direction: ltr;
-    text-align: left;
-    font-family: 'Pinar', Tahoma, Arial, sans-serif;
-}
-
-.user-input:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 4px rgba(37,99,235,.12);
-}
-
-.user-actions {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
-}
-
-.user-actions a,
-.user-actions button {
-    width: 100%;
-    border: 0;
-    font-family: 'Pinar', Tahoma, Arial, sans-serif;
-}
-
-.user-note {
-    margin-top: 14px;
-    background: #eff6ff;
-    color: #1e40af;
-    border: 1px solid #bfdbfe;
-    border-radius: 16px;
-    padding: 10px;
-    font-size: 12px;
-    text-align: center;
-}
-/* SCANBRIDGE_HERO_USER_BOX_END */
-
-
-        /* panel nav button (added by patch) */
-        .nav-links .nav-btn {
-            background: #2563eb !important;
-            color: #fff !important;
-            border-radius: 12px;
-            padding: 8px 18px !important;
-            font-weight: bold;
-            white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, .35);
-        }
-        .nav-links .nav-btn:hover {
-            background: #1d4ed8 !important;
-        }
-</style>
-
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <meta property="og:title" content="Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه">
-    <meta property="og:description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، استعلام قیمت دارو، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://scanbridge.ir">
-    <meta property="og:site_name" content="Scanbridge">
-
-<style>/*SCB_GLASS_V1*/
-body{background:linear-gradient(135deg,#eef2f7 0%,#e3ecfa 55%,#dbeafe 130%)!important;background-attachment:fixed!important;color:#0f172a!important;}
-.nav{background:rgba(255,255,255,.78)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;border-bottom:1px solid rgba(148,163,184,.25)!important;}
-.card,.plan{background:rgba(255,255,255,.72)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;border:1px solid rgba(255,255,255,.9)!important;box-shadow:0 14px 40px rgba(30,58,138,.14)!important;}
-.hero{background:rgba(255,255,255,.5)!important;backdrop-filter:blur(12px)!important;}
-.stat{background:rgba(255,255,255,.8)!important;backdrop-filter:blur(12px)!important;border:1px solid rgba(255,255,255,.9)!important;}
-h1,h2,h3,h4{color:#1e3a8a!important;}
-label,td,th{color:#0f172a!important;}
-input,select,textarea{background:rgba(255,255,255,.85)!important;border:1px solid #cbd5e1!important;color:#0f172a!important;}
-.cta{background:linear-gradient(135deg,#1e3a8a,#2563eb)!important;color:#fff!important;}
-.cta h2,.cta p{color:#fff!important;}
-.brand{color:#1e3a8a!important;}
-</style>
-
-<style>/*SCB_ICONS_V1*/
-.brand-logo{width:36px;height:36px;border-radius:10px;object-fit:cover;vertical-align:middle;}
-.feat-icon{width:56px;height:56px;border-radius:16px;object-fit:cover;margin-bottom:12px;display:block;}
-.plan-icon{width:64px;height:64px;border-radius:18px;object-fit:cover;margin-bottom:12px;display:block;}
-</style>
-
-<style>/*SCB_FONT_ALL*/
-@font-face{font-family:'Pinar';src:url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}
-html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,small,strong,summary{font-family:'Pinar',Tahoma,Arial,sans-serif!important;}
-</style>
-
-<style>/*SCB_ICON_BG_FIX*/
-.ic{background:transparent!important;mix-blend-mode:multiply!important;}
-.brand-logo,.brand img{background:transparent!important;mix-blend-mode:multiply!important;}
-.feat-icon,.plan-icon,.ico-img{background:transparent!important;mix-blend-mode:multiply!important;}
-.stat img,.cust-stat img{background:transparent!important;mix-blend-mode:multiply!important;}
-</style>
-
-<style>/*SCB_HERO_V2*/
-.hero-magic{display:flex;align-items:center;justify-content:center;}
-.hero-magic img{width:min(340px,80vw);height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:28px;box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 0 3px rgba(255,255,255,.15);animation:scbFloat 5s ease-in-out infinite alternate;}
-@keyframes scbFloat{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!important;}
-</style>
-
-<style>/*SCB_HERO_V5*/
-/* هیرو: تصویر به عنوان پس‌زمینه تمام‌صفحه */
-.hero{
- background:linear-gradient(180deg,rgba(15,23,42,.75),rgba(15,23,42,.45)),url("/icons/hero-magic-barcode.png") center/cover no-repeat!important;
- background-attachment:fixed!important;
- min-height:92vh!important;
- display:flex!important;
- align-items:center!important;
- justify-content:center!important;
- padding:100px 20px!important;
-}
-/* متن روی عکس: بلور پشت متن (همون عکس که بلوره) */
-.hero-inner{grid-template-columns:1fr!important;max-width:900px!important;margin:0 auto!important;}
-.hero-inner>div:first-child{
- text-align:center!important;
- background:rgba(15,23,42,.38)!important;
- backdrop-filter:blur(10px)!important;
- -webkit-backdrop-filter:blur(10px)!important;
- border:1px solid rgba(255,255,255,.15)!important;
- border-radius:26px!important;
- padding:38px 34px!important;
- box-shadow:0 25px 60px rgba(0,0,0,.45)!important;
-}
-.hero .badge{background:rgba(37,99,235,.7)!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important;text-shadow:none!important;}
-.hero h1{font-size:40px!important;line-height:1.4!important;color:#fff!important;text-shadow:0 2px 12px rgba(0,0,0,.5)!important;}
-.hero p{color:rgba(255,255,255,.95)!important;text-shadow:0 1px 6px rgba(0,0,0,.5)!important;}
-.hero-actions{justify-content:center!important;}
-.hero-magic{display:none!important;}
-@media(max-width:900px){.hero{background-attachment:scroll!important;min-height:0!important;padding:60px 16px!important;}.hero h1{font-size:30px!important;}}
-</style>
-
-<style>/*SCB_REVEAL_V1*/
-/* دکمه درخواست خرید در همه پلن‌ها پایین کارت */
-.plan{display:flex!important;flex-direction:column!important;height:100%!important;}
-.plan ul{flex:1 1 auto!important;}
-.plan a.btn{margin-top:auto!important;}
-/* انیمیشن اسکرول */
-.scb-reveal{opacity:0!important;transform:translateY(30px)!important;transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)!important;}
-.scb-reveal.scb-show{opacity:1!important;transform:translateY(0)!important;}
-.scb-reveal:nth-child(2){transition-delay:.08s!important;}
-.scb-reveal:nth-child(3){transition-delay:.16s!important;}
-@media (prefers-reduced-motion:reduce){.scb-reveal{opacity:1!important;transform:none!important;transition:none!important;}}
-</style>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -457,40 +272,6 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
 
 @include('partials.site-header')
 
-<style>/*SCB_HOME_PROMO_V2*/
-.scb-trust{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;gap:12px!important;margin-bottom:28px!important;}
-.trust-item{background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:14px 16px;display:flex!important;flex-direction:row!important;align-items:center!important;gap:12px;font-size:14.5px;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;}
-.trust-icon{width:52px;height:52px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
-.trust-txt{display:flex;flex-direction:column;gap:3px;align-items:flex-start;}
-/* دکمه آبی درخواست دمو */
-.trust-item a.demo-btn, .trust-item a.demo-btn:hover, a.demo-btn, a.demo-btn:hover{background:linear-gradient(135deg,#1e3a8a,#2563eb)!important;color:#fff!important;border-radius:10px;padding:6px 16px;font-size:12.5px;font-weight:bold;display:inline-block;margin-top:6px;text-decoration:none!important;box-shadow:0 4px 12px rgba(37,99,235,.3);}
-.trust-item b{color:#1e3a8a!important;font-size:14.5px;}
-.trust-item span{color:#475569!important;font-size:12.5px;}
-.trust-item a{color:#2563eb!important;font-weight:bold;}
-.plan{position:relative;transition:opacity .25s ease,filter .25s ease,transform .25s ease;}
-/* اسم پلن کنار آیکون + فونت بزرگ‌تر */
-.plan h3{display:flex!important;align-items:center!important;gap:12px!important;font-size:25px!important;margin:4px 0 2px;}
-.plan h3 .plan-icon{margin-bottom:0!important;flex-shrink:0;width:64px;height:64px;}
-/* کادر تی‌تک: قاب آبی جلب‌توجه‌کننده */
-.plan.featured{border:2.5px solid #2563eb!important;box-shadow:0 0 0 5px rgba(37,99,235,.15),0 18px 44px rgba(37,99,235,.22)!important;}
-/* روبان پیشنهاد با ستاره سه‌بعدی */
-.plan-ribbon{position:absolute;top:-13px;right:18px;z-index:2;background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;font-size:12px;font-weight:bold;padding:5px 14px;border-radius:999px;box-shadow:0 6px 16px rgba(37,99,235,.35);display:inline-flex!important;align-items:center!important;gap:6px;}
-.ribbon-star{width:22px;height:22px;object-fit:contain;}
-.plan-price{margin:2px 0 10px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;text-align:center;}
-.plan.featured .plan-price{background:#eff6ff;border-color:#dbeafe;}
-.plan-price-annual{font-size:23px;font-weight:800;color:#1e3a8a!important;line-height:1.3;}
-.plan-price-annual small{font-size:12px;font-weight:bold;color:#475569;}
-.plan-price-monthly{font-size:12.5px;color:#475569!important;margin-top:3px;}
-.plan-price-empty{font-size:13px;color:#64748b;text-align:center;margin:2px 0 10px;}
-.launch-tag{display:inline-block;background:#fee2e2;color:#dc2626!important;font-size:11px;font-weight:bold;border-radius:999px;padding:2px 10px;margin-top:6px;}
-.ttac-note{display:flex!important;align-items:center;gap:14px;background:#fff!important;border:1px solid #e5e7eb!important;border-radius:16px;padding:16px 20px;margin:20px auto 0;width:100%!important;box-shadow:0 8px 22px rgba(15,23,42,.06)!important;color:#475569!important;font-size:15.5px;font-weight:bold;text-align:right;}
-.ttac-note img{width:56px;height:56px;object-fit:contain;flex-shrink:0;background:transparent;mix-blend-mode:multiply;}
-/* هاور: پلن زیر دست کمی بزرگ می‌شه و وایگل می‌خوره — بدون تغییر نور بقیه */
-.plans .plan:hover{z-index:6;transform:scale(1.03)!important;animation:scb-wiggle .55s ease;}
-@keyframes scb-wiggle{0%{transform:scale(1.03) rotate(0)}25%{transform:scale(1.03) rotate(-1.2deg)}50%{transform:scale(1.03) rotate(1.2deg)}75%{transform:scale(1.03) rotate(-.6deg)}100%{transform:scale(1.03) rotate(0)}}
-@media (max-width:700px){.scb-trust{grid-template-columns:1fr!important;}}
-</style>
-
 <header class="hero">
     <div class="hero-inner">
         <div>
@@ -504,10 +285,18 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
             <div class="hero-actions">
                 <a class="btn btn-green" href="/buy">درخواست خرید / تمدید</a>
                 <a class="btn btn-primary" href="/download">دانلود نرم‌افزار</a>
-                <a class="btn btn-orange" href="https://wa.me/989136346309">مشاوره واتساپ</a>
+                <a class="btn btn-outline" href="https://wa.me/989136346309">مشاوره واتساپ</a>
             </div>
         </div>
-        <div class="hero-magic"><img src="/icons/hero-magic-barcode.png" alt="بارکدخوان هوشمند Scanbridge"></div>
+        <div class="mock scb-reveal">
+            <div class="mock-card">
+                <div class="mock-card-title">آخرین اسکن‌ها</div>
+                <div class="mock-row"><span>ژلوفن ۴۰۰ میلی‌گرم</span><span class="dot"></span></div>
+                <div class="mock-row"><span>آموکسی‌سیلین ۵۰۰</span><span class="dot"></span></div>
+                <div class="mock-row"><span>شربت سرماخوردگی کودک</span><span class="dot"></span></div>
+                <div class="mock-row"><span>استعلام قیمت: تأیید شد</span><span class="dot"></span></div>
+            </div>
+        </div>
     </div>
 </header>
 
@@ -571,7 +360,7 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
     </div>
 </section>
 
-<section id="plans" style="background:#eef2ff;">
+<section id="plans" style="background:var(--elevated);">
     <div class="container">
         <div class="section-title">
             <h2>پلن‌های ScanBridge</h2>
@@ -691,28 +480,6 @@ a.btn-green,a[href*="wa.me"].btn-green{color:#ffffff!important;text-shadow:none!
         </div>
     </div>
 </section>
-
-
-
-
-<script>
-    function heroUserWhatsApp() {
-        const el = document.getElementById('heroUserInput');
-        const value = el ? el.value.trim() : '';
-
-        const text =
-`سلام، برای Scanbridge درخواست پیگیری دارم.
-
-شماره موبایل یا کد لایسنس:
-${value || '-'}
-
-موضوع:
-خرید / تمدید / پیگیری لایسنس`;
-
-        window.open('https://wa.me/989136346309?text=' + encodeURIComponent(text), '_blank');
-    }
-</script>
-
 
 @include('partials.site-footer')
 
