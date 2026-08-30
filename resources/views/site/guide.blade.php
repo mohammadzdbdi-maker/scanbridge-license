@@ -88,13 +88,17 @@
         .g-head h2 { color: #1e3a8a; font-size: 21px; }
         .g-sub { color: #64748b; font-size: 13.5px; margin-bottom: 16px; margin-right: 72px; }
 
+        @counter-style fa-digits {
+            system: numeric;
+            symbols: "۰" "۱" "۲" "۳" "۴" "۵" "۶" "۷" "۸" "۹";
+        }
         ol.g-steps { counter-reset: step; list-style: none; }
         ol.g-steps li {
             counter-increment: step; position: relative;
             padding: 0 52px 14px 0; color: #334155; font-size: 14.5px;
         }
         ol.g-steps li::before {
-            content: counter(step);
+            content: counter(step, fa-digits);
             position: absolute; right: 0; top: 1px;
             width: 34px; height: 34px; border-radius: 12px;
             background: linear-gradient(135deg, #1e3a8a, #2563eb);
@@ -216,19 +220,19 @@
             <div class="g-gallery-thumbs" dir="ltr">
                 <div class="g-gallery-item" onclick="gOpenLightbox(0)">
                     <img src="/guide-photos/install-download-1.jpg" alt="دانلود از سایت - مرحله ۱" loading="lazy">
-                    <span class="g-gallery-num">1</span>
+                    <span class="g-gallery-num">۱</span>
                 </div>
                 <div class="g-gallery-item" onclick="gOpenLightbox(1)">
                     <img src="/guide-photos/install-download-2.jpg" alt="دانلود از سایت - مرحله ۲" loading="lazy">
-                    <span class="g-gallery-num">2</span>
+                    <span class="g-gallery-num">۲</span>
                 </div>
                 <div class="g-gallery-item" onclick="gOpenLightbox(2)">
                     <img src="/guide-photos/install-run-1.jpg" alt="اجرای فایل نصب - مرحله ۱" loading="lazy">
-                    <span class="g-gallery-num">3</span>
+                    <span class="g-gallery-num">۳</span>
                 </div>
                 <div class="g-gallery-item" onclick="gOpenLightbox(3)">
                     <img src="/guide-photos/install-run-2.jpg" alt="اجرای فایل نصب - مرحله ۲" loading="lazy">
-                    <span class="g-gallery-num">4</span>
+                    <span class="g-gallery-num">۴</span>
                 </div>
             </div>
         </div>
