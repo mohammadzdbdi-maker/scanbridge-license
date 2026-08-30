@@ -62,11 +62,19 @@
             transition: transform .2s ease, box-shadow .2s ease;
         }
         .choice:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 22px 54px rgba(15,23,42,.14); }
-        .choice-icon {
-            width: 130px;
-            height: 130px;
-            object-fit: contain;
+        .choice-icon-box {
+            height: 190px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
             margin-bottom: var(--sp-4);
+        }
+        .choice-icon {
+            max-width: 220px;
+            max-height: 190px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
             filter: drop-shadow(0 14px 20px rgba(15,23,42,.28));
         }
         .choice h2 { color: var(--accent); font-size: 22px; margin: 0 0 var(--sp-3); }
@@ -131,13 +139,13 @@
 
 <div class="chooser">
     <a href="/pharmacy" class="choice">
-        <img class="choice-icon" src="/icons/category-pharmacy.png" alt="داروخانه">
+        <div class="choice-icon-box"><img class="choice-icon" src="/icons/category-pharmacy.png" alt="داروخانه"></div>
         <h2>داروخانه</h2>
         <p>اتصال بارکدخوان موبایل، ثبت و استعلام تی‌تک، شیرخشک، استعلام قیمت دارو، تحویل بار و هشدار تاریخ انقضا.</p>
         <span class="btn btn-primary">ورود به بخش داروخانه‌ها</span>
     </a>
     <a href="/retail" class="choice">
-        <img class="choice-icon" src="/icons/category-retail.png" alt="سوپرمارکت، فروشگاه و هایپرمارکت">
+        <div class="choice-icon-box"><img class="choice-icon" src="/icons/category-retail.png" alt="سوپرمارکت، فروشگاه و هایپرمارکت"></div>
         <h2>سوپرمارکت، فروشگاه و هایپرمارکت</h2>
         <p>اسکن بارکد با موبایل، ثبت کالای ورودی، هشدار تاریخ انقضا و بانک بارکد پرمصرف برای هر فروشگاهی.</p>
         <span class="btn btn-green">ورود به بخش کسب‌وکارها</span>
