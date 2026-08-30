@@ -381,7 +381,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                     </tr>
                     @foreach ($licenses as $lic)
                     <tr>
-                        <td><div style="display:flex;align-items:center;gap:8px;"><span class="license-key">{{ $lic->license_key }}</span><button type="button" class="btn-copy" onclick="copyLicense('{{ $lic->license_key }}')">کپی</button></div></td>
+                        <td><div style="display:flex;align-items:center;gap:8px;"><span class="license-key no-fa-digits">{{ $lic->license_key }}</span><button type="button" class="btn-copy" onclick="copyLicense('{{ $lic->license_key }}')">کپی</button></div></td>
                         <td>{{ $lic->plan }}</td>
                         <td>
                             <span class="badge {{ $lic->status === 'active' ? 'badge-active' : 'badge-disabled' }}">
@@ -535,7 +535,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
                 <input type="file" name="log_file" accept=".txt,.log">
                 @if ($licenses->count() > 1)
                 <label>مربوط به کدام لایسنس؟</label>
-                <select name="license_id">
+                <select name="license_id" class="no-fa-digits">
                     @foreach ($licenses as $lic)
                     <option value="{{ $lic->id }}">{{ $lic->license_key }} ({{ $lic->plan }})</option>
                     @endforeach
