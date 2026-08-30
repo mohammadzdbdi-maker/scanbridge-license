@@ -6,7 +6,10 @@
     var SKIP_TAGS = {SCRIPT:1,STYLE:1,TEXTAREA:1};
     function isSkipped(el){
         while (el) {
-            if (el.classList && el.classList.contains('no-fa-digits')) { return true; }
+            if (el.nodeType === 1) {
+                if (SKIP_TAGS[el.tagName]) { return true; }
+                if (el.classList && el.classList.contains('no-fa-digits')) { return true; }
+            }
             el = el.parentElement;
         }
         return false;
@@ -17,7 +20,8 @@
             if (node.nodeValue && /[0-9]/.test(node.nodeValue) && !isSkipped(node.parentElement)) {
                 node.nodeValue = node.nodeValue.replace(/[0-9]/g, function (d) { return fa[+d]; });
             }
-        } else if (node.nodeType === 1 && !SKIP_TAGS[node.tagName]) {
+        } else if (node.nodeType === 1) {
+            if (SKIP_TAGS[node.tagName] || (node.classList && node.classList.contains('no-fa-digits'))) { return; }
             for (var i = 0; i < node.childNodes.length; i++) { convert(node.childNodes[i]); }
         }
     }
