@@ -170,6 +170,18 @@
         .card p { color: var(--muted); margin: 0; }
         .feat-icon { width: 56px; height: 56px; border-radius: 16px; object-fit: cover; margin-bottom: var(--sp-3); display: block; background: transparent; mix-blend-mode: multiply; }
 
+        /* ===== How it works ===== */
+        .steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-5); }
+        .steps::before { content: ""; position: absolute; top: 26px; right: 12%; left: 12%; height: 2px; background: var(--border); z-index: 0; }
+        .step-item { position: relative; z-index: 1; text-align: center; }
+        .step-num {
+            width: 52px; height: 52px; border-radius: 50%; background: var(--accent-2); color: #fff;
+            display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 800;
+            margin: 0 auto var(--sp-3);
+        }
+        .step-item h3 { color: var(--accent); font-size: 17px; margin: 0 0 var(--sp-2); }
+        .step-item p { color: var(--muted); font-size: 14px; margin: 0; }
+
         .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
         .plan {
             background: var(--surface);
@@ -223,6 +235,15 @@
         }
         .ttac-note img { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; background: transparent; mix-blend-mode: multiply; }
 
+        /* ===== FAQ ===== */
+        .faq-list { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--sp-3); }
+        .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: var(--sp-4) var(--sp-5); box-shadow: 0 8px 22px rgba(15,23,42,.06); }
+        .faq-item summary { cursor: pointer; font-weight: bold; color: var(--accent); font-size: 15.5px; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after { content: "+"; font-size: 22px; line-height: 1; color: var(--muted); font-weight: normal; transition: transform .2s ease; flex-shrink: 0; }
+        .faq-item[open] summary::after { transform: rotate(45deg); }
+        .faq-item p { color: var(--muted); margin: var(--sp-3) 0 0; font-size: 14.5px; }
+
         .cta {
             background: linear-gradient(135deg, var(--accent), var(--accent-2));
             color: white; border-radius: 30px; padding: var(--sp-8);
@@ -242,7 +263,9 @@
         @media (prefers-reduced-motion: reduce) { .scb-reveal { opacity: 1; transform: none; transition: none; } }
 
         @media (max-width: 900px) {
-            .hero-inner, .grid-3, .plans { grid-template-columns: 1fr; }
+            .hero-inner, .grid-3, .plans, .steps { grid-template-columns: 1fr; }
+            .steps { gap: var(--sp-6); }
+            .steps::before { display: none; }
             h1 { font-size: 32px; }
             .nav-inner { flex-direction: column; gap: 12px; }
             .cta { flex-direction: column; align-items: stretch; }
@@ -299,6 +322,37 @@
         </div>
     </div>
 </header>
+
+<section id="how">
+    <div class="container">
+        <div class="section-title">
+            <h2>ScanBridge چطور کار می‌کند؟</h2>
+            <p>در چند دقیقه راه‌اندازی می‌شود و کنار نرم‌افزار فعلی داروخانه شما کار می‌کند</p>
+        </div>
+        <div class="steps">
+            <div class="step-item scb-reveal">
+                <div class="step-num">۱</div>
+                <h3>نصب روی سیستم</h3>
+                <p>ScanBridge را روی کامپیوتر داروخانه نصب کنید؛ نرم‌افزار فعلی شما دست‌نخورده باقی می‌ماند.</p>
+            </div>
+            <div class="step-item scb-reveal">
+                <div class="step-num">۲</div>
+                <h3>اتصال موبایل با QR</h3>
+                <p>با اسکن یک QR کد، موبایل خودتان (یا چند موبایل دیگر) به‌عنوان بارکدخوان وصل می‌شود.</p>
+            </div>
+            <div class="step-item scb-reveal">
+                <div class="step-num">۳</div>
+                <h3>اسکن و ثبت خودکار</h3>
+                <p>هر اسکن بلافاصله وارد سیستم می‌شود؛ تی‌تک، شیرخشک، قیمت دارو و بقیه‌ی عملیات مرتبط خودکار انجام می‌شود.</p>
+            </div>
+            <div class="step-item scb-reveal">
+                <div class="step-num">۴</div>
+                <h3>مدیریت و گزارش</h3>
+                <p>تاریخچه، هشدار انقضا و خروجی Excel/PDF را از همان نرم‌افزار در هر لحظه ببینید.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <section id="features">
     <div class="container">
@@ -462,6 +516,41 @@
         <div class="ttac-note">
             <img src="/icons/icon-warning.png" alt="">
             <span>امکانات وابسته به سامانه تی‌تک، در صورت در دسترس بودن سرویس رسمی TTAC ارائه می‌شود.</span>
+        </div>
+    </div>
+</section>
+
+<section id="faq" style="background:var(--elevated);">
+    <div class="container">
+        <div class="section-title">
+            <h2>سوالات متداول</h2>
+            <p>پاسخ چند سوالی که داروخانه‌ها معمولاً می‌پرسند</p>
+        </div>
+        <div class="faq-list">
+            <details class="faq-item scb-reveal">
+                <summary>آیا باید بارکدخوان جدید بخرم؟</summary>
+                <p>نه؛ ScanBridge با موبایل خودتان یا بارکدخوان فعلی‌تان کار می‌کند و نیازی به خرید تجهیزات جدید نیست.</p>
+            </details>
+            <details class="faq-item scb-reveal">
+                <summary>آیا نرم‌افزار داروخانه فعلی من از بین می‌رود؟</summary>
+                <p>خیر. ScanBridge کنار نرم‌افزار فعلی شما نصب می‌شود و آن را جایگزین نمی‌کند؛ فقط اسکن و عملیات مرتبط را سریع‌تر و خودکارتر می‌کند.</p>
+            </details>
+            <details class="faq-item scb-reveal">
+                <summary>امکانات تی‌تک و استعلام قیمت دارو چطور فعال می‌شود؟</summary>
+                <p>در پلن‌های تی‌تک و حرفه‌ای، ثبت تی‌تک، شیرخشک و استعلام قیمت دارو مستقیم از داخل ScanBridge در دسترس است و نیازی به مرورگر جدا نیست.</p>
+            </details>
+            <details class="faq-item scb-reveal">
+                <summary>می‌توانم قبل از خرید امتحانش کنم؟</summary>
+                <p>بله؛ یک دموی ۱۴ روزه بدون تعهد خرید در داروخانه‌ی خودتان در دسترس است.</p>
+            </details>
+            <details class="faq-item scb-reveal">
+                <summary>اگر مشکلی پیش بیاید، پشتیبانی چطور کمک می‌کند؟</summary>
+                <p>تیم پشتیبانی می‌تواند با یک اتصال از راه دور مستقیم به سیستم شما وصل شود و مشکل را همان لحظه بررسی و رفع کند.</p>
+            </details>
+            <details class="faq-item scb-reveal">
+                <summary>لایسنس چطور فعال می‌شود؟</summary>
+                <p>لایسنس به‌صورت آنلاین و بلافاصله پس از تأیید خرید فعال می‌شود؛ نیازی به ارسال فایل یا فعال‌سازی دستی نیست.</p>
+            </details>
         </div>
     </div>
 </section>
