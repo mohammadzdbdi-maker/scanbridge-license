@@ -242,6 +242,11 @@ Route::get('/', function () {
         return redirect('/admin');
     }
 
+    return view('site.home');
+});
+
+// SCANBRIDGE_PLAN_PRICES_HELPER
+$scbLoadPlanPrices = function () {
     $planPrices = [];
     try {
         foreach (DB::table('scanbridge_prices')->get() as $row) {
@@ -258,8 +263,15 @@ Route::get('/', function () {
     } catch (\Throwable $e) {
         $planPrices = [];
     }
+    return $planPrices;
+};
 
-    return view('site.home', ['planPrices' => $planPrices]);
+Route::get('/pharmacy', function () use ($scbLoadPlanPrices) {
+    return view('site.pharmacy', ['planPrices' => $scbLoadPlanPrices()]);
+});
+
+Route::get('/retail', function () use ($scbLoadPlanPrices) {
+    return view('site.retail', ['planPrices' => $scbLoadPlanPrices()]);
 });
 
 Route::get('/download', function () {

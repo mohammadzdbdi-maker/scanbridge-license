@@ -126,8 +126,8 @@
         </button>
         <div class="scb-nav-links" id="scb-nav-links">
             <a class="scb-login" href="/panel/login">ورود به پنل</a>
-            <a href="/#features">امکانات</a>
-            <a href="/#plans">پلن‌ها</a>
+            <a href="/pharmacy">داروخانه</a>
+            <a href="/retail">فروشگاه‌ها</a>
             <a href="/download">دانلود</a>
             <a href="/buy">خرید / تمدید</a>
             <a href="/guide">راهنما 🎓</a>
