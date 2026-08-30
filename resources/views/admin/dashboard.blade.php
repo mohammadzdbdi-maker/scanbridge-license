@@ -966,6 +966,18 @@ a{color:#1d4ed8!important;}
     .scb-icon-btn-row { justify-content:flex-start; }
 }
 </style>
+
+<style>/*SCB_GLOW_GLASS_ADMIN_V1*/
+@font-face{font-family:'Arad';src:url('/fonts/Arad-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}
+@font-face{font-family:'Arad';src:url('/fonts/Arad-Bold.woff2') format('woff2');font-weight:bold;font-style:normal;font-display:swap;}
+html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,small,strong,summary,.badge,.btn{font-family:'Arad',Tahoma,Arial,sans-serif!important;}
+body{position:relative;overflow-x:hidden;min-height:100vh;}
+body::before{content:"";position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle at center, rgba(37,99,235,.85) 0%, rgba(37,99,235,.45) 35%, transparent 68%);filter:blur(70px);z-index:0;pointer-events:none;}
+body::after{content:"";position:fixed;top:10%;right:-220px;width:560px;height:560px;background:radial-gradient(circle at center, rgba(30,58,138,.35), transparent 70%);filter:blur(80px);z-index:0;pointer-events:none;}
+header,main{position:relative;z-index:1;}
+.card,.stat,.scb-acc-card,.scb-grid-card,.scb-admin-tab-btn,.scb-modal-box{background:rgba(255,255,255,.72)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;border:1px solid rgba(255,255,255,.85)!important;box-shadow:0 10px 30px rgba(30,58,138,.12)!important;}
+.scb-admin-tab-btn.active{background:rgba(219,234,254,.78)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;}
+</style>
 </head>
 <body>
 <header>
@@ -1279,7 +1291,7 @@ a{color:#1d4ed8!important;}
 
             @if(!empty($req->license_key))
                 <div class="license-box" style="max-width:340px; margin-top:8px;">
-                    <div class="license-key" style="font-size:12px;">{{ $req->license_key }}</div>
+                    <div class="license-key no-fa-digits" style="font-size:12px;">{{ $req->license_key }}</div>
                     <button type="button" class="btn btn-copy" onclick="copyLicense('{{ $req->license_key }}')">کپی</button>
                 </div>
             @else
@@ -1471,7 +1483,7 @@ a{color:#1d4ed8!important;}
 
             <div id="scb-modal-src-lic-{{ $license->id }}" class="scb-modal-src" style="display:none;">
                 <div class="license-box" style="max-width:420px;">
-                    <div class="license-key" id="lic-{{ $license->id }}">{{ $license->license_key }}</div>
+                    <div class="license-key no-fa-digits" id="lic-{{ $license->id }}">{{ $license->license_key }}</div>
                     <button type="button" class="btn btn-copy" onclick="copyLicense('{{ $license->license_key }}')">کپی</button>
                 </div>
                 <div style="margin-top:10px; color:#6b7280; font-size:13px;">مشتری: {{ $license->customer_name ?: '-' }}</div>
