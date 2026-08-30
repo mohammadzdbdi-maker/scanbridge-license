@@ -5,10 +5,10 @@
     <title>نرم‌افزار اسکن بارکد برای سوپرمارکت، فروشگاه و هایپرمارکت | ScanBridge</title>
     <link rel="canonical" href="https://scanbridge.ir/retail">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="ScanBridge؛ سیستم هوشمند اسکن بارکد و مدیریت عملیات برای سوپرمارکت، فروشگاه و هایپرمارکت — کنار نرم‌افزار فعلی شما: اتصال موبایل به کامپیوتر، ثبت کالای ورودی، بانک بارکد پرمصرف و هشدار تاریخ انقضا.">
+    <meta name="description" content="ScanBridge؛ سیستم هوشمند اسکن بارکد و مدیریت عملیات برای سوپرمارکت، فروشگاه و هایپرمارکت — کنار نرم‌افزار فعلی شما: اتصال موبایل به کامپیوتر، ثبت کالای ورودی و بانک بارکد پرمصرف.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta property="og:title" content="ScanBridge | اسکن بارکد و مدیریت عملیات فروشگاه">
-    <meta property="og:description" content="ScanBridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، ثبت کالای ورودی، بانک بارکد پرمصرف و هشدار تاریخ انقضا برای سوپرمارکت، فروشگاه و هایپرمارکت.">
+    <meta property="og:description" content="ScanBridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، ثبت کالای ورودی و بانک بارکد پرمصرف برای سوپرمارکت، فروشگاه و هایپرمارکت.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir/retail">
     <meta property="og:site_name" content="Scanbridge">
@@ -124,9 +124,9 @@
         .launch-tag { display: inline-block; background: #fee2e2; color: #dc2626; font-size: 11px; font-weight: bold; border-radius: 999px; padding: 2px 10px; margin-top: 6px; }
 
         .enterprise-note {
-            display: flex; align-items: center; gap: var(--sp-4); background: var(--surface); border: 1px solid var(--border);
+            background: var(--surface); border: 1px solid var(--border);
             border-radius: 16px; padding: var(--sp-4) var(--sp-5); margin: var(--sp-6) auto 0; max-width: 520px;
-            box-shadow: 0 8px 22px rgba(15,23,42,.06); color: var(--muted); font-size: 14.5px; text-align: center;
+            box-shadow: 0 8px 22px rgba(15,23,42,.06); color: var(--muted); font-size: 14.5px; text-align: center; line-height: 1.9;
         }
         .enterprise-note b { color: var(--accent); }
 
@@ -189,7 +189,7 @@
             <h1>اسکن بارکد و مدیریت عملیات فروشگاه با ScanBridge</h1>
             <p>
                 کنار نرم‌افزار فروشگاهی فعلی خود ScanBridge را نصب کنید: اسکن سریع با موبایل،
-                ثبت گروهی کالای ورودی، هشدار تاریخ انقضا و بانک بارکد پرمصرف —
+                ثبت گروهی کالای ورودی و بانک بارکد پرمصرف —
                 بدون نیاز به خرید بارکدخوان جدید.
             </p>
             <div class="hero-actions">
@@ -204,7 +204,7 @@
                 <div class="mock-row"><span>شامپو ضدشوره ۴۰۰ میلی‌لیتر</span><span class="dot"></span></div>
                 <div class="mock-row"><span>بیسکویت خانواده</span><span class="dot"></span></div>
                 <div class="mock-row"><span>نوشابه قوطی ۳۳۰ سی‌سی</span><span class="dot"></span></div>
-                <div class="mock-row"><span>هشدار انقضا: ۳ قلم کالا</span><span class="dot"></span></div>
+                <div class="mock-row"><span>ثبت کالای ورودی: ۱۲ قلم</span><span class="dot"></span></div>
             </div>
         </div>
     </div>
@@ -230,7 +230,7 @@
             <div class="step-item scb-reveal">
                 <div class="step-num">۳</div>
                 <h3>اسکن و ثبت خودکار</h3>
-                <p>هر اسکن بلافاصله وارد سیستم می‌شود؛ ثبت کالای ورودی، هشدار انقضا و بقیه‌ی عملیات مرتبط خودکار انجام می‌شود.</p>
+                <p>هر اسکن بلافاصله وارد سیستم می‌شود؛ ثبت کالای ورودی و بقیه‌ی عملیات مرتبط خودکار انجام می‌شود.</p>
             </div>
             <div class="step-item scb-reveal">
                 <div class="step-num">۴</div>
@@ -258,16 +258,8 @@
                 <p>ثبت گروهی بارکدهای کالای دریافتی، افزودن به انبار فروشگاه، خروجی Excel و PDF و مشاهده جزئیات هر ردیف.</p>
             </div>
             <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-expiry.png" alt="">هشدار تاریخ انقضا</h3>
-                <p>پایش خودکار اقلام و هشدار برای کالاهایی که تاریخ انقضای نزدیک دارند، با تنظیم آستانه و تکرار یادآوری دلخواه.</p>
-            </div>
-            <div class="card scb-reveal">
                 <h3><img class="feat-icon" src="/icons/feature-barcodebank.png" alt="">بانک بارکد پرمصرف</h3>
                 <p>بارکدهای پرفروش را در گروه‌های دلخواه ذخیره کن و بین چند صندوق یا سیستم هم‌شبکه به‌سرعت به اشتراک بگذار.</p>
-            </div>
-            <div class="card scb-reveal">
-                <h3><img class="feat-icon" src="/icons/feature-status.png" alt="">تعیین وضعیت کالا</h3>
-                <p>بررسی و تأیید یا رد کالای دریافتی هنگام تحویل بار، تکی یا گروهی.</p>
             </div>
             <div class="card scb-reveal">
                 <h3><img class="feat-icon" src="/icons/feature-history.png" alt="">تاریخچه و خروجی</h3>
