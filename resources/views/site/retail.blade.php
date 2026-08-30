@@ -317,7 +317,7 @@
                     <li>مدیریت دستگاه‌ها</li>
                     <li>به‌روزرسانی خودکار</li>
                 </ul>
-                <a class="btn btn-primary" href="https://wa.me/989136346309">درخواست خرید</a>
+                <a class="btn btn-primary" href="/buy?plan=Normal">درخواست خرید</a>
             </div>
         </div>
 
