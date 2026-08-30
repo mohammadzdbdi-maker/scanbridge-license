@@ -61,8 +61,14 @@
             display: flex; flex-direction: column; align-items: center;
             transition: transform .2s ease, box-shadow .2s ease;
         }
-        .choice:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(15,23,42,.1); }
-        .choice .emoji { font-size: 46px; margin-bottom: var(--sp-4); }
+        .choice:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 22px 54px rgba(15,23,42,.14); }
+        .choice-icon {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            margin-bottom: var(--sp-4);
+            filter: drop-shadow(0 14px 20px rgba(15,23,42,.28));
+        }
         .choice h2 { color: var(--accent); font-size: 22px; margin: 0 0 var(--sp-3); }
         .choice p { color: var(--muted); font-size: 14.5px; margin: 0 0 var(--sp-6); flex: 1 1 auto; }
         .btn {
@@ -125,13 +131,13 @@
 
 <div class="chooser">
     <a href="/pharmacy" class="choice">
-        <div class="emoji">💊</div>
+        <img class="choice-icon" src="/icons/category-pharmacy.png" alt="داروخانه">
         <h2>داروخانه</h2>
         <p>اتصال بارکدخوان موبایل، ثبت و استعلام تی‌تک، شیرخشک، استعلام قیمت دارو، تحویل بار و هشدار تاریخ انقضا.</p>
         <span class="btn btn-primary">ورود به بخش داروخانه‌ها</span>
     </a>
     <a href="/retail" class="choice">
-        <div class="emoji">🛒</div>
+        <img class="choice-icon" src="/icons/category-retail.png" alt="سوپرمارکت، فروشگاه و هایپرمارکت">
         <h2>سوپرمارکت، فروشگاه و هایپرمارکت</h2>
         <p>اسکن بارکد با موبایل، ثبت کالای ورودی، هشدار تاریخ انقضا و بانک بارکد پرمصرف برای هر فروشگاهی.</p>
         <span class="btn btn-green">ورود به بخش کسب‌وکارها</span>
