@@ -1613,7 +1613,12 @@ Route::get('/latest-android', function () {
     if (!file_exists($path)) {
         return redirect('/download');
     }
-    return response()->download($path, 'Scanbridge.apk');
+    // بدون این هدر، لاراول Content-Type رو از روی محتوای واقعی فایل حدس می‌زنه؛ چون APK از نظر
+    // ساختار داخلی یه فایل ZIP هست، به‌جای application/vnd.android.package-archive خروجی
+    // application/zip می‌ده و گوشی به‌جای نصب‌کننده، یه فایل زیپ دانلود می‌کنه.
+    return response()->download($path, 'Scanbridge.apk', [
+        'Content-Type' => 'application/vnd.android.package-archive',
+    ]);
 });
 
 Route::post('/admin/upload-installer-android', function (\Illuminate\Http\Request $request) use ($requireAdmin) {
