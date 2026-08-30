@@ -7,7 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:title" content="خرید و تمدید Scanbridge | درخواست لایسنس">
+    <meta property="og:description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scanbridge.ir/buy">
+    <meta property="og:site_name" content="Scanbridge">
+
     <style>
+        :root {
+            --bg: #f7f8fa;
+            --surface: #ffffff;
+            --elevated: #f2f4f7;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e5e7eb;
+            --accent: #1e3a8a;
+            --accent-2: #2563eb;
+            --green: #16a34a;
+            --orange: #f97316;
+            --radius-btn: 12px;
+            --radius-card: 24px;
+            --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px;
+            --font: 'Pinar', Tahoma, Arial, sans-serif;
+        }
         @font-face {
             font-family: 'Pinar';
             src: url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');
@@ -17,133 +40,58 @@
         }
 
         * { box-sizing: border-box; }
-        body {
-            margin: 0;
-            font-family: 'Pinar', Tahoma, Arial, sans-serif;
-            background:
-                radial-gradient(circle at top left, rgba(37,99,235,.12), transparent 35%),
-                #f8fafc;
-            color: #0f172a;
-        }
-        .wrap {
-            max-width: 980px;
-            margin: 44px auto;
-            padding: 0 18px;
-        }
+        body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--text); }
+        a { text-decoration: none; }
+
+        .wrap { max-width: 980px; margin: 44px auto; padding: 0 18px; }
         .card {
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 30px;
-            padding: 32px;
-            box-shadow: 0 18px 60px rgba(15,23,42,.08);
+            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card);
+            padding: var(--sp-8); box-shadow: 0 12px 40px rgba(15,23,42,.06);
         }
-        h1 {
-            color: #1e3a8a;
-            text-align: center;
-            margin: 0 0 10px;
-            font-size: 30px;
-        }
-        .lead {
-            color: #64748b;
-            line-height: 1.9;
-            text-align: center;
-            margin: 0 0 28px;
-        }
-        .plans {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin: 24px 0;
-        }
+        h1 { color: var(--accent); text-align: center; margin: 0 0 10px; font-size: 30px; }
+        .lead { color: var(--muted); line-height: 1.9; text-align: center; margin: 0 0 28px; }
+
+        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); margin: var(--sp-6) 0; }
         .plan {
-            border: 1px solid #e5e7eb;
-            border-radius: 22px;
-            padding: 18px;
-            text-align: center;
-            background: #f8fafc;
-            cursor: pointer;
-            transition: .15s;
+            border: 1px solid var(--border); border-radius: 18px; padding: var(--sp-4); text-align: center;
+            background: var(--elevated); cursor: pointer; transition: .15s;
         }
-        .plan:hover {
-            transform: translateY(-2px);
-            border-color: #2563eb;
-        }
-        .plan strong {
-            color: #1e3a8a;
-            font-size: 21px;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .plan span {
-            color: #64748b;
-            font-size: 13px;
-        }
-        .form {
-            margin-top: 24px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            color: #334155;
-            margin-bottom: 6px;
-            font-size: 13px;
-        }
+        .plan:hover { transform: translateY(-2px); border-color: var(--accent-2); }
+        .plan strong { color: var(--accent); font-size: 21px; display: block; margin-bottom: 6px; }
+        .plan span { color: var(--muted); font-size: 13px; }
+
+        .form { margin-top: var(--sp-6); display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+        label { display: block; font-weight: bold; color: #334155; margin-bottom: 6px; font-size: 13px; }
         input, select, textarea {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            border-radius: 16px;
-            min-height: 46px;
-            padding: 10px 12px;
-            font-size: 14px;
-            font-family: 'Pinar', Tahoma, Arial, sans-serif;
-            outline: none;
+            width: 100%; border: 1px solid #d1d5db; border-radius: 14px; min-height: 46px;
+            padding: 10px 12px; font-size: 14px; font-family: var(--font); outline: none; background: #fff; color: var(--text);
         }
         input:focus, select:focus, textarea:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+            border-color: var(--accent-2); box-shadow: 0 0 0 4px rgba(37,99,235,.10);
         }
         .full { grid-column: 1 / -1; }
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 24px;
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: var(--sp-6); }
+
+        .btn, button {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 12px 22px; border-radius: var(--radius-btn); color: #fff; text-decoration: none;
+            font-weight: bold; border: 0; cursor: pointer; font-family: var(--font); font-size: 14px;
+            transition: filter .15s ease;
         }
-        a, button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 13px 22px;
-            border-radius: 16px;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            border: 0;
-            cursor: pointer;
-            font-family: 'Pinar', Tahoma, Arial, sans-serif;
-            font-size: 14px;
-        }
-        .green { background: #16a34a; }
-        .blue { background: #2563eb; }
-        .dark { background: #0f172a; }
-        .orange { background: #f97316; }
+        .btn:hover, button:hover { filter: brightness(1.06); }
+        .green { background: var(--green); }
+        .blue { background: var(--accent-2); }
+        .dark { background: var(--text); }
+        .orange { background: var(--orange); }
+
         .note {
-            margin-top: 20px;
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            color: #1e40af;
-            padding: 14px;
-            border-radius: 18px;
-            line-height: 1.8;
-            font-size: 13px;
+            margin-top: var(--sp-5); background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af;
+            padding: var(--sp-4); border-radius: 16px; line-height: 1.8; font-size: 13px;
         }
+
         @media(max-width:800px){
             .plans, .form { grid-template-columns: 1fr; }
-            .card { padding: 22px; }
+            .card { padding: var(--sp-6); }
         }
         @media(max-width:480px){
             .wrap { margin: 24px auto; padding: 0 12px; }
@@ -151,39 +99,6 @@
             h1 { font-size: 22px; }
         }
     </style>
-
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <meta property="og:title" content="خرید و تمدید Scanbridge | درخواست لایسنس">
-    <meta property="og:description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://scanbridge.ir">
-    <meta property="og:site_name" content="Scanbridge">
-
-<style>/*SCB_GLASS_V1*/
-body{background:linear-gradient(135deg,#eef2f7 0%,#e3ecfa 55%,#dbeafe 130%)!important;background-attachment:fixed!important;color:#0f172a!important;}
-.nav{background:rgba(255,255,255,.78)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;border-bottom:1px solid rgba(148,163,184,.25)!important;}
-.card,.plan{background:rgba(255,255,255,.72)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important;border:1px solid rgba(255,255,255,.9)!important;box-shadow:0 14px 40px rgba(30,58,138,.14)!important;}
-.hero{background:rgba(255,255,255,.5)!important;backdrop-filter:blur(12px)!important;}
-.stat{background:rgba(255,255,255,.8)!important;backdrop-filter:blur(12px)!important;border:1px solid rgba(255,255,255,.9)!important;}
-h1,h2,h3,h4{color:#1e3a8a!important;}
-label,td,th{color:#0f172a!important;}
-input,select,textarea{background:rgba(255,255,255,.85)!important;border:1px solid #cbd5e1!important;color:#0f172a!important;}
-.cta{background:linear-gradient(135deg,#1e3a8a,#2563eb)!important;color:#fff!important;}
-.cta h2,.cta p{color:#fff!important;}
-.brand{color:#1e3a8a!important;}
-</style>
-
-<style>/*SCB_FONT_ALL*/
-@font-face{font-family:'Pinar';src:url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}
-html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,small,strong,summary{font-family:'Pinar',Tahoma,Arial,sans-serif!important;}
-</style>
-
-<style>/*SCB_ICON_BG_FIX*/
-.ic{background:transparent!important;mix-blend-mode:multiply!important;}
-.brand-logo,.brand img{background:transparent!important;mix-blend-mode:multiply!important;}
-.feat-icon,.plan-icon,.ico-img{background:transparent!important;mix-blend-mode:multiply!important;}
-.stat img,.cust-stat img{background:transparent!important;mix-blend-mode:multiply!important;}
-</style>
 </head>
 <body>
 
