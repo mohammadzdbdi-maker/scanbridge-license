@@ -8,8 +8,10 @@
 @font-face{font-family:'Pinar';src:url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');}
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;font-family:'Pinar',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#e3ecfa 55%,#dbeafe 130%)!important;background-attachment:fixed!important;color:#0f172a;line-height:1.9;display:flex;flex-direction:column;}
-.wrap{flex:1 0 auto;display:flex;align-items:center;justify-content:center;padding:24px 16px;}
+body{margin:0;font-family:'Pinar',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#e3ecfa 55%,#dbeafe 130%)!important;background-attachment:fixed!important;color:#0f172a;line-height:1.9;display:flex;flex-direction:column;position:relative;overflow-x:hidden;}
+body::before{content:"";position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle at center, rgba(37,99,235,.85) 0%, rgba(37,99,235,.45) 35%, transparent 68%);filter:blur(70px);z-index:0;pointer-events:none;}
+body::after{content:"";position:fixed;top:10%;right:-220px;width:560px;height:560px;background:radial-gradient(circle at center, rgba(30,58,138,.35), transparent 70%);filter:blur(80px);z-index:0;pointer-events:none;}
+.wrap{flex:1 0 auto;display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative;z-index:1;}
 .card{background:rgba(255,255,255,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.95);border-radius:24px;box-shadow:0 16px 45px rgba(30,58,138,.16);padding:30px;width:100%;max-width:430px;}
 .brand{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;}
 .brand img{width:40px;height:40px;border-radius:10px;object-fit:cover;}

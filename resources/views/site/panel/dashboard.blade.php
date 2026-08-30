@@ -19,6 +19,34 @@
             background: #f8fafc;
             color: #0f172a;
             line-height: 1.9;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: -300px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 900px;
+            height: 900px;
+            background: radial-gradient(circle at center, rgba(37,99,235,.85) 0%, rgba(37,99,235,.45) 35%, transparent 68%);
+            filter: blur(70px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            top: 10%;
+            right: -220px;
+            width: 560px;
+            height: 560px;
+            background: radial-gradient(circle at center, rgba(30,58,138,.35), transparent 70%);
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
         }
         a { text-decoration: none; }
         .nav {
@@ -64,7 +92,7 @@
             font-size: 13px;
             cursor: pointer;
         }
-        .wrap { max-width: 1100px; margin: auto; padding: 30px 20px 60px; }
+        .wrap { max-width: 1100px; margin: auto; padding: 30px 20px 60px; position: relative; z-index: 1; }
         .flash-ok {
             background: #f0fdf4;
             color: #15803d;
@@ -263,7 +291,7 @@ html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,
 
 <style>/*SCB_CUST_V1*/
  .cust-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;}
- .cust-stat{background:#fff;border:1px solid #e5e7eb;border-radius:18px;box-shadow:0 10px 30px rgba(15,23,42,.08);padding:16px;display:flex;align-items:center;gap:12px;}
+ .cust-stat{background:rgba(255,255,255,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.9);border-radius:18px;box-shadow:0 10px 30px rgba(30,58,138,.12);padding:16px;display:flex;align-items:center;gap:12px;}
  .cust-stat img{width:46px;height:46px;border-radius:12px;object-fit:cover;}
  .cust-stat .num{font-size:24px;font-weight:800;color:#1e3a8a;line-height:1.2;}
  .cust-stat .lbl{font-size:13px;color:#64748b;}
