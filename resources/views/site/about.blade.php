@@ -12,6 +12,30 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir/about">
     <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="درباره Scanbridge | نرم‌افزار مدیریت بارکد و تی‌تک">
+    <meta name="twitter:description" content="درباره نرم‌افزار Scanbridge و امکانات آن برای اتصال بارکدخوان موبایل، مدیریت تی‌تک، تاریخچه و عملیات داروخانه.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "ScanBridge",
+      "url": "https://scanbridge.ir/",
+      "logo": "https://scanbridge.ir/icons/logo.png",
+      "description": "نرم‌افزار هوشمند اسکن بارکد و مدیریت عملیات — برای داروخانه‌ها، سوپرمارکت، فروشگاه و هایپرمارکت.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://wa.me/989136346309",
+        "areaServed": "IR",
+        "availableLanguage": "Persian"
+      }
+    }
+    </script>
 
     <style>
         :root {

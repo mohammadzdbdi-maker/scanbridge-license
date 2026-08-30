@@ -6,6 +6,18 @@
     <link rel="canonical" href="https://scanbridge.ir/privacy">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="سیاست حریم خصوصی Scanbridge درباره لایسنس، اطلاعات دستگاه، پشتیبانی و استفاده از امکانات تی‌تک.">
+    <meta property="og:title" content="حریم خصوصی Scanbridge">
+    <meta property="og:description" content="سیاست حریم خصوصی Scanbridge درباره لایسنس، اطلاعات دستگاه، پشتیبانی و استفاده از امکانات تی‌تک.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scanbridge.ir/privacy">
+    <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="حریم خصوصی Scanbridge">
+    <meta name="twitter:description" content="سیاست حریم خصوصی Scanbridge درباره لایسنس، اطلاعات دستگاه، پشتیبانی و استفاده از امکانات تی‌تک.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <style>
         :root {

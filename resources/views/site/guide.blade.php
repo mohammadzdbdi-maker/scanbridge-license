@@ -6,6 +6,52 @@
     <link rel="canonical" href="https://scanbridge.ir/guide">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="راهنمای تصویری و ویدیویی کار با نرم‌افزار ScanBridge: نصب، فعال‌سازی لایسنس، اتصال موبایل، تی‌تک، شیرخشک، تحویل بار و پشتیبانی.">
+    <meta property="og:title" content="راهنمای استفاده از ScanBridge | آموزش گام‌به‌گام">
+    <meta property="og:description" content="راهنمای تصویری و ویدیویی کار با نرم‌افزار ScanBridge: نصب، فعال‌سازی لایسنس، اتصال موبایل، تی‌تک، شیرخشک، تحویل بار و پشتیبانی.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scanbridge.ir/guide">
+    <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="راهنمای استفاده از ScanBridge | آموزش گام‌به‌گام">
+    <meta name="twitter:description" content="راهنمای تصویری و ویدیویی کار با نرم‌افزار ScanBridge: نصب، فعال‌سازی لایسنس، اتصال موبایل، تی‌تک، شیرخشک، تحویل بار و پشتیبانی.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "نصب و راه‌اندازی ScanBridge",
+      "description": "راهنمای گام‌به‌گام نصب و راه‌اندازی نرم‌افزار ScanBridge روی ویندوز.",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "دانلود نصب‌کننده",
+          "text": "از صفحه‌ی دانلود سایت، آخرین نسخه‌ی نصب ScanBridge را دریافت کنید."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "اجرای فایل نصب",
+          "text": "فایل نصب را اجرا کنید و مراحل نصب را دنبال کنید."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "نصب WebView2",
+          "text": "اگر WebView2 روی سیستم نصب نباشد، نصب‌کننده خودش آن را همراه برنامه نصب می‌کند."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "اجرای برنامه",
+          "text": "پس از پایان نصب، برنامه را اجرا کنید — آیکون ScanBridge روی دسکتاپ ساخته می‌شود."
+        }
+      ]
+    }
+    </script>
     <style>
         @font-face {
             font-family: 'Arad';

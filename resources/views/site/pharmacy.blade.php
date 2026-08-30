@@ -12,6 +12,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir/pharmacy">
     <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Scanbridge | اتصال بارکدخوان موبایل، تی‌تک و مدیریت داروخانه">
+    <meta name="twitter:description" content="Scanbridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر، مدیریت اسکن، تی‌تک، استعلام قیمت دارو، ثبت شیر خشک، تعیین وضعیت و تحویل بار برای داروخانه‌ها و مجموعه‌ها.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
 
     <style>
         /* ===== Design tokens (Phase 1 foundation) ===== */

@@ -13,6 +13,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir/buy">
     <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="خرید و تمدید Scanbridge | درخواست لایسنس">
+    <meta name="twitter:description" content="خرید، تمدید یا تغییر پلن ScanBridge — پایه، تی‌تک و حرفه‌ای (یک‌ساله) با ثبت درخواست آنلاین.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
 
     <style>
         :root {

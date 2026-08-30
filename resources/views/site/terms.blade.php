@@ -6,6 +6,18 @@
     <link rel="canonical" href="https://scanbridge.ir/terms">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="شرایط استفاده از نرم‌افزار Scanbridge، لایسنس، تی‌تک، پشتیبانی و مسئولیت کاربران.">
+    <meta property="og:title" content="شرایط استفاده Scanbridge">
+    <meta property="og:description" content="شرایط استفاده از نرم‌افزار Scanbridge، لایسنس، تی‌تک، پشتیبانی و مسئولیت کاربران.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scanbridge.ir/terms">
+    <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="شرایط استفاده Scanbridge">
+    <meta name="twitter:description" content="شرایط استفاده از نرم‌افزار Scanbridge، لایسنس، تی‌تک، پشتیبانی و مسئولیت کاربران.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <style>
         :root {

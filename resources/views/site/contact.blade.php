@@ -12,6 +12,33 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir/contact">
     <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="تماس با Scanbridge | پشتیبانی و خرید">
+    <meta name="twitter:description" content="تماس با پشتیبانی Scanbridge برای خرید، تمدید، دریافت لایسنس و راهنمای نصب نرم‌افزار.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "تماس با Scanbridge",
+      "url": "https://scanbridge.ir/contact",
+      "about": {
+        "@type": "Organization",
+        "name": "ScanBridge",
+        "url": "https://scanbridge.ir/",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "url": "https://wa.me/989136346309",
+          "areaServed": "IR",
+          "availableLanguage": "Persian"
+        }
+      }
+    }
+    </script>
 
     <style>
         :root {

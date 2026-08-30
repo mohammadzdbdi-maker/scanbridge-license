@@ -12,6 +12,13 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://scanbridge.ir">
     <meta property="og:site_name" content="Scanbridge">
+    <meta property="og:image" content="https://scanbridge.ir/icons/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ScanBridge | اسکن بارکد و مدیریت عملیات، برای هر کسب‌وکاری">
+    <meta name="twitter:description" content="ScanBridge نرم‌افزار اتصال بارکدخوان موبایل به کامپیوتر و مدیریت عملیات — برای داروخانه‌ها و همچنین سوپرمارکت، فروشگاه و هایپرمارکت.">
+    <meta name="twitter:image" content="https://scanbridge.ir/icons/og-image.jpg">
 
     <style>
         :root {
