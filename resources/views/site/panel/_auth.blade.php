@@ -5,10 +5,11 @@
 <title>{{ $pageTitle }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-@font-face{font-family:'Pinar';src:url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');}
+@font-face{font-family:'Arad';src:url('/fonts/Arad-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}
+@font-face{font-family:'Arad';src:url('/fonts/Arad-Bold.woff2') format('woff2');font-weight:bold;font-style:normal;font-display:swap;}
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;font-family:'Pinar',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#e3ecfa 55%,#dbeafe 130%)!important;background-attachment:fixed!important;color:#0f172a;line-height:1.9;display:flex;flex-direction:column;position:relative;overflow-x:hidden;}
+body{margin:0;font-family:'Arad',Tahoma,Arial,sans-serif;background:linear-gradient(135deg,#eef2f7 0%,#e3ecfa 55%,#dbeafe 130%)!important;background-attachment:fixed!important;color:#0f172a;line-height:1.9;display:flex;flex-direction:column;position:relative;overflow-x:hidden;}
 body::before{content:"";position:fixed;top:-300px;left:50%;transform:translateX(-50%);width:900px;height:900px;background:radial-gradient(circle at center, rgba(37,99,235,.85) 0%, rgba(37,99,235,.45) 35%, transparent 68%);filter:blur(70px);z-index:0;pointer-events:none;}
 body::after{content:"";position:fixed;top:10%;right:-220px;width:560px;height:560px;background:radial-gradient(circle at center, rgba(30,58,138,.35), transparent 70%);filter:blur(80px);z-index:0;pointer-events:none;}
 .wrap{flex:1 0 auto;display:flex;align-items:center;justify-content:center;padding:24px 16px;position:relative;z-index:1;}

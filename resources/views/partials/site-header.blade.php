@@ -13,7 +13,7 @@
     backdrop-filter: blur(14px) !important;
     -webkit-backdrop-filter: blur(14px) !important;
     border-bottom: 1px solid #e5e7eb !important;
-    font-family: 'Pinar', Tahoma, Arial, sans-serif !important;
+    font-family: 'Arad', Tahoma, Arial, sans-serif !important;
     width: 100% !important;
     display: block !important;
     height: 77px !important;

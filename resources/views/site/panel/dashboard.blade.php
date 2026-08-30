@@ -6,16 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         @font-face {
-            font-family: 'Pinar';
-            src: url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');
+            font-family: 'Arad';
+            src: url('/fonts/Arad-Regular.woff2') format('woff2');
             font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Arad';
+            src: url('/fonts/Arad-Bold.woff2') format('woff2');
+            font-weight: bold;
             font-style: normal;
             font-display: swap;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: 'Pinar', Tahoma, Arial, sans-serif;
+            font-family: 'Arad', Tahoma, Arial, sans-serif;
             background: #f8fafc;
             color: #0f172a;
             line-height: 1.9;
@@ -285,8 +292,9 @@ th{color:#64748b!important;}
 <style>/*SCB_COPY_V1*/.btn-copy{background:linear-gradient(135deg,#06b6d4,#0e7490);color:#fff;border:0;border-radius:8px;padding:5px 12px;font-family:inherit;font-weight:bold;font-size:12px;cursor:pointer;box-shadow:0 3px 8px rgba(6,182,212,.3);}.btn-copy:hover{filter:brightness(1.1);}.copy-note{position:fixed;left:24px;bottom:24px;background:#0f172a;color:#fff;padding:10px 18px;border-radius:12px;display:none;z-index:9999;font-size:13px;}</style>
 
 <style>/*SCB_FONT_ALL*/
-@font-face{font-family:'Pinar';src:url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}
-html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,small,strong,summary{font-family:'Pinar',Tahoma,Arial,sans-serif!important;}
+@font-face{font-family:'Arad';src:url('/fonts/Arad-Regular.woff2') format('woff2');font-weight:normal;font-style:normal;font-display:swap;}
+@font-face{font-family:'Arad';src:url('/fonts/Arad-Bold.woff2') format('woff2');font-weight:bold;font-style:normal;font-display:swap;}
+html,body,button,input,select,textarea,a,th,td,label,span,div,h1,h2,h3,h4,h5,h6,small,strong,summary{font-family:'Arad',Tahoma,Arial,sans-serif!important;}
 </style>
 
 <style>/*SCB_CUST_V1*/

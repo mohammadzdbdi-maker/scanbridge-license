@@ -8,15 +8,22 @@
     <meta name="description" content="راهنمای تصویری و ویدیویی کار با نرم‌افزار ScanBridge: نصب، فعال‌سازی لایسنس، اتصال موبایل، تی‌تک، شیرخشک، تحویل بار و پشتیبانی.">
     <style>
         @font-face {
-            font-family: 'Pinar';
-            src: url('/fonts/Pinar-DS1-FD-Regular.woff2') format('woff2');
+            font-family: 'Arad';
+            src: url('/fonts/Arad-Regular.woff2') format('woff2');
             font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Arad';
+            src: url('/fonts/Arad-Bold.woff2') format('woff2');
+            font-weight: bold;
             font-style: normal;
             font-display: swap;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Pinar', Tahoma, Arial, sans-serif;
+            font-family: 'Arad', Tahoma, Arial, sans-serif;
             background: #f8fafc;
             color: #0f172a;
             line-height: 1.9;
