@@ -279,7 +279,10 @@
                 </p>
             </div>
             @if($androidExists)
-                <a class="btn white-btn" href="/latest-android">دانلود اپلیکیشن اندروید</a>
+                <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:flex-end;">
+                    <a class="btn white-btn" href="/latest-android">دانلود مستقیم (APK)</a>
+                    <a class="btn white-btn" href="https://cafebazaar.ir/app/com.example.scanbridge" target="_blank" rel="noopener">دانلود از کافه‌بازار</a>
+                </div>
             @else
                 <span class="btn white-btn" style="opacity:.6; cursor:default;">به زودی</span>
             @endif
